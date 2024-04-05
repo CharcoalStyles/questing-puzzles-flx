@@ -3,14 +3,15 @@ package states;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.text.FlxText;
+import utils.GlobalState;
 
 class MainMenuState extends FlxState
 {
 	override public function create()
 	{
 		super.create();
-
-		// Add a text to the screen
+		var globalState = new GlobalState();
+		FlxG.plugins.addPlugin(globalState);
 
 		var text = new FlxText(0, 0, FlxG.width, "Questing Puzzles");
 		text.size = 64;

@@ -3,6 +3,7 @@ package entities;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxFrame;
+import flixel.graphics.frames.FlxFramesCollection;
 import flixel.math.FlxPoint;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -25,12 +26,12 @@ class Gem extends FlxSprite
 		kill();
 	}
 
-	public function init(x:Float, y:Float, targetSize:FlxPoint, padding:FlxPoint, type:GemType)
+	public function init(x:Float, y:Float, targetSize:FlxPoint, padding:FlxPoint, gemFrames:FlxFramesCollection, type:GemType)
 	{
 		if (this.frames == null)
 		{
 			var gs = FlxG.plugins.get(GlobalState);
-			this.frames = gs.gemFrames;
+			this.frames = gemFrames;
 		}
 
 		this.color = type.color;
