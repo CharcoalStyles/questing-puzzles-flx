@@ -4,6 +4,8 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxFrame;
 import flixel.math.FlxPoint;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import utils.GlobalState;
 
@@ -13,7 +15,9 @@ class Gem extends FlxSprite
 	var targetScale:FlxPoint;
 
 	var selected:Bool = false;
-	var timer:Float;
+
+	var angleTween:FlxTween;
+	var colourTween:FlxTween;
 
 	public function new()
 	{
@@ -60,27 +64,47 @@ class Gem extends FlxSprite
 	{
 		super.update(elapsed);
 
-		if (this.selected)
-		{
-			timer += elapsed;
-			var s = 0.0007 * Math.sin(timer * 1.6);
-			this.scale.add(s, s);
-			this.angle += 0.13 * Math.sin(timer * 1.3);
-			this.color = FlxColor.interpolate(originalColor, 0xffffffff, 0.55 + 0.3 * Math.sin(timer * 1.6));
-		}
-
 		if (FlxG.mouse.justPressed)
 		{
 			if (this.overlapsPoint(FlxG.mouse.getPosition()))
 			{
 				this.selected = !this.selected;
-				this.timer = Math.PI;
 
-				this.scale = targetScale.clone();
-				this.angle = 0;
-				this.color = originalColor;
+				if (this.selected)
+				{
+					startRocking();
+					colourTween = FlxTween.color(this, 0.6, this.originalColor, FlxColor.WHITE, {
+						type: FlxTweenType.PINGPONG,
+						ease: FlxEase.circIn,
+					});
+				}
+				else
+				{
+					angleTween.cancel();
+					colourTween.cancel();
+					this.angle = 0;
+					this.color = this.originalColor;
+				}
 			}
 		}
+	}
+
+	function startRocking()
+	{
+		angleTween = FlxTween.angle(this, 0, 12, 0.6, {
+			type: FlxTweenType.ONESHOT,
+			ease: FlxEase.smoothStepOut,
+			onComplete: (tw) ->
+			{
+				if (this.selected)
+				{
+					angleTween = FlxTween.angle(this, 12, -12, 1.2, {
+						type: FlxTweenType.PINGPONG,
+						ease: FlxEase.smoothStepInOut,
+					});
+				}
+			}
+		});
 	}
 }
 
