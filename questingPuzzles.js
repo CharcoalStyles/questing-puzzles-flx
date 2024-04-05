@@ -7856,83 +7856,28 @@ entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
 	}
 	,update: function(elapsed) {
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
-		if(this.selected) {
-			this.timer += elapsed;
-			var s = 0.0007 * Math.sin(this.timer * 1.6);
-			var this1 = this.scale;
-			var x = s;
-			var y = s;
-			if(y == null) {
-				y = 0;
-			}
-			if(x == null) {
-				x = 0;
-			}
-			this1.set_x(this1.x + x);
-			this1.set_y(this1.y + y);
-			this.set_angle(this.angle + 0.13 * Math.sin(this.timer * 1.3));
-			var Color1 = this.originalColor;
-			var Factor = 0.55 + 0.3 * Math.sin(this.timer * 1.6);
-			if(Factor == null) {
-				Factor = 0.5;
-			}
-			var r = (255 - (Color1 >> 16 & 255)) * Factor + (Color1 >> 16 & 255) | 0;
-			var g = (255 - (Color1 >> 8 & 255)) * Factor + (Color1 >> 8 & 255) | 0;
-			var b = (255 - (Color1 & 255)) * Factor + (Color1 & 255) | 0;
-			var a = (255 - (Color1 >> 24 & 255)) * Factor + (Color1 >> 24 & 255) | 0;
-			var Alpha = a;
-			if(Alpha == null) {
-				Alpha = 255;
-			}
-			var color = flixel_util_FlxColor._new();
-			var Alpha1 = Alpha;
-			if(Alpha1 == null) {
-				Alpha1 = 255;
-			}
-			color &= -16711681;
-			color |= (r > 255 ? 255 : r < 0 ? 0 : r) << 16;
-			color &= -65281;
-			color |= (g > 255 ? 255 : g < 0 ? 0 : g) << 8;
-			color &= -256;
-			color |= b > 255 ? 255 : b < 0 ? 0 : b;
-			color &= 16777215;
-			color |= (Alpha1 > 255 ? 255 : Alpha1 < 0 ? 0 : Alpha1) << 24;
-			this.set_color(color);
-		}
 		if(flixel_FlxG.mouse._leftButton.current == 2) {
 			if(this.overlapsPoint(flixel_FlxG.mouse.getPosition())) {
 				this.selected = !this.selected;
-				this.timer = Math.PI;
-				var this1 = this.targetScale;
-				var p = null;
-				if(p == null) {
-					var x = 0;
-					var y = 0;
-					if(y == null) {
-						y = 0;
-					}
-					if(x == null) {
-						x = 0;
-					}
-					var point = flixel_math_FlxBasePoint.pool.get().set(x,y);
-					point._inPool = false;
-					p = point;
+				if(this.selected) {
+					this.startRocking();
+					this.colourTween = flixel_tweens_FlxTween.color(this,0.6,this.originalColor,-1,{ type : 4, ease : flixel_tweens_FlxEase.circIn});
+				} else {
+					this.angleTween.cancel();
+					this.colourTween.cancel();
+					this.set_angle(0);
+					this.set_color(this.originalColor);
 				}
-				var x = this1.x;
-				var y = this1.y;
-				if(y == null) {
-					y = 0;
-				}
-				if(x == null) {
-					x = 0;
-				}
-				p.set_x(x);
-				p.set_y(y);
-				this.scale = p;
-				this.set_angle(0);
-				this.set_color(this.originalColor);
 			}
 		}
+	}
+	,startRocking: function() {
+		var _gthis = this;
+		this.angleTween = flixel_tweens_FlxTween.angle(this,0,12,0.6,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepOut, onComplete : function(tw) {
+			if(_gthis.selected) {
+				_gthis.angleTween = flixel_tweens_FlxTween.angle(_gthis,12,-12,1.2,{ type : 4, ease : flixel_tweens_FlxEase.smoothStepInOut});
+			}
+		}});
 	}
 	,__class__: entities_Gem
 });
@@ -68296,7 +68241,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 43580;
+	this.version = 270547;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
