@@ -15,7 +15,8 @@ class Gem extends FlxSprite
 	var originalColor:FlxColor;
 	var targetScale:FlxPoint;
 
-	var selected:Bool = false;
+	public var selected(default, set):Bool = false;
+	public var gemTypeId:Int;
 
 	var angleTween:FlxTween;
 	var colourTween:FlxTween;
@@ -34,14 +35,15 @@ class Gem extends FlxSprite
 			this.frames = gemFrames;
 		}
 
-		this.color = type.color;
-
 		this.alive = true;
 		this.exists = true;
 		this.visible = true;
 		this.selected = false;
-		this.color = type.color;
+
 		this.originalColor = type.color;
+		this.color = type.color;
+		this.gemTypeId = type.id;
+
 		var newFrame = this.frames.getByName(type.frame);
 		this.frame = newFrame;
 
@@ -69,25 +71,31 @@ class Gem extends FlxSprite
 		{
 			if (this.overlapsPoint(FlxG.mouse.getPosition()))
 			{
-				this.selected = !this.selected;
-
 				if (this.selected)
 				{
-					startRocking();
-					colourTween = FlxTween.color(this, 0.6, this.originalColor, FlxColor.WHITE, {
-						type: FlxTweenType.PINGPONG,
-						ease: FlxEase.circIn,
-					});
-				}
-				else
-				{
+					this.selected = false;
 					angleTween.cancel();
 					colourTween.cancel();
 					this.angle = 0;
 					this.color = this.originalColor;
 				}
+				else
+				{
+					this.selected = true;
+				}
 			}
 		}
+	}
+
+	public function set_selected(newSelected)
+	{
+		this.selected = newSelected;
+		startRocking();
+		colourTween = FlxTween.color(this, 0.6, this.originalColor, FlxColor.WHITE, {
+			type: FlxTweenType.PINGPONG,
+			ease: FlxEase.circIn,
+		});
+		return this.selected;
 	}
 
 	function startRocking()
@@ -111,12 +119,12 @@ class Gem extends FlxSprite
 
 class GemType
 {
-	public static var RED:GemType = new GemType("tileGrey_04.png", 0xffFF0000);
-	public static var GREEN:GemType = new GemType("tileGrey_05.png", 0xff00FF00);
-	public static var BLUE:GemType = new GemType("tileGrey_06.png", 0xff0000FF);
-	public static var YELLOW:GemType = new GemType("tileGrey_07.png", 0xffFFFF00);
-	public static var PURPLE:GemType = new GemType("tileGrey_08.png", 0xffFF00FF);
-	public static var ORANGE:GemType = new GemType("tileGrey_09.png", 0xffFFA500);
+	public static var RED:GemType = new GemType(0, "tileGrey_04.png", 0xffFF0000);
+	public static var GREEN:GemType = new GemType(1, "tileGrey_05.png", 0xff00FF00);
+	public static var BLUE:GemType = new GemType(2, "tileGrey_06.png", 0xff0000FF);
+	public static var YELLOW:GemType = new GemType(3, "tileGrey_07.png", 0xffFFFF00);
+	public static var PURPLE:GemType = new GemType(4, "tileGrey_08.png", 0xffFF00FF);
+	public static var ORANGE:GemType = new GemType(5, "tileGrey_09.png", 0xffFFA500);
 
 	public static var ALL:Array<GemType> = [RED, GREEN, BLUE, YELLOW, PURPLE, ORANGE];
 	public static var random:() -> GemType = () ->
@@ -124,10 +132,11 @@ class GemType
 		return ALL[Math.floor(Math.random() * ALL.length)];
 	};
 
+	public var id:Int;
 	public var frame:String;
 	public var color:FlxColor;
 
-	function new(uFrame:String, c:FlxColor)
+	function new(id:Int, uFrame:String, c:FlxColor)
 	{
 		frame = uFrame;
 		color = c;
