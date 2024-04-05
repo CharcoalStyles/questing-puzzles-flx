@@ -31,7 +31,7 @@ class PlayState extends FlxState
 		var cols = 8;
 		var margin = 8;
 
-		var cellSize = Math.floor(FlxG.height / rows - margin);
+		var cellSize = Math.floor(FlxG.height / rows);
 		var gemSize = cellSize - margin;
 
 		var gridX = Math.floor((FlxG.width - (cellSize * cols)) / 2);

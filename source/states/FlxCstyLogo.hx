@@ -27,11 +27,11 @@ class FlxCstyLogo extends FlxState
 
 	private var logoFinished:Bool = false;
 
-	public function new()
+	public function new(nextState:FlxState)
 	{
 		super();
 
-		nextState = new PlayState();
+		this.nextState = nextState;
 	}
 
 	override public function create():Void
