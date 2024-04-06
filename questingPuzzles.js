@@ -7832,13 +7832,13 @@ entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
 			var gs = flixel_FlxG.plugins.get(utils_GlobalState);
 			this.set_frames(gemFrames);
 		}
-		this.set_color(type.color);
 		this.set_alive(true);
 		this.set_exists(true);
 		this.set_visible(true);
-		this.selected = false;
-		this.set_color(type.color);
+		this.set_selected(false);
 		this.originalColor = type.color;
+		this.set_color(type.color);
+		this.gemTypeId = type.id;
 		var newFrame = this.frames.framesByName.h[type.frame];
 		this.set_frame(newFrame);
 		var maxW = Math.max(this.frame.frame.width,this.frame.frame.width);
@@ -7883,18 +7883,23 @@ entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
 		if(flixel_FlxG.mouse._leftButton.current == 2) {
 			if(this.overlapsPoint(flixel_FlxG.mouse.getPosition())) {
-				this.selected = !this.selected;
 				if(this.selected) {
-					this.startRocking();
-					this.colourTween = flixel_tweens_FlxTween.color(this,0.6,this.originalColor,-1,{ type : 4, ease : flixel_tweens_FlxEase.circIn});
-				} else {
+					this.set_selected(false);
 					this.angleTween.cancel();
 					this.colourTween.cancel();
 					this.set_angle(0);
 					this.set_color(this.originalColor);
+				} else {
+					this.set_selected(true);
 				}
 			}
 		}
+	}
+	,set_selected: function(newSelected) {
+		this.selected = newSelected;
+		this.startRocking();
+		this.colourTween = flixel_tweens_FlxTween.color(this,0.6,this.originalColor,-1,{ type : 4, ease : flixel_tweens_FlxEase.circIn});
+		return this.selected;
 	}
 	,startRocking: function() {
 		var _gthis = this;
@@ -7905,8 +7910,9 @@ entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
 		}});
 	}
 	,__class__: entities_Gem
+	,__properties__: $extend(flixel_FlxSprite.prototype.__properties__,{set_selected:"set_selected"})
 });
-var entities_GemType = function(uFrame,c) {
+var entities_GemType = function(id,uFrame,c) {
 	this.frame = uFrame;
 	this.color = c;
 };
@@ -8531,14 +8537,16 @@ var entities_PlayBoard = function(rows,cols) {
 	var margin = Math.floor(cellSize * 0.4);
 	var gridX = Math.floor((flixel_FlxG.width - cellSize * cols) / 2);
 	var gridY = Math.floor((flixel_FlxG.height - cellSize * rows) / 2);
+	this.grid = [];
 	var _g = 0;
-	var _g1 = rows;
+	var _g1 = cols;
 	while(_g < _g1) {
-		var y = _g++;
+		var x = _g++;
+		this.grid[x] = [];
 		var _g2 = 0;
-		var _g3 = cols;
+		var _g3 = rows;
 		while(_g2 < _g3) {
-			var x = _g2++;
+			var y = _g2++;
 			var gt = entities_GemType.random();
 			var gbkc = gt.color;
 			var Value = Math.round(84.15);
@@ -8548,7 +8556,6 @@ var entities_PlayBoard = function(rows,cols) {
 			bk.makeGraphic(cellSize,cellSize,gbkc);
 			this.add(bk);
 			var g = this.gemPool.get();
-			this.add(g);
 			var x1 = cellSize;
 			var y1 = cellSize;
 			if(y1 == null) {
@@ -8586,14 +8593,41 @@ var entities_PlayBoard = function(rows,cols) {
 			var point1 = flixel_math_FlxBasePoint.pool.get().set(x4,y4);
 			point1._inPool = false;
 			g.init(gridX + x * cellSize,gridY + y * cellSize,point,point1,this.gemFrames,gt);
+			this.add(g);
+			this.grid[x][y] = g;
 		}
 	}
+	this.grid[0][0].set_selected(true);
 };
 $hxClasses["entities.PlayBoard"] = entities_PlayBoard;
 entities_PlayBoard.__name__ = "entities.PlayBoard";
 entities_PlayBoard.__super__ = flixel_group_FlxTypedGroup;
 entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
-	__class__: entities_PlayBoard
+	findMatchesInRow: function(y) {
+		var lastGemTypeID = -1;
+		var currentMatchLength = 0;
+		var _g = 0;
+		var _g1 = this.grid.length;
+		while(_g < _g1) {
+			var x = _g++;
+			var gem = this.grid[x][y];
+			if(gem.gemTypeId == lastGemTypeID) {
+				++currentMatchLength;
+			} else {
+				if(currentMatchLength >= 3) {
+					var _g2 = 0;
+					var _g3 = currentMatchLength;
+					while(_g2 < _g3) {
+						var i = _g2++;
+						this.grid[x - i][y].set_selected(true);
+					}
+				}
+				lastGemTypeID = gem.gemTypeId;
+				currentMatchLength = 1;
+			}
+		}
+	}
+	,__class__: entities_PlayBoard
 });
 var flixel_IFlxBasic = function() { };
 $hxClasses["flixel.IFlxBasic"] = flixel_IFlxBasic;
@@ -70571,7 +70605,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 71350;
+	this.version = 576766;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -118518,12 +118552,12 @@ flixel_FlxObject._secondSeparateFlxRect = (function($this) {
 	return $r;
 }(this));
 flixel_FlxSprite.defaultAntialiasing = false;
-entities_GemType.RED = new entities_GemType("tileGrey_04.png",-65536);
-entities_GemType.GREEN = new entities_GemType("tileGrey_05.png",-16711936);
-entities_GemType.BLUE = new entities_GemType("tileGrey_06.png",-16776961);
-entities_GemType.YELLOW = new entities_GemType("tileGrey_07.png",-256);
-entities_GemType.PURPLE = new entities_GemType("tileGrey_08.png",-65281);
-entities_GemType.ORANGE = new entities_GemType("tileGrey_09.png",-23296);
+entities_GemType.RED = new entities_GemType(0,"tileGrey_04.png",-65536);
+entities_GemType.GREEN = new entities_GemType(1,"tileGrey_05.png",-16711936);
+entities_GemType.BLUE = new entities_GemType(2,"tileGrey_06.png",-16776961);
+entities_GemType.YELLOW = new entities_GemType(3,"tileGrey_07.png",-256);
+entities_GemType.PURPLE = new entities_GemType(4,"tileGrey_08.png",-65281);
+entities_GemType.ORANGE = new entities_GemType(5,"tileGrey_09.png",-23296);
 entities_GemType.ALL = [entities_GemType.RED,entities_GemType.GREEN,entities_GemType.BLUE,entities_GemType.YELLOW,entities_GemType.PURPLE,entities_GemType.ORANGE];
 flixel_math_FlxBasePoint.pool = (function($this) {
 	var $r;
