@@ -5,9 +5,19 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxPoint;
 import flixel.util.FlxPool;
+import states.MainMenuState;
 import utils.KennyAtlasLoader;
+
+typedef CellIndex =
+{
+	x:Int,
+	y:Int
+};
+
+typedef MatchGroup = Array<CellIndex>;
 
 class PlayBoard extends FlxTypedGroup<FlxSprite>
 {
@@ -51,33 +61,235 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 				grid[x][y] = g;
 			}
 		}
-
-		grid[0][0].selected = true;
 	}
 
-	function findMatchesInRow(y:Int)
+	override public function update(elapsed:Float):Void
+	{
+		super.update(elapsed);
+
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			FlxG.switchState(new MainMenuState());
+		}
+
+		if (FlxG.keys.justPressed.SPACE)
+		{
+			for (x in 0...grid.length)
+			{
+				for (y in 0...grid[0].length)
+				{
+					grid[x][y].selected = false;
+				}
+			}
+		}
+
+		if (FlxG.keys.justPressed.A)
+		{
+			var matches = findAllMatches();
+
+			for (match in matches)
+			{
+				for (cell in match)
+				{
+					grid[cell.x][cell.y].selected = true;
+				}
+			}
+		}
+
+		if (FlxG.keys.justPressed.X)
+		{
+			for (y in 0...grid[0].length)
+			{
+				var matches = findMatchesInRow(y);
+				FlxG.log.add(matches);
+				for (match in matches)
+				{
+					for (cell in match)
+					{
+						grid[cell.x][cell.y].selected = true;
+					}
+				}
+			}
+		}
+
+		if (FlxG.keys.justPressed.Y)
+		{
+			for (x in 0...grid.length)
+			{
+				var matches = findMatchesInColumn(x);
+				FlxG.log.add(matches);
+				for (match in matches)
+				{
+					for (cell in match)
+					{
+						grid[cell.x][cell.y].selected = true;
+					}
+				}
+			}
+		}
+	}
+
+	function findAllMatches():Array<MatchGroup>
+	{
+		var matches = new Array<MatchGroup>();
+
+		var colMatches = new Array<MatchGroup>();
+		var rowMatches = new Array<MatchGroup>();
+
+		for (y in 0...grid[0].length)
+		{
+			for (m in findMatchesInRow(y))
+			{
+				rowMatches.push(m);
+			}
+		}
+
+		for (x in 0...grid.length)
+		{
+			for (m in findMatchesInColumn(x))
+			{
+				colMatches.push(m);
+			}
+		}
+
+		// find overlapping matches
+
+		var rowSubMatchIndexs = new Array<Int>();
+		var colSubMatchIndexs = new Array<Int>();
+
+		for (rowIndex in 0...rowMatches.length)
+		{
+			for (colIndex in 0...colMatches.length)
+			{
+				var rowMatch = rowMatches[rowIndex];
+				var colMatch = colMatches[colIndex];
+
+				var isMatched = false;
+
+				for (rm in rowMatch)
+				{
+					for (cm in colMatch)
+					{
+						if (rm.x == cm.x && rm.y == cm.y)
+						{
+							isMatched = true;
+							break;
+						}
+					}
+				}
+
+				if (isMatched)
+				{
+					// join the two matches
+					var match = new MatchGroup();
+
+					for (rm in rowMatch)
+					{
+						match.push(rm);
+					}
+
+					for (cm in colMatch)
+					{
+						match.push(cm);
+					}
+
+					matches.push(match);
+
+					rowSubMatchIndexs.push(rowIndex);
+					colSubMatchIndexs.push(colIndex);
+				}
+			}
+		}
+
+		// remove the submatches
+		for (i in rowSubMatchIndexs)
+		{
+			rowMatches.remove(rowMatches[i]);
+		}
+
+		for (i in colSubMatchIndexs)
+		{
+			colMatches.remove(colMatches[i]);
+		}
+
+		// add the remaining matches
+		for (m in rowMatches)
+		{
+			matches.push(m);
+		}
+
+		for (m in colMatches)
+		{
+			matches.push(m);
+		}
+
+		return matches;
+	}
+
+	function findMatchesInRow(y:Int):Array<MatchGroup>
 	{
 		var lastGemTypeID = -1;
-		var currentMatchLength = 0;
+		var matches = new Array<MatchGroup>();
+		var workingMatch = new MatchGroup();
+
 		for (x in 0...grid.length)
 		{
 			var gem = grid[x][y];
 			if (gem.gemTypeId == lastGemTypeID)
 			{
-				currentMatchLength++;
+				workingMatch.push({x: x, y: y});
 			}
 			else
 			{
-				if (currentMatchLength >= 3)
+				if (workingMatch.length >= 3)
 				{
-					for (i in 0...currentMatchLength)
-					{
-						grid[x - i][y].selected = true;
-					}
+					matches.push(workingMatch);
 				}
+
+				workingMatch = new MatchGroup();
+				workingMatch.push({x: x, y: y});
 				lastGemTypeID = gem.gemTypeId;
-				currentMatchLength = 1;
 			}
 		}
+
+		if (workingMatch.length >= 3)
+		{
+			matches.push(workingMatch);
+		}
+
+		return matches;
+	}
+
+	function findMatchesInColumn(x:Int):Array<MatchGroup>
+	{
+		var lastGemTypeID = -1;
+		var matches = new Array<MatchGroup>();
+		var workingMatch = new MatchGroup();
+
+		for (y in 0...grid[0].length)
+		{
+			var gem = grid[x][y];
+			if (gem.gemTypeId == lastGemTypeID)
+			{
+				workingMatch.push({x: x, y: y});
+			}
+			else
+			{
+				if (workingMatch.length >= 3)
+				{
+					matches.push(workingMatch);
+				}
+				workingMatch = new MatchGroup();
+				workingMatch.push({x: x, y: y});
+				lastGemTypeID = gem.gemTypeId;
+			}
+		}
+
+		if (workingMatch.length >= 3)
+		{
+			matches.push(workingMatch);
+		}
+
+		return matches;
 	}
 }

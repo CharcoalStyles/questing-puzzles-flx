@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.graphics.frames.FlxFrame;
 import flixel.graphics.frames.FlxFramesCollection;
 import flixel.math.FlxPoint;
+import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -21,9 +22,14 @@ class Gem extends FlxSprite
 	var angleTween:FlxTween;
 	var colourTween:FlxTween;
 
+	var debugText:FlxText;
+
 	public function new()
 	{
 		super();
+
+		this.debugText = new FlxText(0, 0, 100, "");
+
 		kill();
 	}
 
@@ -67,35 +73,46 @@ class Gem extends FlxSprite
 	{
 		super.update(elapsed);
 
+		this.debugText.x = this.x;
+		this.debugText.y = this.y;
+		this.debugText.text = Std.string(this.gemTypeId);
+
 		if (FlxG.mouse.justPressed)
 		{
 			if (this.overlapsPoint(FlxG.mouse.getPosition()))
 			{
-				if (this.selected)
-				{
-					this.selected = false;
-					angleTween.cancel();
-					colourTween.cancel();
-					this.angle = 0;
-					this.color = this.originalColor;
-				}
-				else
-				{
-					this.selected = true;
-				}
+				this.selected = !this.selected;
 			}
 		}
 	}
 
+	override public function draw():Void
+	{
+		super.draw();
+		this.debugText.draw();
+	}
+
 	public function set_selected(newSelected)
 	{
+		if (newSelected)
+		{
+			startRocking();
+			colourTween = FlxTween.color(this, 0.6, this.originalColor, FlxColor.WHITE, {
+				type: FlxTweenType.PINGPONG,
+				ease: FlxEase.circIn,
+			});
+		}
+		else
+		{
+			if (angleTween != null)
+				angleTween.cancel();
+			if (colourTween != null)
+				colourTween.cancel();
+			this.angle = 0;
+			this.color = this.originalColor;
+		}
 		this.selected = newSelected;
-		startRocking();
-		colourTween = FlxTween.color(this, 0.6, this.originalColor, FlxColor.WHITE, {
-			type: FlxTweenType.PINGPONG,
-			ease: FlxEase.circIn,
-		});
-		return this.selected;
+		return newSelected;
 	}
 
 	function startRocking()
@@ -138,6 +155,7 @@ class GemType
 
 	function new(id:Int, uFrame:String, c:FlxColor)
 	{
+		this.id = id;
 		frame = uFrame;
 		color = c;
 	}
