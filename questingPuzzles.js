@@ -3567,7 +3567,7 @@ ManifestResources.init = function(config) {
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$nokiafc22_$ttf);
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$monsterrat_$ttf);
 	var bundle;
-	var data = "{\"name\":null,\"assets\":\"aoy4:pathy34:assets%2Fdata%2Fdata-goes-here.txty4:sizezy4:typey4:TEXTy2:idR1y7:preloadtgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R4R5R7R6tgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3y5:IMAGER5R8R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3R4R5R10R6tgoR0y26:assets%2Fimages%2Fcsty.pngR2i271R3R9R5R11R6tgoR0y36:assets%2Fsounds%2Fsounds-go-here.txtR2zR3R4R5R12R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R4R5R13R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR15y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R14R5y26:flixel%2Fsounds%2Fbeep.mp3R16aR18y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R19R16aR18R19hgoR2i33629R3R20R5R17R16aR15R17hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R21R22y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i248R3R9R5R27R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R9R5R28R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R9R5R29R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R9R5R30R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R9R5R31R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R9R5R32R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:pathy36:assets%2Fsounds%2Fsounds-go-here.txty4:sizezy4:typey4:TEXTy2:idR1y7:preloadtgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R4R5R7R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R4R5R8R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R4R5R9R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3R4R5R10R6tgoR0y26:assets%2Fimages%2Fcsty.pngR2i271R3y5:IMAGER5R11R6tgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R12R5R13R6tgoR2i8220R3y5:MUSICR5y26:flixel%2Fsounds%2Fbeep.mp3y9:pathGroupaR15y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i39706R3R14R5y28:flixel%2Fsounds%2Fflixel.mp3R16aR18y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i6840R3y5:SOUNDR5R17R16aR15R17hgoR2i33629R3R20R5R19R16aR18R19hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R21R22y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i248R3R12R5R27R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R12R5R28R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R12R5R29R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R12R5R30R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R12R5R31R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R12R5R32R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -7821,6 +7821,7 @@ flixel_FlxSprite.prototype = $extend(flixel_FlxObject.prototype,{
 var entities_Gem = function() {
 	this.selected = false;
 	flixel_FlxSprite.call(this);
+	this.debugText = new flixel_text_FlxText(0,0,100,"");
 	this.kill();
 };
 $hxClasses["entities.Gem"] = entities_Gem;
@@ -7881,25 +7882,35 @@ entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
 	}
 	,update: function(elapsed) {
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
+		this.debugText.set_x(this.x);
+		this.debugText.set_y(this.y);
+		this.debugText.set_text(Std.string(this.gemTypeId));
 		if(flixel_FlxG.mouse._leftButton.current == 2) {
 			if(this.overlapsPoint(flixel_FlxG.mouse.getPosition())) {
-				if(this.selected) {
-					this.set_selected(false);
-					this.angleTween.cancel();
-					this.colourTween.cancel();
-					this.set_angle(0);
-					this.set_color(this.originalColor);
-				} else {
-					this.set_selected(true);
-				}
+				this.set_selected(!this.selected);
 			}
 		}
 	}
+	,draw: function() {
+		flixel_FlxSprite.prototype.draw.call(this);
+		this.debugText.draw();
+	}
 	,set_selected: function(newSelected) {
+		if(newSelected) {
+			this.startRocking();
+			this.colourTween = flixel_tweens_FlxTween.color(this,0.6,this.originalColor,-1,{ type : 4, ease : flixel_tweens_FlxEase.circIn});
+		} else {
+			if(this.angleTween != null) {
+				this.angleTween.cancel();
+			}
+			if(this.colourTween != null) {
+				this.colourTween.cancel();
+			}
+			this.set_angle(0);
+			this.set_color(this.originalColor);
+		}
 		this.selected = newSelected;
-		this.startRocking();
-		this.colourTween = flixel_tweens_FlxTween.color(this,0.6,this.originalColor,-1,{ type : 4, ease : flixel_tweens_FlxEase.circIn});
-		return this.selected;
+		return newSelected;
 	}
 	,startRocking: function() {
 		var _gthis = this;
@@ -7913,6 +7924,7 @@ entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
 	,__properties__: $extend(flixel_FlxSprite.prototype.__properties__,{set_selected:"set_selected"})
 });
 var entities_GemType = function(id,uFrame,c) {
+	this.id = id;
 	this.frame = uFrame;
 	this.color = c;
 };
@@ -8597,35 +8609,249 @@ var entities_PlayBoard = function(rows,cols) {
 			this.grid[x][y] = g;
 		}
 	}
-	this.grid[0][0].set_selected(true);
 };
 $hxClasses["entities.PlayBoard"] = entities_PlayBoard;
 entities_PlayBoard.__name__ = "entities.PlayBoard";
 entities_PlayBoard.__super__ = flixel_group_FlxTypedGroup;
 entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
-	findMatchesInRow: function(y) {
+	update: function(elapsed) {
+		flixel_group_FlxTypedGroup.prototype.update.call(this,elapsed);
+		var _this = flixel_FlxG.keys.justPressed;
+		if(_this.keyManager.checkStatusUnsafe(27,_this.status)) {
+			var nextState = flixel_util_typeLimit_NextState.fromState(new states_MainMenuState());
+			var stateOnCall = flixel_FlxG.game._state;
+			if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
+				flixel_FlxG.game._state.startOutro(function() {
+					if(flixel_FlxG.game._state == stateOnCall) {
+						flixel_FlxG.game._nextState = nextState;
+					} else {
+						flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
+					}
+				});
+			}
+		}
+		var _this = flixel_FlxG.keys.justPressed;
+		if(_this.keyManager.checkStatusUnsafe(32,_this.status)) {
+			var _g = 0;
+			var _g1 = this.grid.length;
+			while(_g < _g1) {
+				var x = _g++;
+				var _g2 = 0;
+				var _g3 = this.grid[0].length;
+				while(_g2 < _g3) {
+					var y = _g2++;
+					this.grid[x][y].set_selected(false);
+				}
+			}
+		}
+		var _this = flixel_FlxG.keys.justPressed;
+		if(_this.keyManager.checkStatusUnsafe(65,_this.status)) {
+			var matches = this.findAllMatches();
+			var _g = 0;
+			while(_g < matches.length) {
+				var match = matches[_g];
+				++_g;
+				var _g1 = 0;
+				while(_g1 < match.length) {
+					var cell = match[_g1];
+					++_g1;
+					this.grid[cell.x][cell.y].set_selected(true);
+				}
+			}
+		}
+		var _this = flixel_FlxG.keys.justPressed;
+		if(_this.keyManager.checkStatusUnsafe(88,_this.status)) {
+			var _g = 0;
+			var _g1 = this.grid[0].length;
+			while(_g < _g1) {
+				var y = _g++;
+				var matches = this.findMatchesInRow(y);
+				flixel_FlxG.log.advanced(matches,flixel_system_debug_log_LogStyle.NORMAL);
+				var _g2 = 0;
+				while(_g2 < matches.length) {
+					var match = matches[_g2];
+					++_g2;
+					var _g3 = 0;
+					while(_g3 < match.length) {
+						var cell = match[_g3];
+						++_g3;
+						this.grid[cell.x][cell.y].set_selected(true);
+					}
+				}
+			}
+		}
+		var _this = flixel_FlxG.keys.justPressed;
+		if(_this.keyManager.checkStatusUnsafe(89,_this.status)) {
+			var _g = 0;
+			var _g1 = this.grid.length;
+			while(_g < _g1) {
+				var x = _g++;
+				var matches = this.findMatchesInColumn(x);
+				flixel_FlxG.log.advanced(matches,flixel_system_debug_log_LogStyle.NORMAL);
+				var _g2 = 0;
+				while(_g2 < matches.length) {
+					var match = matches[_g2];
+					++_g2;
+					var _g3 = 0;
+					while(_g3 < match.length) {
+						var cell = match[_g3];
+						++_g3;
+						this.grid[cell.x][cell.y].set_selected(true);
+					}
+				}
+			}
+		}
+	}
+	,findAllMatches: function() {
+		var matches = [];
+		var colMatches = [];
+		var rowMatches = [];
+		var _g = 0;
+		var _g1 = this.grid[0].length;
+		while(_g < _g1) {
+			var y = _g++;
+			var _g2 = 0;
+			var _g3 = this.findMatchesInRow(y);
+			while(_g2 < _g3.length) {
+				var m = _g3[_g2];
+				++_g2;
+				rowMatches.push(m);
+			}
+		}
+		var _g = 0;
+		var _g1 = this.grid.length;
+		while(_g < _g1) {
+			var x = _g++;
+			var _g2 = 0;
+			var _g3 = this.findMatchesInColumn(x);
+			while(_g2 < _g3.length) {
+				var m = _g3[_g2];
+				++_g2;
+				colMatches.push(m);
+			}
+		}
+		var rowSubMatchIndexs = [];
+		var colSubMatchIndexs = [];
+		var _g = 0;
+		var _g1 = rowMatches.length;
+		while(_g < _g1) {
+			var rowIndex = _g++;
+			var _g2 = 0;
+			var _g3 = colMatches.length;
+			while(_g2 < _g3) {
+				var colIndex = _g2++;
+				var rowMatch = rowMatches[rowIndex];
+				var colMatch = colMatches[colIndex];
+				var isMatched = false;
+				var _g4 = 0;
+				while(_g4 < rowMatch.length) {
+					var rm = rowMatch[_g4];
+					++_g4;
+					var _g5 = 0;
+					while(_g5 < colMatch.length) {
+						var cm = colMatch[_g5];
+						++_g5;
+						if(rm.x == cm.x && rm.y == cm.y) {
+							isMatched = true;
+							break;
+						}
+					}
+				}
+				if(isMatched) {
+					var match = [];
+					var _g6 = 0;
+					while(_g6 < rowMatch.length) {
+						var rm1 = rowMatch[_g6];
+						++_g6;
+						match.push(rm1);
+					}
+					var _g7 = 0;
+					while(_g7 < colMatch.length) {
+						var cm1 = colMatch[_g7];
+						++_g7;
+						match.push(cm1);
+					}
+					matches.push(match);
+					rowSubMatchIndexs.push(rowIndex);
+					colSubMatchIndexs.push(colIndex);
+				}
+			}
+		}
+		var _g = 0;
+		while(_g < rowSubMatchIndexs.length) {
+			var i = rowSubMatchIndexs[_g];
+			++_g;
+			HxOverrides.remove(rowMatches,rowMatches[i]);
+		}
+		var _g = 0;
+		while(_g < colSubMatchIndexs.length) {
+			var i = colSubMatchIndexs[_g];
+			++_g;
+			HxOverrides.remove(colMatches,colMatches[i]);
+		}
+		var _g = 0;
+		while(_g < rowMatches.length) {
+			var m = rowMatches[_g];
+			++_g;
+			matches.push(m);
+		}
+		var _g = 0;
+		while(_g < colMatches.length) {
+			var m = colMatches[_g];
+			++_g;
+			matches.push(m);
+		}
+		return matches;
+	}
+	,findMatchesInRow: function(y) {
 		var lastGemTypeID = -1;
-		var currentMatchLength = 0;
+		var matches = [];
+		var workingMatch = [];
 		var _g = 0;
 		var _g1 = this.grid.length;
 		while(_g < _g1) {
 			var x = _g++;
 			var gem = this.grid[x][y];
 			if(gem.gemTypeId == lastGemTypeID) {
-				++currentMatchLength;
+				workingMatch.push({ x : x, y : y});
 			} else {
-				if(currentMatchLength >= 3) {
-					var _g2 = 0;
-					var _g3 = currentMatchLength;
-					while(_g2 < _g3) {
-						var i = _g2++;
-						this.grid[x - i][y].set_selected(true);
-					}
+				if(workingMatch.length >= 3) {
+					matches.push(workingMatch);
 				}
+				workingMatch = [];
+				workingMatch.push({ x : x, y : y});
 				lastGemTypeID = gem.gemTypeId;
-				currentMatchLength = 1;
 			}
 		}
+		if(workingMatch.length >= 3) {
+			matches.push(workingMatch);
+		}
+		return matches;
+	}
+	,findMatchesInColumn: function(x) {
+		var lastGemTypeID = -1;
+		var matches = [];
+		var workingMatch = [];
+		var _g = 0;
+		var _g1 = this.grid[0].length;
+		while(_g < _g1) {
+			var y = _g++;
+			var gem = this.grid[x][y];
+			if(gem.gemTypeId == lastGemTypeID) {
+				workingMatch.push({ x : x, y : y});
+			} else {
+				if(workingMatch.length >= 3) {
+					matches.push(workingMatch);
+				}
+				workingMatch = [];
+				workingMatch.push({ x : x, y : y});
+				lastGemTypeID = gem.gemTypeId;
+			}
+		}
+		if(workingMatch.length >= 3) {
+			matches.push(workingMatch);
+		}
+		return matches;
 	}
 	,__class__: entities_PlayBoard
 });
@@ -70605,7 +70831,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 576766;
+	this.version = 689063;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
