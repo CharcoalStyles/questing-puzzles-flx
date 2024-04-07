@@ -76,14 +76,11 @@ class Gem extends FlxSprite
 		this.debugText.x = this.x;
 		this.debugText.y = this.y;
 		this.debugText.text = Std.string(this.gemTypeId);
+	}
 
-		if (FlxG.mouse.justPressed)
-		{
-			if (this.overlapsPoint(FlxG.mouse.getPosition()))
-			{
-				this.selected = !this.selected;
-			}
-		}
+	public function move(x:Float, y:Float, duration:Float, onComplete:FlxTween->Void):FlxTween
+	{
+		return FlxTween.tween(this, {x: x, y: y}, duration, {onComplete: onComplete});
 	}
 
 	override public function draw():Void

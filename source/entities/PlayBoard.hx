@@ -8,6 +8,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxPoint;
 import flixel.util.FlxPool;
+import lime.app.Promise;
 import states.MainMenuState;
 import utils.KennyAtlasLoader;
 
@@ -15,7 +16,24 @@ typedef CellIndex =
 {
 	x:Int,
 	y:Int
-};
+}
+
+typedef GemGrid =
+{
+	x:Int,
+	y:Int,
+	gem:Gem
+}
+
+enum State
+{
+	Idle;
+	Swapping;
+	SwappingRevert;
+	Matching;
+	Falling;
+	Refilling;
+}
 
 typedef MatchGroup = Array<CellIndex>;
 
@@ -26,19 +44,34 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 
 	var grid:Array<Array<Gem>>;
 
+	var boardX:Int;
+	var boardY:Int;
+	var boardWidth:Int;
+	var boardHeight:Int;
+
+	var cellSize:Int;
+
+	var state = State.Idle;
+
 	public function new(rows:Int, cols:Int)
 	{
 		super();
+		FlxG.watch.add(this, "state");
+		FlxG.watch.add(this, "gemMoves");
+
+		boardWidth = cols;
+		boardHeight = rows;
+
 		gemFrames = KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png", "assets/data/spritesheet_tilesGrey.xml");
 
 		gemPool = new FlxPool<Gem>(PoolFactory.fromFunction(() -> new Gem()));
 		gemPool.preAllocate(72);
 
-		var cellSize = Math.floor(Math.min(FlxG.height, FlxG.width) / Math.max(rows, cols));
+		cellSize = Math.floor(Math.min(FlxG.height, FlxG.width) / Math.max(rows, cols));
 		var margin = Math.floor(cellSize * 0.4);
 
-		var gridX = Math.floor((FlxG.width - (cellSize * cols)) / 2);
-		var gridY = Math.floor((FlxG.height - (cellSize * rows)) / 2);
+		boardX = Math.floor((FlxG.width - (cellSize * cols)) / 2);
+		boardY = Math.floor((FlxG.height - (cellSize * rows)) / 2);
 
 		grid = new Array();
 
@@ -51,17 +84,23 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 				var gbkc = gt.color;
 				gbkc.alphaFloat = 0.33;
 
-				var bk = new FlxSprite(gridX + x * cellSize, gridY + y * cellSize);
+				var bk = new FlxSprite(boardX + x * cellSize, boardY + y * cellSize);
 				bk.makeGraphic(cellSize, cellSize, gbkc);
 				add(bk);
 
 				var g = gemPool.get();
-				g.init(gridX + x * cellSize, gridY + y * cellSize, FlxPoint.get(cellSize, cellSize), FlxPoint.get(margin, margin), gemFrames, gt);
+				g.init(boardX + x * cellSize, boardY + y * cellSize, FlxPoint.get(cellSize, cellSize), FlxPoint.get(margin, margin), gemFrames, gt);
 				add(g);
 				grid[x][y] = g;
 			}
 		}
 	}
+
+	var selected:GemGrid = null;
+
+	var swapping:Array<GemGrid> = null;
+
+	var gemMoves = 0;
 
 	override public function update(elapsed:Float):Void
 	{
@@ -72,61 +111,141 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			FlxG.switchState(new MainMenuState());
 		}
 
-		if (FlxG.keys.justPressed.SPACE)
+		switch (state)
 		{
-			for (x in 0...grid.length)
-			{
-				for (y in 0...grid[0].length)
+			case State.Idle:
+				updateIdle();
+			case State.Swapping:
+				updateSwapping();
+			case SwappingRevert:
+				if (gemMoves >= 2)
 				{
-					grid[x][y].selected = false;
+					state = State.Idle;
 				}
-			}
+			default:
+				// case State.Matching:
+				//	updateMatching();
+				// case State.Falling:
+				//	updateFalling();
+				// case State.Refilling:
+				//	updateRefilling();
+		}
+	}
+
+	function swapCells():Void
+	{
+		if (swapping == null)
+		{
+			return;
 		}
 
-		if (FlxG.keys.justPressed.A)
+		gemMoves = 0;
+
+		var temp = grid[swapping[0].x][swapping[0].y];
+		grid[swapping[0].x][swapping[0].y] = grid[swapping[1].x][swapping[1].y];
+		grid[swapping[1].x][swapping[1].y] = temp;
+
+		swapping[0].gem.move(swapping[1].gem.x, swapping[1].gem.y, 0.3, (t) ->
+		{
+			gemMoves++;
+		});
+		swapping[1].gem.move(swapping[0].gem.x, swapping[0].gem.y, 0.3, (t) ->
+		{
+			gemMoves++;
+		});
+	}
+
+	function updateSwapping()
+	{
+		if (gemMoves >= 2)
 		{
 			var matches = findAllMatches();
 
-			for (match in matches)
+			for (m in matches)
 			{
-				for (cell in match)
+				var x = "";
+				for (c in m)
 				{
-					grid[cell.x][cell.y].selected = true;
+					x += "(" + c.x + ", " + c.y + ") - ";
 				}
+				FlxG.log.add("Match: " + x);
+			}
+
+			if (matches.length > 0)
+			{
+				state = State.Matching;
+			}
+			else
+			{
+				// swap back
+				swapCells();
+				state = State.SwappingRevert;
 			}
 		}
+	}
 
-		if (FlxG.keys.justPressed.X)
+	function updateIdle()
+	{
+		if (FlxG.mouse.justPressed && state == State.Idle)
 		{
-			for (y in 0...grid[0].length)
+			var cell = getCellAtMouse();
+			if (cell != null)
 			{
-				var matches = findMatchesInRow(y);
-				FlxG.log.add(matches);
-				for (match in matches)
+				FlxG.log.add("Clicked on cell: " + cell.x + ", " + cell.y);
+
+				var clickedGem = grid[cell.x][cell.y];
+
+				if (selected == null)
 				{
-					for (cell in match)
+					var selectedGem = clickedGem;
+					selectedGem.selected = true;
+					selected = {x: cell.x, y: cell.y, gem: selectedGem};
+				}
+				else
+				{
+					if (selected.x == cell.x && selected.y == cell.y)
 					{
-						grid[cell.x][cell.y].selected = true;
+						selected.gem.selected = false;
+						selected = null;
+					}
+					else
+					{
+						var dx = cell.x - selected.x;
+						var dy = cell.y - selected.y;
+
+						if (Math.abs(dx) + Math.abs(dy) == 1)
+						{
+							selected.gem.selected = false;
+							swapping = [selected, {x: cell.x, y: cell.y, gem: clickedGem}];
+							swapCells();
+							selected = null;
+
+							state = State.Swapping;
+						}
+						else
+						{
+							selected.gem.selected = false;
+
+							selected = {x: cell.x, y: cell.y, gem: clickedGem};
+							selected.gem.selected = true;
+						}
 					}
 				}
 			}
 		}
+	}
 
-		if (FlxG.keys.justPressed.Y)
+	function getCellAtMouse():CellIndex
+	{
+		var x = FlxG.mouse.x - boardX;
+		var y = FlxG.mouse.y - boardY;
+
+		if (x < 0 || y < 0 || x >= boardWidth * cellSize || y >= boardHeight * cellSize)
 		{
-			for (x in 0...grid.length)
-			{
-				var matches = findMatchesInColumn(x);
-				FlxG.log.add(matches);
-				for (match in matches)
-				{
-					for (cell in match)
-					{
-						grid[cell.x][cell.y].selected = true;
-					}
-				}
-			}
+			return null;
 		}
+
+		return {x: Math.floor(x / cellSize), y: Math.floor(y / cellSize)};
 	}
 
 	function findAllMatches():Array<MatchGroup>
