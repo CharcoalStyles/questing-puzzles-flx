@@ -9,6 +9,7 @@ import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxPoint;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxPool;
+import haxe.atomic.AtomicBool;
 import lime.app.Promise;
 import states.MainMenuState;
 import utils.KennyAtlasLoader;
@@ -25,6 +26,17 @@ typedef GemGrid =
 	y:Int,
 	gem:Gem
 }
+
+typedef UpdatedGem =
+{
+	originalX:Int,
+	originalY:Int,
+	updatedX:Int,
+	updatedY:Int,
+	targetPostion:FlxPoint,
+	gem:Gem,
+	isMatch:Bool
+};
 
 enum State
 {
@@ -89,7 +101,7 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 		gemFrames = KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png", "assets/data/spritesheet_tilesGrey.xml");
 
 		gemPool = new FlxPool<Gem>(PoolFactory.fromFunction(() -> new Gem()));
-		gemPool.preAllocate(72);
+		gemPool.preAllocate(rows * cols);
 
 		cellSize = Math.floor(Math.min(FlxG.height, FlxG.width) / Math.max(rows, cols));
 		var margin = Math.floor(cellSize * 0.4);
@@ -104,7 +116,7 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			grid[x] = new Array();
 			for (y in 0...rows)
 			{
-				var gt = GemType.random();
+				var gt = bsToGt[boardState[x][y] - 1]; // GemType.random();
 				var gbkc = gt.color;
 				gbkc.alphaFloat = 0.33;
 
@@ -223,69 +235,172 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 					flatMatches.push({x: c.x, y: c.y, gem: grid[c.x][c.y]});
 				}
 			}
+			flatMatches.sort((a, b) -> a.y - b.y);
 
-			// for each column, find the lowest matched gem
-			var lowestMatchedCells = new Array<Int>();
+			var updatedGems = new Array<UpdatedGem>();
 
-			for (i in 0...boardWidth)
+			for (match in flatMatches)
 			{
-				lowestMatchedCells.push(-1);
-			}
+				trace(match.x, match.y);
 
-			for (cell in flatMatches)
-			{
-				if (lowestMatchedCells[cell.x] == -1 || cell.y > lowestMatchedCells[cell.x])
+				var gem = grid[match.x][match.y];
+				var updatedMatchedGem:UpdatedGem = {
+					originalX: match.x,
+					originalY: match.y,
+					updatedX: match.x,
+					updatedY: match.y,
+					targetPostion: FlxPoint.get(gem.x, gem.y),
+					gem: gem,
+					isMatch: true
+				};
+
+				var finished = false;
+
+				var nextY = match.y - 1;
+				while (!finished)
 				{
-					lowestMatchedCells[cell.x] = cell.y;
-				}
-			}
-			for (x in 0...lowestMatchedCells.length)
-			{
-				var colFall = FlxG.random.float(0.32, 0.38);
-				var lmc = lowestMatchedCells[x];
-				if (lmc != -1)
-				{
-					var colDelta = 0;
-					for (i in 1...lmc + 1)
+					if (nextY < 0)
 					{
-						var y = lmc - i;
+						finished = true;
+						continue;
+					}
 
-						var car = flatMatches.filter((c) -> c.x == x && c.y == y);
-
-						if (car.length > 0 && colDelta > 0)
+					var ng = updatedGems.filter((g) -> g.originalX == match.x && g.originalY == nextY && g.isMatch); // Perhaps not do this, bruteforce it to the top?
+					if (ng.length > 0)
+					{
+						finished = true;
+					}
+					else
+					{
+						var nextGem = grid[match.x][nextY];
+						if (nextGem != null)
 						{
-							colDelta += 1;
-						}
+							var updatedGem = updatedGems.filter((g) -> g.originalX == match.x && g.originalY == nextY && !g.isMatch);
 
-						if (car.length == 0)
-						{
-							if (colDelta == 0)
+							if (updatedGem.length > 0)
 							{
-								// this is the first not matched cell, find the cell distance between this and hte lmc
-								colDelta = lmc - y;
+								updatedMatchedGem.updatedY = nextY + 1;
+								updatedMatchedGem.targetPostion = FlxPoint.get(nextGem.x, nextGem.y);
+								finished = true;
 							}
-
-							var gem = grid[x][y];
-							var targetGem = grid[x][y + colDelta];
-
-							var index = gemMoves.push(false);
-
-							gem.move(targetGem.x, targetGem.y, Math.pow(colDelta, colFall) * colFall, (t) ->
+							else
 							{
-								gemMoves[index - 1] = true;
-							}, FlxEase.bounceOut);
+								updatedGems.push({
+									originalX: match.x,
+									originalY: nextY,
+									updatedX: match.x,
+									updatedY: nextY + 1,
+									targetPostion: FlxPoint.get(nextGem.x, nextGem.y),
+									gem: nextGem,
+									isMatch: false
+								});
+								updatedMatchedGem.updatedY = nextY;
+								updatedMatchedGem.targetPostion = FlxPoint.get(nextGem.x, nextGem.y);
+								nextY--;
+							}
+						}
+						else
+						{
+							finished = true;
 						}
 					}
 				}
+
+				updatedGems.push(updatedMatchedGem);
 			}
 
-			for (m in flatMatches)
+			var colFall = new Array<Float>();
+			for (i in 0...boardWidth)
 			{
-				m.gem.kill();
-				grid[m.x][m.y] = null;
+				colFall.push(FlxG.random.float(0.32, 0.38));
+			}
+
+			trace(updatedGems);
+
+			for (ug in updatedGems)
+			{
+				grid[ug.updatedX][ug.updatedY] = ug.gem;
+			}
+
+			for (ug in updatedGems.filter((ug) -> !ug.isMatch))
+			{
+				var index = gemMoves.push(false);
+				ug.gem.move(ug.targetPostion.x, ug.targetPostion.y, colFall[ug.updatedY], (t) ->
+				{
+					gemMoves[index - 1] = true;
+				}, FlxEase.bounceOut);
+			}
+
+			for (ug in updatedGems.filter((ug) -> ug.isMatch))
+			{
+				ug.gem.kill();
+				grid[ug.updatedX][ug.updatedY] = null;
 			}
 
 			state = State.Falling;
+
+			// 	// for each column, find the lowest matched gem
+			// 	var lowestMatchedCells = new Array<Int>();
+
+			// 	for (i in 0...boardWidth)
+			// 	{
+			// 		lowestMatchedCells.push(-1);
+			// 	}
+
+			// 	for (cell in flatMatches)
+			// 	{
+			// 		if (lowestMatchedCells[cell.x] == -1 || cell.y > lowestMatchedCells[cell.x])
+			// 		{
+			// 			lowestMatchedCells[cell.x] = cell.y;
+			// 		}
+			// 	}
+			// 	for (x in 0...lowestMatchedCells.length)
+			// 	{
+			// 		var colFall = FlxG.random.float(0.32, 0.38);
+			// 		var lmc = lowestMatchedCells[x];
+			// 		if (lmc != -1)
+			// 		{
+			// 			var colDelta = 0;
+			// 			for (i in 1...lmc + 1)
+			// 			{
+			// 				var y = lmc - i;
+
+			// 				var car = flatMatches.filter((c) -> c.x == x && c.y == y);
+
+			// 				if (car.length > 0 && colDelta > 0)
+			// 				{
+			// 					colDelta += 1;
+			// 				}
+
+			// 				if (car.length == 0)
+			// 				{
+			// 					if (colDelta == 0)
+			// 					{
+			// 						// this is the first not matched cell, find the cell distance between this and hte lmc
+			// 						colDelta = lmc - y;
+			// 					}
+
+			// 					var gem = grid[x][y];
+			// 					var targetGem = grid[x][y + colDelta];
+
+			// 					var index = gemMoves.push(false);
+
+			// 					gem.move(targetGem.x, targetGem.y, Math.pow(colDelta, colFall) * colFall, (t) ->
+			// 					{
+			// 						gemMoves[index - 1] = true;
+			// 					}, FlxEase.bounceOut);
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+
+			// 	for (m in flatMatches)
+			// 	{
+			// 		m.gem.kill();
+			// 		grid[m.x][m.y] = null;
+			// 	}
+
+			// 	state = State.Falling;
 		}
 		else
 		{
