@@ -7886,8 +7886,8 @@ entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
 		this.debugText.set_y(this.y);
 		this.debugText.set_text(Std.string(this.gemTypeId));
 	}
-	,move: function(x,y,duration,onComplete) {
-		return flixel_tweens_FlxTween.tween(this,{ x : x, y : y},duration,{ onComplete : onComplete});
+	,move: function(x,y,duration,onComplete,ease) {
+		return flixel_tweens_FlxTween.tween(this,{ x : x, y : y},duration,{ onComplete : onComplete, ease : ease != null ? ease : flixel_tweens_FlxEase.linear});
 	}
 	,draw: function() {
 		flixel_FlxSprite.prototype.draw.call(this);
@@ -8546,13 +8546,17 @@ flixel_group_FlxTypedGroup.prototype = $extend(flixel_FlxBasic.prototype,{
 	,__properties__: $extend(flixel_FlxBasic.prototype.__properties__,{get_memberRemoved:"get_memberRemoved",get_memberAdded:"get_memberAdded",set_maxSize:"set_maxSize"})
 });
 var entities_PlayBoard = function(rows,cols) {
-	this.gemMoves = 0;
+	this.gemMoves = null;
 	this.swapping = null;
 	this.selected = null;
+	this.bsToGt = [entities_GemType.BLUE,entities_GemType.GREEN,entities_GemType.ORANGE,entities_GemType.PURPLE,entities_GemType.RED,entities_GemType.YELLOW];
+	this.boardState = [];
 	this.state = entities_State.Idle;
 	flixel_group_FlxTypedGroup.call(this);
+	flixel_FlxG.mouse.set_visible(true);
 	this.boardWidth = cols;
 	this.boardHeight = rows;
+	this.boardState = [[1,2,3,4,5,1,2,3],[2,6,4,5,1,2,3,4],[3,4,6,6,2,3,4,5],[4,5,6,2,3,4,5,1],[5,1,2,3,4,5,1,2],[1,2,3,4,5,1,2,3],[2,3,4,5,1,2,3,4],[3,4,5,1,2,3,4,5]];
 	this.gemFrames = utils_KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png","assets/data/spritesheet_tilesGrey.xml");
 	this.gemPool = new flixel_util_FlxPool(function() {
 		return new entities_Gem();
@@ -8645,6 +8649,26 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 				});
 			}
 		}
+		var _this = flixel_FlxG.keys.justPressed;
+		if(_this.keyManager.checkStatusUnsafe(70,_this.status)) {
+			var _g = 0;
+			var _g1 = this.boardWidth;
+			while(_g < _g1) {
+				var x = _g++;
+				var r = "";
+				var _g2 = 0;
+				var _g3 = this.boardHeight;
+				while(_g2 < _g3) {
+					var y = _g2++;
+					if(this.grid[x][y] != null) {
+						r += this.grid[x][y].gemTypeId + ", ";
+					} else {
+						r += "-, ";
+					}
+				}
+				flixel_FlxG.log.advanced(r,flixel_system_debug_log_LogStyle.NORMAL);
+			}
+		}
 		switch(this.state._hx_index) {
 		case 0:
 			this.updateIdle();
@@ -8653,11 +8677,26 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			this.updateSwapping();
 			break;
 		case 2:
-			if(this.gemMoves >= 2) {
+			if(this.gemMoves.indexOf(false) != -1) {
+				return;
+			} else {
 				this.state = entities_State.Idle;
 			}
 			break;
+		case 3:
+			this.updateMatching();
+			break;
+		case 4:
+			this.updateFalling();
+			break;
 		default:
+		}
+	}
+	,updateFalling: function() {
+		if(this.gemMoves.indexOf(false) != -1) {
+			return;
+		} else {
+			this.state = entities_State.Refilling;
 		}
 	}
 	,swapCells: function() {
@@ -8665,46 +8704,117 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		if(this.swapping == null) {
 			return;
 		}
-		this.gemMoves = 0;
+		this.gemMoves = [false,false];
 		var temp = this.grid[this.swapping[0].x][this.swapping[0].y];
 		this.grid[this.swapping[0].x][this.swapping[0].y] = this.grid[this.swapping[1].x][this.swapping[1].y];
 		this.grid[this.swapping[1].x][this.swapping[1].y] = temp;
 		this.swapping[0].gem.move(this.swapping[1].gem.x,this.swapping[1].gem.y,0.3,function(t) {
-			_gthis.gemMoves++;
+			_gthis.gemMoves[0] = true;
 		});
 		this.swapping[1].gem.move(this.swapping[0].gem.x,this.swapping[0].gem.y,0.3,function(t) {
-			_gthis.gemMoves++;
+			_gthis.gemMoves[1] = true;
 		});
 	}
-	,updateSwapping: function() {
-		if(this.gemMoves >= 2) {
-			var matches = this.findAllMatches();
+	,updateMatching: function() {
+		var _gthis = this;
+		var matches = this.findAllMatches();
+		if(matches.length > 0) {
+			this.gemMoves = [];
+			var flatMatches = [];
 			var _g = 0;
 			while(_g < matches.length) {
 				var m = matches[_g];
 				++_g;
-				var x = "";
 				var _g1 = 0;
 				while(_g1 < m.length) {
 					var c = m[_g1];
 					++_g1;
-					x += "(" + c.x + ", " + c.y + ") - ";
+					flatMatches.push({ x : c.x, y : c.y, gem : this.grid[c.x][c.y]});
 				}
-				flixel_FlxG.log.advanced("Match: " + x,flixel_system_debug_log_LogStyle.NORMAL);
 			}
-			if(matches.length > 0) {
-				this.state = entities_State.Matching;
-			} else {
-				this.swapCells();
-				this.state = entities_State.SwappingRevert;
+			var lowestMatchedCells = [];
+			var _g = 0;
+			var _g1 = this.boardWidth;
+			while(_g < _g1) {
+				var i = _g++;
+				lowestMatchedCells.push(-1);
 			}
+			var _g = 0;
+			while(_g < flatMatches.length) {
+				var cell = flatMatches[_g];
+				++_g;
+				if(lowestMatchedCells[cell.x] == -1 || cell.y > lowestMatchedCells[cell.x]) {
+					lowestMatchedCells[cell.x] = cell.y;
+				}
+			}
+			var _g = 0;
+			var _g1 = lowestMatchedCells.length;
+			while(_g < _g1) {
+				var x = _g++;
+				var colFall = flixel_FlxG.random.float(0.32,0.38);
+				var lmc = lowestMatchedCells[x];
+				if(lmc != -1) {
+					var colDelta = 0;
+					var _g2 = 1;
+					var _g3 = lmc + 1;
+					while(_g2 < _g3) {
+						var i = _g2++;
+						var y = lmc - i;
+						var _g4 = [];
+						var _g5 = 0;
+						var _g6 = flatMatches;
+						while(_g5 < _g6.length) {
+							var v = _g6[_g5];
+							++_g5;
+							if(v.x == x && v.y == y) {
+								_g4.push(v);
+							}
+						}
+						var car = _g4;
+						if(car.length > 0 && colDelta > 0) {
+							++colDelta;
+						}
+						if(car.length == 0) {
+							if(colDelta == 0) {
+								colDelta = lmc - y;
+							}
+							var gem = this.grid[x][y];
+							var targetGem = this.grid[x][y + colDelta];
+							var index = [this.gemMoves.push(false)];
+							gem.move(targetGem.x,targetGem.y,Math.pow(colDelta,colFall) * colFall,(function(index) {
+								return function(t) {
+									_gthis.gemMoves[index[0] - 1] = true;
+								};
+							})(index),flixel_tweens_FlxEase.bounceOut);
+						}
+					}
+				}
+			}
+			var _g = 0;
+			while(_g < flatMatches.length) {
+				var m = flatMatches[_g];
+				++_g;
+				m.gem.kill();
+				this.grid[m.x][m.y] = null;
+			}
+			this.state = entities_State.Falling;
+		} else {
+			this.swapCells();
+			this.swapping = null;
+			this.state = entities_State.SwappingRevert;
+		}
+	}
+	,updateSwapping: function() {
+		if(this.gemMoves.indexOf(false) != -1) {
+			return;
+		} else {
+			this.state = entities_State.Matching;
 		}
 	}
 	,updateIdle: function() {
 		if(flixel_FlxG.mouse._leftButton.current == 2 && this.state == entities_State.Idle) {
 			var cell = this.getCellAtMouse();
 			if(cell != null) {
-				flixel_FlxG.log.advanced("Clicked on cell: " + cell.x + ", " + cell.y,flixel_system_debug_log_LogStyle.NORMAL);
 				var clickedGem = this.grid[cell.x][cell.y];
 				if(this.selected == null) {
 					var selectedGem = clickedGem;
@@ -70868,7 +70978,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 757036;
+	this.version = 536399;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
