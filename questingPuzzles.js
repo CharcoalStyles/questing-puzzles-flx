@@ -8569,6 +8569,67 @@ var entities_PlayBoard = function(rows,cols) {
 	this.boardX = Math.floor((flixel_FlxG.width - this.cellSize * cols) / 2);
 	this.boardY = Math.floor((flixel_FlxG.height - this.cellSize * rows) / 2);
 	this.grid = [];
+	var _g = 0;
+	var _g1 = cols;
+	while(_g < _g1) {
+		var x = _g++;
+		this.grid[x] = [];
+		var _g2 = 0;
+		var _g3 = rows;
+		while(_g2 < _g3) {
+			var y = _g2++;
+			var gt = entities_GemType.random();
+			var gbkc = gt.color;
+			var Value = Math.round(84.15);
+			gbkc &= 16777215;
+			gbkc |= (Value > 255 ? 255 : Value < 0 ? 0 : Value) << 24;
+			var bk = new flixel_FlxSprite(this.boardX + x * this.cellSize,this.boardY + y * this.cellSize);
+			bk.makeGraphic(this.cellSize,this.cellSize,gbkc);
+			this.add(bk);
+			var g = this.gemPool.get();
+			var tmp = this.boardX + x * this.cellSize;
+			var tmp1 = this.boardY + y * this.cellSize;
+			var x1 = this.cellSize;
+			var y1 = this.cellSize;
+			if(y1 == null) {
+				y1 = 0;
+			}
+			if(x1 == null) {
+				x1 = 0;
+			}
+			var x2 = x1;
+			var y2 = y1;
+			if(y2 == null) {
+				y2 = 0;
+			}
+			if(x2 == null) {
+				x2 = 0;
+			}
+			var point = flixel_math_FlxBasePoint.pool.get().set(x2,y2);
+			point._inPool = false;
+			var x3 = margin;
+			var y3 = margin;
+			if(y3 == null) {
+				y3 = 0;
+			}
+			if(x3 == null) {
+				x3 = 0;
+			}
+			var x4 = x3;
+			var y4 = y3;
+			if(y4 == null) {
+				y4 = 0;
+			}
+			if(x4 == null) {
+				x4 = 0;
+			}
+			var point1 = flixel_math_FlxBasePoint.pool.get().set(x4,y4);
+			point1._inPool = false;
+			g.init(tmp,tmp1,point,point1,this.gemFrames,gt);
+			this.add(g);
+			this.grid[x][y] = g;
+		}
+	}
 };
 $hxClasses["entities.PlayBoard"] = entities_PlayBoard;
 entities_PlayBoard.__name__ = "entities.PlayBoard";
@@ -71058,7 +71119,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 236595;
+	this.version = 251962;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
