@@ -13,6 +13,10 @@ import utils.GlobalState;
 
 class Gem extends FlxSprite
 {
+	public static var count:Int = 0;
+
+	public var id:Int;
+
 	var originalColor:FlxColor;
 	var targetScale:FlxPoint;
 
@@ -27,6 +31,8 @@ class Gem extends FlxSprite
 	public function new()
 	{
 		super();
+		this.id = Gem.count;
+		Gem.count++;
 
 		this.debugText = new FlxText(0, 0, 100, "");
 
@@ -80,7 +86,7 @@ class Gem extends FlxSprite
 
 	public function move(x:Float, y:Float, duration:Float, onComplete:FlxTween->Void, ?ease:EaseFunction):FlxTween
 	{
-		return FlxTween.tween(this, {x: x, y: y}, duration, {onComplete: onComplete, ease: ease != null ? ease : FlxEase.linear });
+		return FlxTween.tween(this, {x: x, y: y}, duration, {onComplete: onComplete, ease: ease != null ? ease : FlxEase.linear});
 	}
 
 	override public function draw():Void
