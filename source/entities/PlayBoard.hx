@@ -7,6 +7,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxPoint;
+import flixel.tweens.FlxEase;
 import flixel.util.FlxPool;
 import lime.app.Promise;
 import states.MainMenuState;
@@ -53,14 +54,37 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 
 	var state = State.Idle;
 
+	var boardState = new Array<Array<Int>>();
+	var bsToGt = [
+		GemType.BLUE,
+		GemType.GREEN,
+		GemType.ORANGE,
+		GemType.PURPLE,
+		GemType.RED,
+		GemType.YELLOW
+	];
+
 	public function new(rows:Int, cols:Int)
 	{
 		super();
 		FlxG.watch.add(this, "state");
 		FlxG.watch.add(this, "gemMoves");
 
+		FlxG.mouse.visible = true;
+
 		boardWidth = cols;
 		boardHeight = rows;
+
+		boardState = [
+			[1, 2, 3, 4, 5, 1, 2, 3],
+			[2, 6, 4, 5, 1, 2, 3, 4],
+			[3, 4, 6, 6, 2, 3, 4, 5],
+			[4, 5, 6, 2, 3, 4, 5, 1],
+			[5, 1, 2, 3, 4, 5, 1, 2],
+			[1, 2, 3, 4, 5, 1, 2, 3],
+			[2, 3, 4, 5, 1, 2, 3, 4],
+			[3, 4, 5, 1, 2, 3, 4, 5]
+		];
 
 		gemFrames = KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png", "assets/data/spritesheet_tilesGrey.xml");
 
@@ -100,7 +124,7 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 
 	var swapping:Array<GemGrid> = null;
 
-	var gemMoves = 0;
+	var gemMoves:Array<Bool> = null;
 
 	override public function update(elapsed:Float):Void
 	{
@@ -111,6 +135,23 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			FlxG.switchState(new MainMenuState());
 		}
 
+		if (FlxG.keys.justPressed.F)
+		{
+			for (x in 0...boardWidth)
+			{
+				var r = "";
+				for (y in 0...boardHeight)
+				{
+					if (grid[x][y] != null)
+						r += grid[x][y].gemTypeId + ", ";
+					else
+						r += "-, ";
+				}
+
+				FlxG.log.add(r);
+			}
+		}
+
 		switch (state)
 		{
 			case State.Idle:
@@ -118,17 +159,29 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			case State.Swapping:
 				updateSwapping();
 			case SwappingRevert:
-				if (gemMoves >= 2)
-				{
+				if (gemMoves.contains(false))
+					return;
+				else
 					state = State.Idle;
-				}
 			default:
-				// case State.Matching:
-				//	updateMatching();
-				// case State.Falling:
-				//	updateFalling();
+			case State.Matching:
+				updateMatching();
+			case State.Falling:
+				updateFalling();
 				// case State.Refilling:
 				//	updateRefilling();
+		}
+	}
+
+	function updateFalling()
+	{
+		if (gemMoves.contains(false))
+		{
+			return;
+		}
+		else
+		{
+			state = State.Refilling;
 		}
 	}
 
@@ -139,7 +192,7 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			return;
 		}
 
-		gemMoves = 0;
+		gemMoves = [false, false];
 
 		var temp = grid[swapping[0].x][swapping[0].y];
 		grid[swapping[0].x][swapping[0].y] = grid[swapping[1].x][swapping[1].y];
@@ -147,41 +200,107 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 
 		swapping[0].gem.move(swapping[1].gem.x, swapping[1].gem.y, 0.3, (t) ->
 		{
-			gemMoves++;
+			gemMoves[0] = true;
 		});
 		swapping[1].gem.move(swapping[0].gem.x, swapping[0].gem.y, 0.3, (t) ->
 		{
-			gemMoves++;
+			gemMoves[1] = true;
 		});
+	}
+
+	function updateMatching()
+	{
+		var matches = findAllMatches();
+
+		if (matches.length > 0)
+		{
+			gemMoves = [];
+			var flatMatches = new Array<GemGrid>();
+			for (m in matches)
+			{
+				for (c in m)
+				{
+					flatMatches.push({x: c.x, y: c.y, gem: grid[c.x][c.y]});
+				}
+			}
+
+			// for each column, find the lowest matched gem
+			var lowestMatchedCells = new Array<Int>();
+
+			for (i in 0...boardWidth)
+			{
+				lowestMatchedCells.push(-1);
+			}
+
+			for (cell in flatMatches)
+			{
+				if (lowestMatchedCells[cell.x] == -1 || cell.y > lowestMatchedCells[cell.x])
+				{
+					lowestMatchedCells[cell.x] = cell.y;
+				}
+			}
+			for (x in 0...lowestMatchedCells.length)
+			{
+				var colFall = FlxG.random.float(0.32, 0.38);
+				var lmc = lowestMatchedCells[x];
+				if (lmc != -1)
+				{
+					var colDelta = 0;
+					for (i in 1...lmc + 1)
+					{
+						var y = lmc - i;
+
+						var car = flatMatches.filter((c) -> c.x == x && c.y == y);
+
+						if (car.length > 0 && colDelta > 0)
+						{
+							colDelta += 1;
+						}
+
+						if (car.length == 0)
+						{
+							if (colDelta == 0)
+							{
+								// this is the first not matched cell, find the cell distance between this and hte lmc
+								colDelta = lmc - y;
+							}
+
+							var gem = grid[x][y];
+							var targetGem = grid[x][y + colDelta];
+
+							var index = gemMoves.push(false);
+
+							gem.move(targetGem.x, targetGem.y, Math.pow(colDelta, colFall) * colFall, (t) ->
+							{
+								gemMoves[index - 1] = true;
+							}, FlxEase.bounceOut);
+						}
+					}
+				}
+			}
+
+			for (m in flatMatches)
+			{
+				m.gem.kill();
+				grid[m.x][m.y] = null;
+			}
+
+			state = State.Falling;
+		}
+		else
+		{
+			swapCells();
+			swapping = null;
+			state = State.SwappingRevert;
+		}
 	}
 
 	function updateSwapping()
 	{
-		if (gemMoves >= 2)
-		{
-			var matches = findAllMatches();
-
-			for (m in matches)
-			{
-				var x = "";
-				for (c in m)
-				{
-					x += "(" + c.x + ", " + c.y + ") - ";
-				}
-				FlxG.log.add("Match: " + x);
-			}
-
-			if (matches.length > 0)
-			{
-				state = State.Matching;
-			}
-			else
-			{
-				// swap back
-				swapCells();
-				state = State.SwappingRevert;
-			}
-		}
+		if (gemMoves.contains(false))
+			return;
+		else
+			state = State.Matching;
 	}
 
 	function updateIdle()
@@ -191,8 +310,6 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			var cell = getCellAtMouse();
 			if (cell != null)
 			{
-				FlxG.log.add("Clicked on cell: " + cell.x + ", " + cell.y);
-
 				var clickedGem = grid[cell.x][cell.y];
 
 				if (selected == null)

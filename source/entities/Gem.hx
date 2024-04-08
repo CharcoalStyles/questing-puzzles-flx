@@ -78,9 +78,9 @@ class Gem extends FlxSprite
 		this.debugText.text = Std.string(this.gemTypeId);
 	}
 
-	public function move(x:Float, y:Float, duration:Float, onComplete:FlxTween->Void):FlxTween
+	public function move(x:Float, y:Float, duration:Float, onComplete:FlxTween->Void, ?ease:EaseFunction):FlxTween
 	{
-		return FlxTween.tween(this, {x: x, y: y}, duration, {onComplete: onComplete});
+		return FlxTween.tween(this, {x: x, y: y}, duration, {onComplete: onComplete, ease: ease != null ? ease : FlxEase.linear });
 	}
 
 	override public function draw():Void
