@@ -7821,6 +7821,8 @@ flixel_FlxSprite.prototype = $extend(flixel_FlxObject.prototype,{
 var entities_Gem = function() {
 	this.selected = false;
 	flixel_FlxSprite.call(this);
+	this.id = entities_Gem.count;
+	entities_Gem.count++;
 	this.debugText = new flixel_text_FlxText(0,0,100,"");
 	this.kill();
 };
@@ -8547,16 +8549,16 @@ flixel_group_FlxTypedGroup.prototype = $extend(flixel_FlxBasic.prototype,{
 });
 var entities_PlayBoard = function(rows,cols) {
 	this.gemMoves = null;
-	this.swapping = null;
+	this.userSwap = null;
 	this.selected = null;
-	this.bsToGt = [entities_GemType.BLUE,entities_GemType.GREEN,entities_GemType.ORANGE,entities_GemType.PURPLE,entities_GemType.RED,entities_GemType.YELLOW];
+	this.bsToGt = [entities_GemType.RED,entities_GemType.GREEN,entities_GemType.BLUE,entities_GemType.YELLOW,entities_GemType.PURPLE,entities_GemType.ORANGE];
 	this.boardState = [];
 	this.state = entities_State.Idle;
 	flixel_group_FlxTypedGroup.call(this);
 	flixel_FlxG.mouse.set_visible(true);
 	this.boardWidth = cols;
 	this.boardHeight = rows;
-	this.boardState = [[1,2,3,4,5,1,2,3],[2,6,4,5,1,2,3,4],[3,4,6,6,2,3,4,5],[4,5,6,2,3,4,5,1],[5,1,2,3,4,5,1,2],[1,2,3,4,5,1,2,3],[2,3,4,5,1,2,3,4],[3,4,5,1,2,3,4,5]];
+	this.boardState = [[1,2,6,4,5,1,2,3],[2,6,4,5,1,2,3,4],[6,4,6,6,2,3,3,5],[4,5,6,2,3,4,3,1],[5,1,2,3,4,5,1,2],[1,2,3,4,5,1,2,3],[2,3,4,5,1,2,3,4],[3,4,5,1,2,3,4,5]];
 	this.gemFrames = utils_KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png","assets/data/spritesheet_tilesGrey.xml");
 	this.gemPool = new flixel_util_FlxPool(function() {
 		return new entities_Gem();
@@ -8567,67 +8569,6 @@ var entities_PlayBoard = function(rows,cols) {
 	this.boardX = Math.floor((flixel_FlxG.width - this.cellSize * cols) / 2);
 	this.boardY = Math.floor((flixel_FlxG.height - this.cellSize * rows) / 2);
 	this.grid = [];
-	var _g = 0;
-	var _g1 = cols;
-	while(_g < _g1) {
-		var x = _g++;
-		this.grid[x] = [];
-		var _g2 = 0;
-		var _g3 = rows;
-		while(_g2 < _g3) {
-			var y = _g2++;
-			var gt = this.bsToGt[this.boardState[x][y] - 1];
-			var gbkc = gt.color;
-			var Value = Math.round(84.15);
-			gbkc &= 16777215;
-			gbkc |= (Value > 255 ? 255 : Value < 0 ? 0 : Value) << 24;
-			var bk = new flixel_FlxSprite(this.boardX + x * this.cellSize,this.boardY + y * this.cellSize);
-			bk.makeGraphic(this.cellSize,this.cellSize,gbkc);
-			this.add(bk);
-			var g = this.gemPool.get();
-			var tmp = this.boardX + x * this.cellSize;
-			var tmp1 = this.boardY + y * this.cellSize;
-			var x1 = this.cellSize;
-			var y1 = this.cellSize;
-			if(y1 == null) {
-				y1 = 0;
-			}
-			if(x1 == null) {
-				x1 = 0;
-			}
-			var x2 = x1;
-			var y2 = y1;
-			if(y2 == null) {
-				y2 = 0;
-			}
-			if(x2 == null) {
-				x2 = 0;
-			}
-			var point = flixel_math_FlxBasePoint.pool.get().set(x2,y2);
-			point._inPool = false;
-			var x3 = margin;
-			var y3 = margin;
-			if(y3 == null) {
-				y3 = 0;
-			}
-			if(x3 == null) {
-				x3 = 0;
-			}
-			var x4 = x3;
-			var y4 = y3;
-			if(y4 == null) {
-				y4 = 0;
-			}
-			if(x4 == null) {
-				x4 = 0;
-			}
-			var point1 = flixel_math_FlxBasePoint.pool.get().set(x4,y4);
-			point1._inPool = false;
-			g.init(tmp,tmp1,point,point1,this.gemFrames,gt);
-			this.add(g);
-			this.grid[x][y] = g;
-		}
-	}
 };
 $hxClasses["entities.PlayBoard"] = entities_PlayBoard;
 entities_PlayBoard.__name__ = "entities.PlayBoard";
@@ -8699,21 +8640,23 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			this.state = entities_State.Refilling;
 		}
 	}
-	,swapCells: function() {
-		var _gthis = this;
-		if(this.swapping == null) {
-			return;
+	,swapCells: function(gem1,gem2,visual) {
+		if(visual == null) {
+			visual = true;
 		}
-		this.gemMoves = [false,false];
-		var temp = this.grid[this.swapping[0].x][this.swapping[0].y];
-		this.grid[this.swapping[0].x][this.swapping[0].y] = this.grid[this.swapping[1].x][this.swapping[1].y];
-		this.grid[this.swapping[1].x][this.swapping[1].y] = temp;
-		this.swapping[0].gem.move(this.swapping[1].gem.x,this.swapping[1].gem.y,0.3,function(t) {
-			_gthis.gemMoves[0] = true;
-		});
-		this.swapping[1].gem.move(this.swapping[0].gem.x,this.swapping[0].gem.y,0.3,function(t) {
-			_gthis.gemMoves[1] = true;
-		});
+		var _gthis = this;
+		var temp = this.grid[gem1.x][gem1.y];
+		this.grid[gem1.x][gem1.y] = this.grid[gem2.x][gem2.y];
+		this.grid[gem2.x][gem2.y] = temp;
+		if(visual) {
+			this.gemMoves = [false,false];
+			gem1.gem.move(gem2.gem.x,gem2.gem.y,0.3,function(t) {
+				_gthis.gemMoves[0] = true;
+			});
+			gem2.gem.move(gem1.gem.x,gem1.gem.y,0.3,function(t) {
+				_gthis.gemMoves[1] = true;
+			});
+		}
 	}
 	,updateMatching: function() {
 		var _gthis = this;
@@ -8721,6 +8664,13 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		if(matches.length > 0) {
 			this.gemMoves = [];
 			var flatMatches = [];
+			var byColMatches = [];
+			var _g = 0;
+			var _g1 = this.boardWidth;
+			while(_g < _g1) {
+				var y = _g++;
+				byColMatches.push([]);
+			}
 			var _g = 0;
 			while(_g < matches.length) {
 				var m = matches[_g];
@@ -8730,147 +8680,155 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 					var c = m[_g1];
 					++_g1;
 					flatMatches.push({ x : c.x, y : c.y, gem : this.grid[c.x][c.y]});
+					byColMatches[c.x].push({ x : c.x, y : c.y, gem : this.grid[c.x][c.y]});
 				}
 			}
 			flatMatches.sort(function(a,b) {
 				return a.y - b.y;
 			});
-			var updatedGems = [];
+			var _g = [];
+			var _g1 = 0;
+			var _g2 = byColMatches;
+			while(_g1 < _g2.length) {
+				var v = _g2[_g1];
+				++_g1;
+				if(v.length > 0) {
+					_g.push(v);
+				}
+			}
+			byColMatches = _g;
+			var result = new Array(byColMatches.length);
 			var _g = 0;
-			while(_g < flatMatches.length) {
-				var match = flatMatches[_g];
+			var _g1 = byColMatches.length;
+			while(_g < _g1) {
+				var i = _g++;
+				var c = byColMatches[i];
+				c.sort(function(a,b) {
+					return a.y - b.y;
+				});
+				result[i] = c;
+			}
+			byColMatches = result;
+			var emptyCells = [];
+			var movedCells = [];
+			var _g = 0;
+			while(_g < byColMatches.length) {
+				var colMatches = byColMatches[_g];
 				++_g;
-				haxe_Log.trace(match.x,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 244, className : "entities.PlayBoard", methodName : "updateMatching", customParams : [match.y]});
-				var gem = this.grid[match.x][match.y];
-				var match1 = match.x;
-				var match2 = match.y;
-				var match3 = match.x;
-				var match4 = match.y;
-				var x = gem.x;
-				var y = gem.y;
-				if(y == null) {
-					y = 0;
+				var column = colMatches[0].x;
+				var result = new Array(colMatches.length);
+				var _g1 = 0;
+				var _g2 = colMatches.length;
+				while(_g1 < _g2) {
+					var i = _g1++;
+					result[i] = colMatches[i].y;
 				}
-				if(x == null) {
-					x = 0;
-				}
-				var x1 = x;
-				var y1 = y;
-				if(y1 == null) {
-					y1 = 0;
-				}
-				if(x1 == null) {
-					x1 = 0;
-				}
-				var point = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
-				point._inPool = false;
-				var updatedMatchedGem = { originalX : match1, originalY : match2, updatedX : match3, updatedY : match4, targetPostion : point, gem : gem, isMatch : true};
-				var finished = false;
-				var nextY = match.y - 1;
-				while(!finished) {
-					if(nextY < 0) {
-						finished = true;
+				var matchedCells = result;
+				matchedCells.sort(function(a,b) {
+					return a - b;
+				});
+				var filledCells = [];
+				var _g3 = 0;
+				var _g4 = this.boardHeight;
+				while(_g3 < _g4) {
+					var y = _g3++;
+					if(matchedCells.indexOf(y) != -1) {
 						continue;
 					}
-					var _g1 = [];
-					var _g2 = 0;
-					var _g3 = updatedGems;
-					while(_g2 < _g3.length) {
-						var v = _g3[_g2];
-						++_g2;
-						if(v.originalX == match.x && v.originalY == nextY && v.isMatch) {
-							_g1.push(v);
-						}
+					var x = this.grid[column][y].x;
+					var y1 = this.grid[column][y].y;
+					if(y1 == null) {
+						y1 = 0;
 					}
-					var ng = _g1;
-					if(ng.length > 0) {
-						finished = true;
-					} else {
-						var nextGem = this.grid[match.x][nextY];
-						if(nextGem != null) {
-							var _g4 = [];
-							var _g5 = 0;
-							var _g6 = updatedGems;
-							while(_g5 < _g6.length) {
-								var v1 = _g6[_g5];
-								++_g5;
-								if(v1.originalX == match.x && v1.originalY == nextY && !v1.isMatch) {
-									_g4.push(v1);
-								}
-							}
-							var updatedGem = _g4;
-							if(updatedGem.length > 0) {
-								updatedMatchedGem.updatedY = nextY + 1;
-								var x2 = nextGem.x;
-								var y2 = nextGem.y;
-								if(y2 == null) {
-									y2 = 0;
-								}
-								if(x2 == null) {
-									x2 = 0;
-								}
-								var x3 = x2;
-								var y3 = y2;
-								if(y3 == null) {
-									y3 = 0;
-								}
-								if(x3 == null) {
-									x3 = 0;
-								}
-								var point1 = flixel_math_FlxBasePoint.pool.get().set(x3,y3);
-								point1._inPool = false;
-								updatedMatchedGem.targetPostion = point1;
-								finished = true;
+					if(x == null) {
+						x = 0;
+					}
+					var x1 = x;
+					var y2 = y1;
+					if(y2 == null) {
+						y2 = 0;
+					}
+					if(x1 == null) {
+						x1 = 0;
+					}
+					var point = flixel_math_FlxBasePoint.pool.get().set(x1,y2);
+					point._inPool = false;
+					filledCells.push({ original : { x : column, y : y}, updated : { x : column, y : y}, targetPosition : point});
+				}
+				var totalEmpty = matchedCells.length;
+				while(matchedCells.length > 0) {
+					var empty = matchedCells.pop();
+					if(empty != null) {
+						var uY = totalEmpty - matchedCells.length - 1;
+						var x2 = this.grid[column][0].x;
+						var y3 = this.grid[column][0].y;
+						if(y3 == null) {
+							y3 = 0;
+						}
+						if(x2 == null) {
+							x2 = 0;
+						}
+						var x3 = x2;
+						var y4 = y3;
+						if(y4 == null) {
+							y4 = 0;
+						}
+						if(x3 == null) {
+							x3 = 0;
+						}
+						var point1 = flixel_math_FlxBasePoint.pool.get().set(x3,y4);
+						point1._inPool = false;
+						emptyCells.push({ original : { x : column, y : empty}, updated : { x : column, y : uY}, targetPosition : point1});
+						var result1 = new Array(matchedCells.length);
+						var _g5 = 0;
+						var _g6 = matchedCells.length;
+						while(_g5 < _g6) {
+							var i1 = _g5++;
+							result1[i1] = matchedCells[i1] + 1;
+						}
+						matchedCells = result1;
+						var result2 = new Array(filledCells.length);
+						var _g7 = 0;
+						var _g8 = filledCells.length;
+						while(_g7 < _g8) {
+							var i2 = _g7++;
+							var c = filledCells[i2];
+							var filledCells1;
+							if(empty < c.updated.y) {
+								filledCells1 = c;
 							} else {
-								var match5 = match.x;
-								var match6 = match.x;
-								var x4 = nextGem.x;
-								var y4 = nextGem.y;
-								if(y4 == null) {
-									y4 = 0;
+								c.updated.y += 1;
+								var target = _gthis.grid[column][c.updated.y];
+								var this1 = c.targetPosition;
+								var x4 = target.x;
+								var y5 = target.y;
+								if(y5 == null) {
+									y5 = 0;
 								}
 								if(x4 == null) {
 									x4 = 0;
 								}
-								var x5 = x4;
-								var y5 = y4;
-								if(y5 == null) {
-									y5 = 0;
-								}
-								if(x5 == null) {
-									x5 = 0;
-								}
-								var point2 = flixel_math_FlxBasePoint.pool.get().set(x5,y5);
-								point2._inPool = false;
-								updatedGems.push({ originalX : match5, originalY : nextY, updatedX : match6, updatedY : nextY + 1, targetPostion : point2, gem : nextGem, isMatch : false});
-								updatedMatchedGem.updatedY = nextY;
-								var x6 = nextGem.x;
-								var y6 = nextGem.y;
-								if(y6 == null) {
-									y6 = 0;
-								}
-								if(x6 == null) {
-									x6 = 0;
-								}
-								var x7 = x6;
-								var y7 = y6;
-								if(y7 == null) {
-									y7 = 0;
-								}
-								if(x7 == null) {
-									x7 = 0;
-								}
-								var point3 = flixel_math_FlxBasePoint.pool.get().set(x7,y7);
-								point3._inPool = false;
-								updatedMatchedGem.targetPostion = point3;
-								--nextY;
+								this1.set_x(x4);
+								this1.set_y(y5);
+								filledCells1 = c;
 							}
-						} else {
-							finished = true;
+							result2[i2] = filledCells1;
 						}
+						filledCells = result2;
 					}
 				}
-				updatedGems.push(updatedMatchedGem);
+				var _g9 = [];
+				var _g10 = 0;
+				var _g11 = filledCells;
+				while(_g10 < _g11.length) {
+					var v = _g11[_g10];
+					++_g10;
+					if(v.original.y != v.updated.y) {
+						_g9.push(v);
+					}
+				}
+				var culled = _g9;
+				movedCells = movedCells.concat(culled);
 			}
 			var colFall = [];
 			var _g = 0;
@@ -8879,57 +8837,46 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 				var i = _g++;
 				colFall.push(flixel_FlxG.random.float(0.32,0.38));
 			}
-			haxe_Log.trace(updatedGems,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 318, className : "entities.PlayBoard", methodName : "updateMatching"});
-			var _g = 0;
-			while(_g < updatedGems.length) {
-				var ug = updatedGems[_g];
-				++_g;
-				this.grid[ug.updatedX][ug.updatedY] = ug.gem;
-			}
-			var _g = 0;
-			var _g1 = [];
-			var _g2 = 0;
-			var _g3 = updatedGems;
-			while(_g2 < _g3.length) {
-				var v = _g3[_g2];
-				++_g2;
-				if(!v.isMatch) {
-					_g1.push(v);
+			var _g = [];
+			var _g1 = 0;
+			var _g2 = movedCells;
+			while(_g1 < _g2.length) {
+				var v = _g2[_g1];
+				++_g1;
+				if(v.original.y != v.updated.y) {
+					_g.push(v);
 				}
 			}
-			var _g2 = _g1;
-			while(_g < _g2.length) {
-				var ug = _g2[_g];
+			movedCells = _g;
+			movedCells.sort(function(a,b) {
+				return b.updated.y - a.updated.y;
+			});
+			var _g = 0;
+			while(_g < movedCells.length) {
+				var mc = movedCells[_g];
 				++_g;
+				var originalGem = this.grid[mc.original.x][mc.original.y];
+				var emptyCell = this.grid[mc.updated.x][mc.updated.y];
+				this.swapCells({ x : mc.original.x, y : mc.original.y, gem : originalGem},{ x : mc.updated.x, y : mc.updated.y, gem : emptyCell},false);
 				var index = [this.gemMoves.push(false)];
-				ug.gem.move(ug.targetPostion.x,ug.targetPostion.y,colFall[ug.updatedY],(function(index) {
+				originalGem.move(mc.targetPosition.x,mc.targetPosition.y,colFall[mc.updated.x],(function(index) {
 					return function(t) {
 						_gthis.gemMoves[index[0] - 1] = true;
 					};
 				})(index),flixel_tweens_FlxEase.bounceOut);
 			}
 			var _g = 0;
-			var _g1 = [];
-			var _g2 = 0;
-			var _g3 = updatedGems;
-			while(_g2 < _g3.length) {
-				var v = _g3[_g2];
-				++_g2;
-				if(v.isMatch) {
-					_g1.push(v);
-				}
-			}
-			var _g2 = _g1;
-			while(_g < _g2.length) {
-				var ug = _g2[_g];
+			while(_g < emptyCells.length) {
+				var ec = emptyCells[_g];
 				++_g;
-				ug.gem.kill();
-				this.grid[ug.updatedX][ug.updatedY] = null;
+				var emptyGem = this.grid[ec.updated.x][ec.updated.y];
+				emptyGem.kill();
+				this.grid[ec.updated.x][ec.updated.y] = null;
 			}
 			this.state = entities_State.Falling;
 		} else {
-			this.swapCells();
-			this.swapping = null;
+			this.swapCells(this.userSwap[0],this.userSwap[1]);
+			this.userSwap = null;
 			this.state = entities_State.SwappingRevert;
 		}
 	}
@@ -8957,8 +8904,8 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 					var dy = cell.y - this.selected.y;
 					if(Math.abs(dx) + Math.abs(dy) == 1) {
 						this.selected.gem.set_selected(false);
-						this.swapping = [this.selected,{ x : cell.x, y : cell.y, gem : clickedGem}];
-						this.swapCells();
+						this.userSwap = [this.selected,{ x : cell.x, y : cell.y, gem : clickedGem}];
+						this.swapCells(this.userSwap[0],this.userSwap[1]);
 						this.selected = null;
 						this.state = entities_State.Swapping;
 					} else {
@@ -9019,6 +8966,7 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 				var rowMatch = rowMatches[rowIndex];
 				var colMatch = colMatches[colIndex];
 				var isMatched = false;
+				var duplicateCells = [];
 				var _g4 = 0;
 				while(_g4 < rowMatch.length) {
 					var rm = rowMatch[_g4];
@@ -9028,6 +8976,7 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 						var cm = colMatch[_g5];
 						++_g5;
 						if(rm.x == cm.x && rm.y == cm.y) {
+							duplicateCells.push(rm);
 							isMatched = true;
 							break;
 						}
@@ -9039,7 +8988,9 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 					while(_g6 < rowMatch.length) {
 						var rm1 = rowMatch[_g6];
 						++_g6;
-						match.push(rm1);
+						if(duplicateCells.indexOf(rm1) == -1) {
+							match.push(rm1);
+						}
 					}
 					var _g7 = 0;
 					while(_g7 < colMatch.length) {
@@ -71107,7 +71058,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 264694;
+	this.version = 236595;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -119054,6 +119005,7 @@ flixel_FlxObject._secondSeparateFlxRect = (function($this) {
 	return $r;
 }(this));
 flixel_FlxSprite.defaultAntialiasing = false;
+entities_Gem.count = 0;
 entities_GemType.RED = new entities_GemType(0,"tileGrey_04.png",-65536);
 entities_GemType.GREEN = new entities_GemType(1,"tileGrey_05.png",-16711936);
 entities_GemType.BLUE = new entities_GemType(2,"tileGrey_06.png",-16776961);
