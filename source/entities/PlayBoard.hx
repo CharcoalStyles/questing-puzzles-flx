@@ -103,6 +103,26 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 		boardY = Math.floor((FlxG.height - (cellSize * rows)) / 2);
 
 		grid = new Array();
+
+		for (x in 0...cols)
+		{
+			grid[x] = new Array();
+			for (y in 0...rows)
+			{
+				var gt = GemType.random(); // bsToGt[boardState[x][y] - 1]; // GemType.random();
+				var gbkc = gt.color;
+				gbkc.alphaFloat = 0.33;
+
+				var bk = new FlxSprite(boardX + x * cellSize, boardY + y * cellSize);
+				bk.makeGraphic(cellSize, cellSize, gbkc);
+				add(bk);
+
+				var g = gemPool.get();
+				g.init(boardX + x * cellSize, boardY + y * cellSize, FlxPoint.get(cellSize, cellSize), FlxPoint.get(margin, margin), gemFrames, gt);
+				add(g);
+				grid[x][y] = g;
+			}
+		}
 	}
 
 	var selected:GemGrid = null;
