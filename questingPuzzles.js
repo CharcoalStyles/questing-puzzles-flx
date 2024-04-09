@@ -7830,7 +7830,14 @@ $hxClasses["entities.Gem"] = entities_Gem;
 entities_Gem.__name__ = "entities.Gem";
 entities_Gem.__super__ = flixel_FlxSprite;
 entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
-	init: function(x,y,targetSize,padding,gemFrames,type) {
+	respawn: function(x,y,type) {
+		this.set_x(x);
+		this.set_y(y);
+		this.originalColor = type.color;
+		this.set_color(type.color);
+		this.gemTypeId = type.id;
+	}
+	,init: function(x,y,targetSize,padding,gemFrames,type) {
 		if(this.frames == null) {
 			var gs = flixel_FlxG.plugins.get(utils_GlobalState);
 			this.set_frames(gemFrames);
@@ -8558,7 +8565,7 @@ var entities_PlayBoard = function(rows,cols) {
 	flixel_FlxG.mouse.set_visible(true);
 	this.boardWidth = cols;
 	this.boardHeight = rows;
-	this.boardState = [[1,2,6,4,5,1,2,3],[2,6,4,5,1,2,3,4],[6,4,6,6,2,3,3,5],[4,5,6,2,3,4,3,1],[5,1,2,3,4,5,1,2],[1,2,3,4,5,1,2,3],[2,3,4,5,1,2,3,4],[3,4,5,1,2,3,4,5]];
+	this.boardState = [[3,4,5,3,1,3,2,0],[5,5,5,4,2,3,3,2],[4,5,5,0,2,1,0,1],[2,2,4,2,2,3,0,4],[5,4,2,4,4,0,2,4],[2,1,1,4,2,0,2,3],[1,0,5,5,5,3,2,4],[4,2,2,5,5,1,2,2]];
 	this.gemFrames = utils_KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png","assets/data/spritesheet_tilesGrey.xml");
 	this.gemPool = new flixel_util_FlxPool(function() {
 		return new entities_Gem();
@@ -8578,7 +8585,7 @@ var entities_PlayBoard = function(rows,cols) {
 		var _g3 = rows;
 		while(_g2 < _g3) {
 			var y = _g2++;
-			var gt = entities_GemType.random();
+			var gt = this.bsToGt[this.boardState[x][y]];
 			var gbkc = gt.color;
 			var Value = Math.round(84.15);
 			gbkc &= 16777215;
@@ -8630,6 +8637,27 @@ var entities_PlayBoard = function(rows,cols) {
 			this.grid[x][y] = g;
 		}
 	}
+	var deb = "[";
+	var _g = 0;
+	var _g1 = this.boardWidth;
+	while(_g < _g1) {
+		var x = _g++;
+		deb += "[";
+		var _g2 = 0;
+		var _g3 = this.boardHeight;
+		while(_g2 < _g3) {
+			var y = _g2++;
+			if(this.grid[x][y] != null) {
+				deb += this.grid[x][y].gemTypeId + ", ";
+			} else {
+				deb += "-, ";
+			}
+		}
+		deb += "],";
+	}
+	deb += "]";
+	haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 151, className : "entities.PlayBoard", methodName : "new"});
+	haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 152, className : "entities.PlayBoard", methodName : "new"});
 };
 $hxClasses["entities.PlayBoard"] = entities_PlayBoard;
 entities_PlayBoard.__name__ = "entities.PlayBoard";
@@ -8764,10 +8792,29 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			while(_g < _g1) {
 				var i = _g++;
 				var c = byColMatches[i];
-				c.sort(function(a,b) {
+				var temp = [];
+				var _g2 = 0;
+				while(_g2 < c.length) {
+					var m = c[_g2];
+					++_g2;
+					var _g3 = [];
+					var _g4 = 0;
+					var _g5 = temp;
+					while(_g4 < _g5.length) {
+						var v = _g5[_g4];
+						++_g4;
+						if(v.y == m.y) {
+							_g3.push(v);
+						}
+					}
+					if(_g3.length == 0) {
+						temp.push(m);
+					}
+				}
+				temp.sort(function(a,b) {
 					return a.y - b.y;
 				});
-				result[i] = c;
+				result[i] = temp;
 			}
 			byColMatches = result;
 			var emptyCells = [];
@@ -8822,7 +8869,7 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 					if(empty != null) {
 						var uY = totalEmpty - matchedCells.length - 1;
 						var x2 = this.grid[column][0].x;
-						var y3 = this.grid[column][0].y;
+						var y3 = this.grid[column][uY].y;
 						if(y3 == null) {
 							y3 = 0;
 						}
@@ -8891,12 +8938,22 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 				var culled = _g9;
 				movedCells = movedCells.concat(culled);
 			}
+			var ecByCols = [];
+			var _g = 0;
+			while(_g < emptyCells.length) {
+				var ec = emptyCells[_g];
+				++_g;
+				if(ecByCols[ec.updated.x] == null) {
+					ecByCols[ec.updated.x] = [];
+				}
+				ecByCols[ec.updated.x].push(ec);
+			}
 			var colFall = [];
 			var _g = 0;
 			var _g1 = this.boardWidth;
 			while(_g < _g1) {
 				var i = _g++;
-				colFall.push(flixel_FlxG.random.float(0.32,0.38));
+				colFall.push(flixel_FlxG.random.float(0.32,0.38) * (1 + (ecByCols[i] != null ? ecByCols[i].length * 0.25 : 0)));
 			}
 			var _g = [];
 			var _g1 = 0;
@@ -8927,12 +8984,40 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 				})(index),flixel_tweens_FlxEase.bounceOut);
 			}
 			var _g = 0;
-			while(_g < emptyCells.length) {
-				var ec = emptyCells[_g];
+			var _g1 = [];
+			var _g2 = 0;
+			var _g3 = ecByCols;
+			while(_g2 < _g3.length) {
+				var v = _g3[_g2];
+				++_g2;
+				if(v != null) {
+					_g1.push(v);
+				}
+			}
+			var _g2 = _g1;
+			while(_g < _g2.length) {
+				var col = _g2[_g];
 				++_g;
-				var emptyGem = this.grid[ec.updated.x][ec.updated.y];
-				emptyGem.kill();
-				this.grid[ec.updated.x][ec.updated.y] = null;
+				col.sort((function() {
+					return function(a,b) {
+						return b.updated.y - a.updated.y;
+					};
+				})());
+				var lowestPixY = col[0].targetPosition.y;
+				var _g1 = 0;
+				while(_g1 < col.length) {
+					var ec = col[_g1];
+					++_g1;
+					var emptyGem = this.grid[ec.updated.x][ec.updated.y];
+					emptyGem.respawn(ec.targetPosition.x,0 - lowestPixY,entities_GemType.random());
+					this.grid[ec.updated.x][ec.updated.y] = emptyGem;
+					var index1 = [this.gemMoves.push(false)];
+					emptyGem.move(ec.targetPosition.x,ec.targetPosition.y,colFall[ec.updated.x],(function(index) {
+						return function(t) {
+							_gthis.gemMoves[index[0] - 1] = true;
+						};
+					})(index1),flixel_tweens_FlxEase.bounceOut);
+				}
 			}
 			this.state = entities_State.Falling;
 		} else {
@@ -9014,8 +9099,8 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 				colMatches.push(m);
 			}
 		}
-		var rowSubMatchIndexs = [];
-		var colSubMatchIndexs = [];
+		var rowSubMatches = [];
+		var colSubMatches = [];
 		var _g = 0;
 		var _g1 = rowMatches.length;
 		while(_g < _g1) {
@@ -9060,22 +9145,22 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 						match.push(cm1);
 					}
 					matches.push(match);
-					rowSubMatchIndexs.push(rowIndex);
-					colSubMatchIndexs.push(colIndex);
+					rowSubMatches.push(rowMatch);
+					colSubMatches.push(colMatch);
 				}
 			}
 		}
 		var _g = 0;
-		while(_g < rowSubMatchIndexs.length) {
-			var i = rowSubMatchIndexs[_g];
+		while(_g < rowSubMatches.length) {
+			var rowMatch = rowSubMatches[_g];
 			++_g;
-			HxOverrides.remove(rowMatches,rowMatches[i]);
+			HxOverrides.remove(rowMatches,rowMatch);
 		}
 		var _g = 0;
-		while(_g < colSubMatchIndexs.length) {
-			var i = colSubMatchIndexs[_g];
+		while(_g < colSubMatches.length) {
+			var colMatch = colSubMatches[_g];
 			++_g;
-			HxOverrides.remove(colMatches,colMatches[i]);
+			HxOverrides.remove(colMatches,colMatch);
 		}
 		var _g = 0;
 		while(_g < rowMatches.length) {
@@ -71119,7 +71204,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 251962;
+	this.version = 311066;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
