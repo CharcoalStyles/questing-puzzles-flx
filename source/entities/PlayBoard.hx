@@ -81,15 +81,25 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 		boardHeight = rows;
 
 		boardState = [
-			[1, 2, 6, 4, 5, 1, 2, 3],
-			[2, 6, 4, 5, 1, 2, 3, 4],
-			[6, 4, 6, 6, 2, 3, 3, 5],
-			[4, 5, 6, 2, 3, 4, 3, 1],
-			[5, 1, 2, 3, 4, 5, 1, 2],
-			[1, 2, 3, 4, 5, 1, 2, 3],
-			[2, 3, 4, 5, 1, 2, 3, 4],
-			[3, 4, 5, 1, 2, 3, 4, 5]
+			[3, 4, 5, 3, 1, 3, 2, 0,],
+			[5, 5, 5, 4, 2, 3, 3, 2,],
+			[4, 5, 5, 0, 2, 1, 0, 1,],
+			[2, 2, 4, 2, 2, 3, 0, 4,],
+			[5, 4, 2, 4, 4, 0, 2, 4,],
+			[2, 1, 1, 4, 2, 0, 2, 3,],
+			[1, 0, 5, 5, 5, 3, 2, 4,],
+			[4, 2, 2, 5, 5, 1, 2, 2,],
 		];
+		// [
+		// 	[1, 2, 6, 4, 5, 1, 2, 3],
+		// 	[2, 6, 4, 5, 1, 2, 3, 4],
+		// 	[6, 4, 6, 6, 2, 3, 3, 5],
+		// 	[4, 5, 6, 2, 3, 4, 3, 1],
+		// 	[5, 1, 2, 3, 4, 5, 1, 2],
+		// 	[1, 2, 3, 4, 5, 1, 2, 3],
+		// 	[2, 3, 4, 5, 1, 2, 3, 4],
+		// 	[3, 4, 5, 1, 2, 3, 4, 5]
+		// ];
 
 		gemFrames = KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png", "assets/data/spritesheet_tilesGrey.xml");
 
@@ -109,7 +119,7 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			grid[x] = new Array();
 			for (y in 0...rows)
 			{
-				var gt = GemType.random(); // bsToGt[boardState[x][y] - 1]; // GemType.random();
+				var gt = bsToGt[boardState[x][y]]; // GemType.random();
 				var gbkc = gt.color;
 				gbkc.alphaFloat = 0.33;
 
@@ -123,6 +133,23 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 				grid[x][y] = g;
 			}
 		}
+
+		var deb = "[";
+		for (x in 0...boardWidth)
+		{
+			deb += "[";
+			for (y in 0...boardHeight)
+			{
+				if (grid[x][y] != null)
+					deb += grid[x][y].gemTypeId + ", ";
+				else
+					deb += "-, ";
+			}
+			deb += "],";
+		}
+		deb += "]";
+		trace("Board");
+		trace(deb);
 	}
 
 	var selected:GemGrid = null;
@@ -210,8 +237,6 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 		}
 	}
 
-	// function swapCells(?gem1:GemGrid, ?gem2:GemGrid, ?noVisual:Bool):Void {}
-
 	function updateMatching()
 	{
 		var matches = findAllMatches();
@@ -240,8 +265,16 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			byColMatches = byColMatches.filter((c) -> c.length > 0);
 			byColMatches = byColMatches.map((c) ->
 			{
-				c.sort((a, b) -> a.y - b.y);
-				return c;
+				var temp:Array<GemGrid> = [];
+
+				for (m in c)
+				{
+					if (temp.filter((t) -> t.y == m.y).length == 0)
+						temp.push(m);
+				}
+
+				temp.sort((a, b) -> a.y - b.y);
+				return temp;
 			});
 
 			var emptyCells = new Array<UpdatedGem>();
@@ -278,7 +311,7 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 						emptyCells.push({
 							original: {x: column, y: empty},
 							updated: {x: column, y: uY},
-							targetPosition: FlxPoint.get(grid[column][0].x, grid[column][0].y)
+							targetPosition: FlxPoint.get(grid[column][0].x, grid[column][uY].y)
 						});
 
 						matchedCells = matchedCells.map((c) -> c + 1);
@@ -301,10 +334,19 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 				movedCells = movedCells.concat(culled);
 			}
 
+			var ecByCols = new Array<Array<UpdatedGem>>();
+			for (ec in emptyCells)
+			{
+				if (ecByCols[ec.updated.x] == null)
+					ecByCols[ec.updated.x] = [];
+
+				ecByCols[ec.updated.x].push(ec);
+			}
+
 			var colFall = new Array<Float>();
 			for (i in 0...boardWidth)
 			{
-				colFall.push(FlxG.random.float(0.32, 0.38));
+				colFall.push(FlxG.random.float(0.32, 0.38) * (1 + (ecByCols[i] != null ? ecByCols[i].length * 0.25 : 0)));
 			}
 
 			movedCells = movedCells.filter((mc) -> mc.original.y != mc.updated.y);
@@ -323,11 +365,24 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 				}, FlxEase.bounceOut);
 			}
 
-			for (ec in emptyCells)
+			for (col in ecByCols.filter((c) -> c != null))
 			{
-				var emptyGem = grid[ec.updated.x][ec.updated.y];
-				emptyGem.kill();
-				grid[ec.updated.x][ec.updated.y] = null;
+				col.sort((a, b) -> b.updated.y - a.updated.y);
+				var lowestPixY = col[0].targetPosition.y;
+				for (ec in col)
+				{
+					var emptyGem = grid[ec.updated.x][ec.updated.y];
+
+					emptyGem.respawn(ec.targetPosition.x, 0 - lowestPixY, GemType.random());
+
+					grid[ec.updated.x][ec.updated.y] = emptyGem;
+
+					var index = gemMoves.push(false);
+					emptyGem.move(ec.targetPosition.x, ec.targetPosition.y, colFall[ec.updated.x], (t) ->
+					{
+						gemMoves[index - 1] = true;
+					}, FlxEase.bounceOut);
+				}
 			}
 
 			state = State.Falling;
@@ -435,8 +490,8 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 
 		// find overlapping matches
 
-		var rowSubMatchIndexs = new Array<Int>();
-		var colSubMatchIndexs = new Array<Int>();
+		var rowSubMatches = new Array<MatchGroup>();
+		var colSubMatches = new Array<MatchGroup>();
 
 		for (rowIndex in 0...rowMatches.length)
 		{
@@ -479,21 +534,21 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 
 					matches.push(match);
 
-					rowSubMatchIndexs.push(rowIndex);
-					colSubMatchIndexs.push(colIndex);
+					rowSubMatches.push(rowMatch);
+					colSubMatches.push(colMatch);
 				}
 			}
 		}
 
 		// remove the submatches
-		for (i in rowSubMatchIndexs)
+		for (rowMatch in rowSubMatches)
 		{
-			rowMatches.remove(rowMatches[i]);
+			rowMatches.remove(rowMatch);
 		}
 
-		for (i in colSubMatchIndexs)
+		for (colMatch in colSubMatches)
 		{
-			colMatches.remove(colMatches[i]);
+			colMatches.remove(colMatch);
 		}
 
 		// add the remaining matches

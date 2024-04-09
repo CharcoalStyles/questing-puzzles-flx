@@ -39,6 +39,16 @@ class Gem extends FlxSprite
 		kill();
 	}
 
+	public function respawn(x:Float, y:Float, type:GemType)
+	{
+		this.x = x;
+		this.y = y;
+
+		this.originalColor = type.color;
+		this.color = type.color;
+		this.gemTypeId = type.id;
+	}
+
 	public function init(x:Float, y:Float, targetSize:FlxPoint, padding:FlxPoint, gemFrames:FlxFramesCollection, type:GemType)
 	{
 		if (this.frames == null)
