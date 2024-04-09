@@ -44,19 +44,6 @@ class Gem extends FlxSprite
 		this.x = x;
 		this.y = y;
 
-		this.originalColor = type.color;
-		this.color = type.color;
-		this.gemTypeId = type.id;
-	}
-
-	public function init(x:Float, y:Float, targetSize:FlxPoint, padding:FlxPoint, gemFrames:FlxFramesCollection, type:GemType)
-	{
-		if (this.frames == null)
-		{
-			var gs = FlxG.plugins.get(GlobalState);
-			this.frames = gemFrames;
-		}
-
 		this.alive = true;
 		this.exists = true;
 		this.visible = true;
@@ -66,8 +53,16 @@ class Gem extends FlxSprite
 		this.color = type.color;
 		this.gemTypeId = type.id;
 
-		var newFrame = this.frames.getByName(type.frame);
-		this.frame = newFrame;
+		this.frame = this.frames.getByName(type.frame);
+	}
+
+	public function init(x:Float, y:Float, targetSize:FlxPoint, padding:FlxPoint, gemFrames:FlxFramesCollection, type:GemType)
+	{
+		if (this.frames == null)
+		{
+			var gs = FlxG.plugins.get(GlobalState);
+			this.frames = gemFrames;
+		}
 
 		var maxW = Math.max(frame.frame.width, frame.frame.width);
 		var maxH = Math.max(frame.frame.height, frame.frame.height);
@@ -79,8 +74,10 @@ class Gem extends FlxSprite
 		this.scale.set(scaleX, scaleY);
 
 		// set the position of the sprite, including the padding
-		this.x = x + padding.x / 2;
-		this.y = y + padding.y / 2;
+		var targetX = x + padding.x / 2;
+		var targetY = y + padding.y / 2;
+
+		this.respawn(targetX, targetY, type);
 
 		this.updateHitbox();
 	}

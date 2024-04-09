@@ -37,7 +37,7 @@ enum State
 	Swapping;
 	SwappingRevert;
 	Matching;
-	Falling;
+	PostMatch;
 	Refilling;
 }
 
@@ -81,25 +81,15 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 		boardHeight = rows;
 
 		boardState = [
-			[3, 4, 5, 3, 1, 3, 2, 0,],
-			[5, 5, 5, 4, 2, 3, 3, 2,],
-			[4, 5, 5, 0, 2, 1, 0, 1,],
-			[2, 2, 4, 2, 2, 3, 0, 4,],
-			[5, 4, 2, 4, 4, 0, 2, 4,],
-			[2, 1, 1, 4, 2, 0, 2, 3,],
-			[1, 0, 5, 5, 5, 3, 2, 4,],
-			[4, 2, 2, 5, 5, 1, 2, 2,],
+			[1, 2, 6, 4, 5, 1, 2, 3],
+			[2, 6, 4, 5, 1, 2, 3, 4],
+			[6, 4, 6, 6, 2, 3, 3, 5],
+			[4, 5, 6, 2, 3, 4, 3, 1],
+			[5, 1, 2, 3, 4, 5, 1, 2],
+			[1, 2, 3, 4, 5, 1, 2, 3],
+			[2, 3, 4, 5, 1, 2, 3, 4],
+			[3, 4, 5, 1, 2, 3, 4, 5]
 		];
-		// [
-		// 	[1, 2, 6, 4, 5, 1, 2, 3],
-		// 	[2, 6, 4, 5, 1, 2, 3, 4],
-		// 	[6, 4, 6, 6, 2, 3, 3, 5],
-		// 	[4, 5, 6, 2, 3, 4, 3, 1],
-		// 	[5, 1, 2, 3, 4, 5, 1, 2],
-		// 	[1, 2, 3, 4, 5, 1, 2, 3],
-		// 	[2, 3, 4, 5, 1, 2, 3, 4],
-		// 	[3, 4, 5, 1, 2, 3, 4, 5]
-		// ];
 
 		gemFrames = KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png", "assets/data/spritesheet_tilesGrey.xml");
 
@@ -119,13 +109,7 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			grid[x] = new Array();
 			for (y in 0...rows)
 			{
-				var gt = bsToGt[boardState[x][y]]; // GemType.random();
-				var gbkc = gt.color;
-				gbkc.alphaFloat = 0.33;
-
-				var bk = new FlxSprite(boardX + x * cellSize, boardY + y * cellSize);
-				bk.makeGraphic(cellSize, cellSize, gbkc);
-				add(bk);
+				var gt = GemType.random(); // bsToGt[boardState[x][y]]; // GemType.random(); //
 
 				var g = gemPool.get();
 				g.init(boardX + x * cellSize, boardY + y * cellSize, FlxPoint.get(cellSize, cellSize), FlxPoint.get(margin, margin), gemFrames, gt);
@@ -189,23 +173,33 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			case State.Idle:
 				updateIdle();
 			case State.Swapping:
-				updateSwapping();
+				onGemMovedFinished(() ->
+				{
+					state = State.Matching;
+				});
 			case SwappingRevert:
-				if (gemMoves.contains(false))
-					return;
-				else
+				onGemMovedFinished(() ->
+				{
 					state = State.Idle;
+				});
 			default:
 			case State.Matching:
 				updateMatching();
-			case State.Falling:
-				updateFalling();
+			case State.PostMatch:
+				onGemMovedFinished(() ->
+				{
+					var matches = findAllMatches();
+					if (matches.length > 0)
+						state = State.Matching;
+					else
+						state = State.Idle;
+				});
 				// case State.Refilling:
 				//	updateRefilling();
 		}
 	}
 
-	function updateFalling()
+	function onGemMovedFinished(callback:() -> Void)
 	{
 		if (gemMoves.contains(false))
 		{
@@ -213,7 +207,7 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 		}
 		else
 		{
-			state = State.Refilling;
+			callback();
 		}
 	}
 
@@ -385,7 +379,7 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 				}
 			}
 
-			state = State.Falling;
+			state = State.PostMatch;
 		}
 		else
 		{
@@ -393,14 +387,6 @@ class PlayBoard extends FlxTypedGroup<FlxSprite>
 			userSwap = null;
 			state = State.SwappingRevert;
 		}
-	}
-
-	function updateSwapping()
-	{
-		if (gemMoves.contains(false))
-			return;
-		else
-			state = State.Matching;
 	}
 
 	function updateIdle()
