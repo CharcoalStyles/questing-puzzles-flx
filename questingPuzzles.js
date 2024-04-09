@@ -7833,15 +7833,6 @@ entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
 	respawn: function(x,y,type) {
 		this.set_x(x);
 		this.set_y(y);
-		this.originalColor = type.color;
-		this.set_color(type.color);
-		this.gemTypeId = type.id;
-	}
-	,init: function(x,y,targetSize,padding,gemFrames,type) {
-		if(this.frames == null) {
-			var gs = flixel_FlxG.plugins.get(utils_GlobalState);
-			this.set_frames(gemFrames);
-		}
 		this.set_alive(true);
 		this.set_exists(true);
 		this.set_visible(true);
@@ -7849,8 +7840,13 @@ entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
 		this.originalColor = type.color;
 		this.set_color(type.color);
 		this.gemTypeId = type.id;
-		var newFrame = this.frames.framesByName.h[type.frame];
-		this.set_frame(newFrame);
+		this.set_frame(this.frames.framesByName.h[type.frame]);
+	}
+	,init: function(x,y,targetSize,padding,gemFrames,type) {
+		if(this.frames == null) {
+			var gs = flixel_FlxG.plugins.get(utils_GlobalState);
+			this.set_frames(gemFrames);
+		}
 		var maxW = Math.max(this.frame.frame.width,this.frame.frame.width);
 		var maxH = Math.max(this.frame.frame.height,this.frame.frame.height);
 		var scaleX = (targetSize.x - padding.x) / maxW;
@@ -7885,8 +7881,9 @@ entities_Gem.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 		this1.set_x(x1);
 		this1.set_y(y1);
-		this.set_x(x + padding.x / 2);
-		this.set_y(y + padding.y / 2);
+		var targetX = x + padding.x / 2;
+		var targetY = y + padding.y / 2;
+		this.respawn(targetX,targetY,type);
 		this.updateHitbox();
 	}
 	,update: function(elapsed) {
@@ -7948,10 +7945,10 @@ var entities_State = $hxEnums["entities.State"] = { __ename__:"entities.State",_
 	,Swapping: {_hx_name:"Swapping",_hx_index:1,__enum__:"entities.State",toString:$estr}
 	,SwappingRevert: {_hx_name:"SwappingRevert",_hx_index:2,__enum__:"entities.State",toString:$estr}
 	,Matching: {_hx_name:"Matching",_hx_index:3,__enum__:"entities.State",toString:$estr}
-	,Falling: {_hx_name:"Falling",_hx_index:4,__enum__:"entities.State",toString:$estr}
+	,PostMatch: {_hx_name:"PostMatch",_hx_index:4,__enum__:"entities.State",toString:$estr}
 	,Refilling: {_hx_name:"Refilling",_hx_index:5,__enum__:"entities.State",toString:$estr}
 };
-entities_State.__constructs__ = [entities_State.Idle,entities_State.Swapping,entities_State.SwappingRevert,entities_State.Matching,entities_State.Falling,entities_State.Refilling];
+entities_State.__constructs__ = [entities_State.Idle,entities_State.Swapping,entities_State.SwappingRevert,entities_State.Matching,entities_State.PostMatch,entities_State.Refilling];
 var flixel_group_FlxTypedGroup = function(MaxSize) {
 	if(MaxSize == null) {
 		MaxSize = 0;
@@ -8565,7 +8562,7 @@ var entities_PlayBoard = function(rows,cols) {
 	flixel_FlxG.mouse.set_visible(true);
 	this.boardWidth = cols;
 	this.boardHeight = rows;
-	this.boardState = [[3,4,5,3,1,3,2,0],[5,5,5,4,2,3,3,2],[4,5,5,0,2,1,0,1],[2,2,4,2,2,3,0,4],[5,4,2,4,4,0,2,4],[2,1,1,4,2,0,2,3],[1,0,5,5,5,3,2,4],[4,2,2,5,5,1,2,2]];
+	this.boardState = [[1,2,6,4,5,1,2,3],[2,6,4,5,1,2,3,4],[6,4,6,6,2,3,3,5],[4,5,6,2,3,4,3,1],[5,1,2,3,4,5,1,2],[1,2,3,4,5,1,2,3],[2,3,4,5,1,2,3,4],[3,4,5,1,2,3,4,5]];
 	this.gemFrames = utils_KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png","assets/data/spritesheet_tilesGrey.xml");
 	this.gemPool = new flixel_util_FlxPool(function() {
 		return new entities_Gem();
@@ -8585,14 +8582,7 @@ var entities_PlayBoard = function(rows,cols) {
 		var _g3 = rows;
 		while(_g2 < _g3) {
 			var y = _g2++;
-			var gt = this.bsToGt[this.boardState[x][y]];
-			var gbkc = gt.color;
-			var Value = Math.round(84.15);
-			gbkc &= 16777215;
-			gbkc |= (Value > 255 ? 255 : Value < 0 ? 0 : Value) << 24;
-			var bk = new flixel_FlxSprite(this.boardX + x * this.cellSize,this.boardY + y * this.cellSize);
-			bk.makeGraphic(this.cellSize,this.cellSize,gbkc);
-			this.add(bk);
+			var gt = entities_GemType.random();
 			var g = this.gemPool.get();
 			var tmp = this.boardX + x * this.cellSize;
 			var tmp1 = this.boardY + y * this.cellSize;
@@ -8656,14 +8646,15 @@ var entities_PlayBoard = function(rows,cols) {
 		deb += "],";
 	}
 	deb += "]";
-	haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 151, className : "entities.PlayBoard", methodName : "new"});
-	haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 152, className : "entities.PlayBoard", methodName : "new"});
+	haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 135, className : "entities.PlayBoard", methodName : "new"});
+	haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 136, className : "entities.PlayBoard", methodName : "new"});
 };
 $hxClasses["entities.PlayBoard"] = entities_PlayBoard;
 entities_PlayBoard.__name__ = "entities.PlayBoard";
 entities_PlayBoard.__super__ = flixel_group_FlxTypedGroup;
 entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	update: function(elapsed) {
+		var _gthis = this;
 		flixel_group_FlxTypedGroup.prototype.update.call(this,elapsed);
 		var _this = flixel_FlxG.keys.justPressed;
 		if(_this.keyManager.checkStatusUnsafe(27,_this.status)) {
@@ -8704,29 +8695,36 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			this.updateIdle();
 			break;
 		case 1:
-			this.updateSwapping();
+			this.onGemMovedFinished(function() {
+				_gthis.state = entities_State.Matching;
+			});
 			break;
 		case 2:
-			if(this.gemMoves.indexOf(false) != -1) {
-				return;
-			} else {
-				this.state = entities_State.Idle;
-			}
+			this.onGemMovedFinished(function() {
+				_gthis.state = entities_State.Idle;
+			});
 			break;
 		case 3:
 			this.updateMatching();
 			break;
 		case 4:
-			this.updateFalling();
+			this.onGemMovedFinished(function() {
+				var matches = _gthis.findAllMatches();
+				if(matches.length > 0) {
+					_gthis.state = entities_State.Matching;
+				} else {
+					_gthis.state = entities_State.Idle;
+				}
+			});
 			break;
 		default:
 		}
 	}
-	,updateFalling: function() {
+	,onGemMovedFinished: function(callback) {
 		if(this.gemMoves.indexOf(false) != -1) {
 			return;
 		} else {
-			this.state = entities_State.Refilling;
+			callback();
 		}
 	}
 	,swapCells: function(gem1,gem2,visual) {
@@ -9019,18 +9017,11 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 					})(index1),flixel_tweens_FlxEase.bounceOut);
 				}
 			}
-			this.state = entities_State.Falling;
+			this.state = entities_State.PostMatch;
 		} else {
 			this.swapCells(this.userSwap[0],this.userSwap[1]);
 			this.userSwap = null;
 			this.state = entities_State.SwappingRevert;
-		}
-	}
-	,updateSwapping: function() {
-		if(this.gemMoves.indexOf(false) != -1) {
-			return;
-		} else {
-			this.state = entities_State.Matching;
 		}
 	}
 	,updateIdle: function() {
@@ -71204,7 +71195,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 311066;
+	this.version = 305336;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
