@@ -71246,7 +71246,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 301174;
+	this.version = 838064;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -118862,6 +118862,8 @@ states_FlxCstyLogo.prototype = $extend(flixel_FlxState.prototype,{
 	,__class__: states_FlxCstyLogo
 });
 var states_MainMenuState = function() {
+	this.currentColour = 0;
+	this.rgb = [-3129280,-12529600,-12566320];
 	flixel_FlxState.call(this);
 };
 $hxClasses["states.MainMenuState"] = states_MainMenuState;
@@ -118872,14 +118874,33 @@ states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
 		flixel_FlxState.prototype.create.call(this);
 		var globalState = new utils_GlobalState();
 		flixel_FlxG.plugins.addPlugin(globalState);
+		flixel_FlxG.mouse.set_visible(true);
 		var text = new flixel_text_FlxText(0,0,flixel_FlxG.width,"Questing Puzzles");
 		text.set_size(64);
 		text.set_alignment("center");
 		this.add(text);
-		text = new flixel_text_FlxText(0,flixel_FlxG.height - 96,flixel_FlxG.width,"Press SPACE to start");
-		text.set_size(32);
-		text.set_alignment("center");
-		this.add(text);
+		this.startText = new flixel_text_FlxText(0,flixel_FlxG.height - 96,flixel_FlxG.width,"START");
+		this.startText.set_size(46);
+		this.startText.set_alignment("center");
+		var _this = this.startText;
+		var Color = -1;
+		var Size = 4;
+		var Quality = 4;
+		if(Quality == null) {
+			Quality = 1;
+		}
+		if(Size == null) {
+			Size = 1;
+		}
+		if(Color == null) {
+			Color = 0;
+		}
+		_this.set_borderStyle(flixel_text_FlxTextBorderStyle.OUTLINE);
+		_this.set_borderColor(Color);
+		_this.set_borderSize(Size);
+		_this.set_borderQuality(Quality);
+		this.add(this.startText);
+		this.changeColour(0);
 	}
 	,update: function(elapsed) {
 		flixel_FlxState.prototype.update.call(this,elapsed);
@@ -118896,6 +118917,66 @@ states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
 				});
 			}
 		}
+		if(flixel_FlxG.mouse.x >= this.startText.x && flixel_FlxG.mouse.x <= this.startText.x + this.startText.get_width() && flixel_FlxG.mouse.y >= this.startText.y && flixel_FlxG.mouse.y <= this.startText.y + this.startText.get_height()) {
+			if(flixel_FlxG.mouse._leftButton.current == 2) {
+				var nextState1 = flixel_util_typeLimit_NextState.fromState(new states_PlayState());
+				var stateOnCall1 = flixel_FlxG.game._state;
+				if(!((nextState1) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState1)) {
+					flixel_FlxG.game._state.startOutro(function() {
+						if(flixel_FlxG.game._state == stateOnCall1) {
+							flixel_FlxG.game._nextState = nextState1;
+						} else {
+							flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
+						}
+					});
+				}
+			} else {
+				var _this = this.startText;
+				var Color = -1;
+				var Size = 6;
+				var Quality = 32;
+				if(Quality == null) {
+					Quality = 1;
+				}
+				if(Size == null) {
+					Size = 1;
+				}
+				if(Color == null) {
+					Color = 0;
+				}
+				_this.set_borderStyle(flixel_text_FlxTextBorderStyle.OUTLINE);
+				_this.set_borderColor(Color);
+				_this.set_borderSize(Size);
+				_this.set_borderQuality(Quality);
+			}
+		} else {
+			var _this = this.startText;
+			var Color = -1;
+			var Size = 4;
+			var Quality = 4;
+			if(Quality == null) {
+				Quality = 1;
+			}
+			if(Size == null) {
+				Size = 1;
+			}
+			if(Color == null) {
+				Color = 0;
+			}
+			_this.set_borderStyle(flixel_text_FlxTextBorderStyle.OUTLINE);
+			_this.set_borderColor(Color);
+			_this.set_borderSize(Size);
+			_this.set_borderQuality(Quality);
+		}
+	}
+	,changeColour: function(initColourIndex) {
+		var _gthis = this;
+		var nc = initColourIndex + 1;
+		var nextColor = nc % this.rgb.length;
+		flixel_FlxG.log.advanced("nc: " + nc + " rgb.lemgth: " + this.rgb.length + " nextColor: " + nextColor,flixel_system_debug_log_LogStyle.NORMAL);
+		flixel_tweens_FlxTween.color(this.startText,1.5,this.rgb[initColourIndex],this.rgb[nextColor],{ type : 8, ease : flixel_tweens_FlxEase.linear, onComplete : function(tween) {
+			_gthis.changeColour(nextColor);
+		}});
 	}
 	,__class__: states_MainMenuState
 });
