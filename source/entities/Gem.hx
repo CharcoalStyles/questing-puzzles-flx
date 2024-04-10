@@ -39,6 +39,15 @@ class Gem extends FlxSprite
 		kill();
 	}
 
+	public function setType(type:GemType)
+	{
+		this.originalColor = type.color;
+		this.color = type.color;
+		this.gemTypeId = type.id;
+
+		this.frame = this.frames.getByName(type.frame);
+	}
+
 	public function respawn(x:Float, y:Float, type:GemType)
 	{
 		this.x = x;
@@ -49,11 +58,7 @@ class Gem extends FlxSprite
 		this.visible = true;
 		this.selected = false;
 
-		this.originalColor = type.color;
-		this.color = type.color;
-		this.gemTypeId = type.id;
-
-		this.frame = this.frames.getByName(type.frame);
+		setType(type);
 	}
 
 	public function init(x:Float, y:Float, targetSize:FlxPoint, padding:FlxPoint, gemFrames:FlxFramesCollection, type:GemType)
@@ -154,9 +159,10 @@ class GemType
 	public static var ORANGE:GemType = new GemType(5, "tileGrey_09.png", 0xffFFA500);
 
 	public static var ALL:Array<GemType> = [RED, GREEN, BLUE, YELLOW, PURPLE, ORANGE];
-	public static var random:() -> GemType = () ->
+	public static var random = (?notIds:Array<Int>) ->
 	{
-		return ALL[Math.floor(Math.random() * ALL.length)];
+		var filtered = ALL.filter((gt) -> (notIds == null ? [] : notIds).indexOf(gt.id) == -1);
+		return filtered[Math.floor(Math.random() * filtered.length)];
 	};
 
 	public var id:Int;
