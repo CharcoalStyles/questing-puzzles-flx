@@ -2,7 +2,6 @@ package entities;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxFrame;
 import flixel.graphics.frames.FlxFramesCollection;
 import flixel.math.FlxPoint;
 import flixel.text.FlxText;
