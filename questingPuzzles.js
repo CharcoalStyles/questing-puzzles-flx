@@ -8646,7 +8646,7 @@ var entities_PlayBoard = function(rows,cols) {
 			bkgrndTile.updateHitbox();
 			bkgrndTile.set_color(5263440);
 			this.bkgrndTiles.add(bkgrndTile);
-			var gt = this.bsToGt[this.boardState[x][y] - 1];
+			var gt = entities_GemType.random();
 			var g = this.gemPool.get();
 			var tmp = this.boardX + x * this.cellSize;
 			var tmp1 = this.boardY + y * this.cellSize;
@@ -71555,7 +71555,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 783951;
+	this.version = 857680;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
