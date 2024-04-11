@@ -146,7 +146,7 @@ class PlayBoard extends FlxGroup
 				bkgrndTile.color = 0x00505050;
 				bkgrndTiles.add(bkgrndTile);
 
-				var gt = bsToGt[boardState[x][y] - 1]; // GemType.random(); //
+				var gt = GemType.random(); // bsToGt[boardState[x][y] - 1]; // GemType.random(); //
 
 				var g = gemPool.get();
 				g.init(boardX + x * cellSize, boardY + y * cellSize, FlxPoint.get(cellSize, cellSize), FlxPoint.get(margin, margin), gemFrames, gt);
