@@ -7982,9 +7982,9 @@ var entities_State = $hxEnums["entities.State"] = { __ename__:"entities.State",_
 	,SwappingRevert: {_hx_name:"SwappingRevert",_hx_index:2,__enum__:"entities.State",toString:$estr}
 	,Matching: {_hx_name:"Matching",_hx_index:3,__enum__:"entities.State",toString:$estr}
 	,PostMatch: {_hx_name:"PostMatch",_hx_index:4,__enum__:"entities.State",toString:$estr}
-	,Refilling: {_hx_name:"Refilling",_hx_index:5,__enum__:"entities.State",toString:$estr}
+	,Shuffle: {_hx_name:"Shuffle",_hx_index:5,__enum__:"entities.State",toString:$estr}
 };
-entities_State.__constructs__ = [entities_State.Idle,entities_State.Swapping,entities_State.SwappingRevert,entities_State.Matching,entities_State.PostMatch,entities_State.Refilling];
+entities_State.__constructs__ = [entities_State.Idle,entities_State.Swapping,entities_State.SwappingRevert,entities_State.Matching,entities_State.PostMatch,entities_State.Shuffle];
 var entities_MoveDirection = $hxEnums["entities.MoveDirection"] = { __ename__:"entities.MoveDirection",__constructs__:null
 	,Up: {_hx_name:"Up",_hx_index:0,__enum__:"entities.MoveDirection",toString:$estr}
 	,Down: {_hx_name:"Down",_hx_index:1,__enum__:"entities.MoveDirection",toString:$estr}
@@ -8609,7 +8609,7 @@ var entities_PlayBoard = function(rows,cols) {
 	flixel_FlxG.mouse.set_visible(true);
 	this.boardWidth = cols;
 	this.boardHeight = rows;
-	this.boardState = [[1,2,6,4,5,1,2,3],[2,6,4,5,1,2,3,4],[6,4,6,6,2,3,3,5],[4,5,6,2,3,4,3,1],[5,1,2,3,4,5,1,2],[1,2,3,4,5,1,2,3],[2,3,4,5,1,2,3,4],[3,4,5,1,2,3,4,5]];
+	this.boardState = [[6,6,4,2,3,3,4,4],[1,1,6,4,5,5,1,1],[2,2,5,1,2,2,4,4],[1,1,3,3,5,5,1,1],[2,2,5,1,2,2,4,4],[1,1,3,3,5,5,1,1],[2,2,5,1,2,2,4,4],[1,1,3,3,5,5,1,1]];
 	this.gemFrames = utils_KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png","assets/data/spritesheet_tilesGrey.xml");
 	this.gemPool = new flixel_util_FlxPool(function() {
 		return new entities_Gem();
@@ -8646,7 +8646,7 @@ var entities_PlayBoard = function(rows,cols) {
 			bkgrndTile.updateHitbox();
 			bkgrndTile.set_color(5263440);
 			this.bkgrndTiles.add(bkgrndTile);
-			var gt = entities_GemType.random(null);
+			var gt = this.bsToGt[this.boardState[x][y] - 1];
 			var g = this.gemPool.get();
 			var tmp = this.boardX + x * this.cellSize;
 			var tmp1 = this.boardY + y * this.cellSize;
@@ -8694,7 +8694,7 @@ var entities_PlayBoard = function(rows,cols) {
 	var matches = this.findAllMatches(this.grid);
 	var count = 0;
 	while(matches.length > 0 && count < 1000) {
-		this.deMatchBoard(matches);
+		this.deMatchBoard(this.grid,matches);
 		matches = this.findAllMatches(this.grid);
 		++count;
 	}
@@ -8702,33 +8702,37 @@ var entities_PlayBoard = function(rows,cols) {
 	this.add(this.bkgrndTiles);
 	this.add(this.gems);
 	this.potentialMoves = this.findPotentialMoves();
-	var deb = "[";
-	var _g = 0;
-	var _g1 = this.boardWidth;
-	while(_g < _g1) {
-		var x = _g++;
-		deb += "[";
-		var _g2 = 0;
-		var _g3 = this.boardHeight;
-		while(_g2 < _g3) {
-			var y = _g2++;
-			if(this.grid[x][y] != null) {
-				deb += this.grid[x][y].gemTypeId + ", ";
-			} else {
-				deb += "-, ";
-			}
-		}
-		deb += "],";
-	}
-	deb += "]";
-	haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 190, className : "entities.PlayBoard", methodName : "new"});
-	haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 191, className : "entities.PlayBoard", methodName : "new"});
+	this.traceBoard(this.grid,false);
 };
 $hxClasses["entities.PlayBoard"] = entities_PlayBoard;
 entities_PlayBoard.__name__ = "entities.PlayBoard";
 entities_PlayBoard.__super__ = flixel_group_FlxTypedGroup;
 entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
-	update: function(elapsed) {
+	traceBoard: function(board,isId) {
+		var deb = "[";
+		var _g = 0;
+		var _g1 = board.length;
+		while(_g < _g1) {
+			var x = _g++;
+			deb += "[";
+			var _g2 = 0;
+			var _g3 = board[0].length;
+			while(_g2 < _g3) {
+				var y = _g2++;
+				var g = board[x][y];
+				if(board[x][y] != null) {
+					deb += (isId ? g.id : g.gemTypeId) + ", ";
+				} else {
+					deb += "-, ";
+				}
+			}
+			deb += "],";
+		}
+		deb += "]";
+		haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 195, className : "entities.PlayBoard", methodName : "traceBoard"});
+		haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 196, className : "entities.PlayBoard", methodName : "traceBoard"});
+	}
+	,update: function(elapsed) {
 		var _gthis = this;
 		flixel_group_FlxTypedGroup.prototype.update.call(this,elapsed);
 		var _this = flixel_FlxG.keys.justPressed;
@@ -8798,18 +8802,27 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 				if(matches.length > 0) {
 					_gthis.state = entities_State.Matching;
 				} else {
-					_gthis.state = entities_State.Idle;
-					_gthis.moveTimer = 0.0;
-					_gthis.shownMatch = false;
-					_gthis.potentialMoves = _gthis.findPotentialMoves();
-					if(_gthis.suggestedGem != null) {
-						_gthis.suggestedGem.set_highlighted(false);
-						_gthis.suggestedGem = null;
-					}
+					_gthis.resetToIdle();
 				}
 			});
 			break;
-		default:
+		case 5:
+			this.onGemMovedFinished($bind(this,this.resetToIdle));
+			break;
+		}
+	}
+	,resetToIdle: function() {
+		this.state = entities_State.Idle;
+		this.moveTimer = 0.0;
+		this.shownMatch = false;
+		this.potentialMoves = this.findPotentialMoves();
+		if(this.potentialMoves.length == 0) {
+			flixel_FlxG.log.advanced("No moves left",flixel_system_debug_log_LogStyle.NORMAL);
+			this.shuffleBoard();
+		}
+		if(this.suggestedGem != null) {
+			this.suggestedGem.set_highlighted(false);
+			this.suggestedGem = null;
 		}
 	}
 	,onGemMovedFinished: function(callback) {
@@ -9316,10 +9329,10 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		}
 		return matches;
 	}
-	,findPotentialMoves: function() {
+	,findPotentialMoves: function(inGrid) {
 		var start = new Date().getTime() / 1000;
 		var moves = [];
-		var workingGrid = this.grid.slice();
+		var workingGrid = (inGrid == null ? this.grid : inGrid).slice();
 		var _g = 0;
 		var _g1 = workingGrid.length;
 		while(_g < _g1) {
@@ -9441,15 +9454,104 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		}
 		return possibleMoves;
 	}
-	,deMatchBoard: function(matches) {
+	,deMatchBoard: function(board,matches) {
 		var _g = 0;
 		while(_g < matches.length) {
 			var m = matches[_g];
 			++_g;
 			var g = m[Math.floor(m.length / 2)];
-			var oId = this.grid[g.x][g.y].gemTypeId;
-			this.grid[g.x][g.y].setType(entities_GemType.random([oId]));
+			var oId = board[g.x][g.y].gemTypeId;
+			board[g.x][g.y].setType(entities_GemType.random([oId]));
 		}
+	}
+	,shuffleBoard: function() {
+		var _gthis = this;
+		var targetGrid = this.grid.slice();
+		var gridSpaces = [];
+		var gems = [];
+		var _g = 0;
+		var _g1 = targetGrid.length;
+		while(_g < _g1) {
+			var x = _g++;
+			var _g2 = 0;
+			var _g3 = targetGrid[0].length;
+			while(_g2 < _g3) {
+				var y = _g2++;
+				gridSpaces.push({ x : x, y : y});
+				gems.push({ x : x, y : y, gem : targetGrid[x][y]});
+			}
+		}
+		var potentialMoves = this.findPotentialMoves();
+		var updates = [];
+		while(potentialMoves.length == 0) {
+			var workingGems = gems.slice();
+			flixel_FlxG.random.shuffle_entities_GemGrid(workingGems);
+			while(workingGems.length > 0) {
+				var gem1 = workingGems.pop();
+				var gem2 = workingGems.pop();
+				var temp = targetGrid[gem1.x][gem1.y];
+				targetGrid[gem1.x][gem1.y] = targetGrid[gem2.x][gem2.y];
+				targetGrid[gem2.x][gem2.y] = temp;
+				var tmp = { x : gem1.x, y : gem1.y};
+				var tmp1 = { x : gem2.x, y : gem2.y};
+				var x = targetGrid[gem2.x][gem2.y].x;
+				var y = targetGrid[gem2.x][gem2.y].y;
+				if(y == null) {
+					y = 0;
+				}
+				if(x == null) {
+					x = 0;
+				}
+				var x1 = x;
+				var y1 = y;
+				if(y1 == null) {
+					y1 = 0;
+				}
+				if(x1 == null) {
+					x1 = 0;
+				}
+				var point = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
+				point._inPool = false;
+				updates.push({ original : tmp, updated : tmp1, targetPosition : point});
+				var tmp2 = { x : gem2.x, y : gem2.y};
+				var tmp3 = { x : gem1.x, y : gem1.y};
+				var x2 = targetGrid[gem1.x][gem1.y].x;
+				var y2 = targetGrid[gem1.x][gem1.y].y;
+				if(y2 == null) {
+					y2 = 0;
+				}
+				if(x2 == null) {
+					x2 = 0;
+				}
+				var x3 = x2;
+				var y3 = y2;
+				if(y3 == null) {
+					y3 = 0;
+				}
+				if(x3 == null) {
+					x3 = 0;
+				}
+				var point1 = flixel_math_FlxBasePoint.pool.get().set(x3,y3);
+				point1._inPool = false;
+				updates.push({ original : tmp2, updated : tmp3, targetPosition : point1});
+			}
+			this.deMatchBoard(targetGrid,this.findAllMatches(targetGrid));
+			potentialMoves = this.findPotentialMoves(targetGrid);
+		}
+		var _g = 0;
+		while(_g < updates.length) {
+			var u = updates[_g];
+			++_g;
+			var gem = targetGrid[u.original.x][u.original.y];
+			var index = [this.gemMoves.push(false)];
+			gem.move(u.targetPosition.x,u.targetPosition.y,0.3,(function(index) {
+				return function(t) {
+					_gthis.gemMoves[index[0] - 1] = true;
+				};
+			})(index));
+		}
+		this.grid = targetGrid;
+		this.state = entities_State.Shuffle;
 	}
 	,__class__: entities_PlayBoard
 });
@@ -13278,7 +13380,19 @@ flixel_math_FlxRandom.rangeBound = function(Value) {
 	return (lowerBound > 2147483646 ? 2147483646 : lowerBound) | 0;
 };
 flixel_math_FlxRandom.prototype = {
-	shuffle_entities_ScoredRankedMatch: function(array) {
+	shuffle_entities_GemGrid: function(array) {
+		var maxValidIndex = array.length - 1;
+		var _g = 0;
+		var _g1 = maxValidIndex;
+		while(_g < _g1) {
+			var i = _g++;
+			var j = this.int(i,maxValidIndex);
+			var tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	,shuffle_entities_ScoredRankedMatch: function(array) {
 		var maxValidIndex = array.length - 1;
 		var _g = 0;
 		var _g1 = maxValidIndex;
@@ -71441,7 +71555,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 602811;
+	this.version = 783951;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
