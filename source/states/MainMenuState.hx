@@ -70,7 +70,6 @@ class MainMenuState extends FlxState
 	{
 		var nc = initColourIndex + 1;
 		var nextColor = nc % rgb.length;
-		FlxG.log.add("nc: " + nc + " rgb.lemgth: " + rgb.length + " nextColor: " + nextColor);
 		FlxTween.color(startText, 1.5, rgb[initColourIndex], rgb[nextColor], {
 			type: FlxTweenType.ONESHOT,
 			ease: FlxEase.linear,

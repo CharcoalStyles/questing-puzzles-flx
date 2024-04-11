@@ -9,6 +9,7 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxPool;
+import haxe.Timer;
 import states.MainMenuState;
 import utils.KennyAtlasLoader;
 
@@ -16,6 +17,20 @@ typedef CellIndex =
 {
 	x:Int,
 	y:Int
+}
+
+typedef CellMove =
+{
+	x:Int,
+	y:Int,
+	direction:MoveDirection
+}
+
+typedef ScoredRankedMatch =
+{
+	move:CellMove,
+	matches:Array<MatchGroup>,
+	score:Int
 }
 
 typedef GemGrid =
@@ -42,6 +57,14 @@ enum State
 	Refilling;
 }
 
+enum MoveDirection
+{
+	Up;
+	Down;
+	Left;
+	Right;
+}
+
 typedef MatchGroup = Array<CellIndex>;
 
 class PlayBoard extends FlxGroup
@@ -59,6 +82,9 @@ class PlayBoard extends FlxGroup
 	var cellSize:Int;
 
 	var state = State.Idle;
+	var potentialMoves:Array<ScoredRankedMatch> = null;
+
+	var moveTimer:Float = 0.0;
 
 	var boardState = new Array<Array<Int>>();
 	var bsToGt = [
@@ -130,13 +156,13 @@ class PlayBoard extends FlxGroup
 			}
 		}
 
-		var matches = findAllMatches();
+		var matches = findAllMatches(this.grid);
 		var count = 0;
 
 		while (matches.length > 0 && count < 1000)
 		{
 			deMatchBoard(matches);
-			matches = findAllMatches();
+			matches = findAllMatches(this.grid);
 			count += 1;
 		}
 
@@ -144,6 +170,8 @@ class PlayBoard extends FlxGroup
 
 		add(bkgrndTiles);
 		add(gems);
+
+		potentialMoves = findPotentialMoves();
 
 		var deb = "[";
 		for (x in 0...boardWidth)
@@ -178,6 +206,15 @@ class PlayBoard extends FlxGroup
 			FlxG.switchState(new MainMenuState());
 		}
 
+		if (FlxG.keys.justPressed.M)
+		{
+			var srMoves = findPotentialMoves();
+			for (m in srMoves)
+			{
+				FlxG.log.add("Move: " + m.move.x + ", " + m.move.y + " | " + m.move.direction + "(" + m.matches.length + ")");
+			}
+		}
+
 		if (FlxG.keys.justPressed.F)
 		{
 			for (x in 0...boardWidth)
@@ -198,7 +235,7 @@ class PlayBoard extends FlxGroup
 		switch (state)
 		{
 			case State.Idle:
-				updateIdle();
+				updateIdle(elapsed);
 			case State.Swapping:
 				onGemMovedFinished(() ->
 				{
@@ -215,11 +252,22 @@ class PlayBoard extends FlxGroup
 			case State.PostMatch:
 				onGemMovedFinished(() ->
 				{
-					var matches = findAllMatches();
+					var matches = findAllMatches(this.grid);
 					if (matches.length > 0)
 						state = State.Matching;
 					else
+					{
 						state = State.Idle;
+						moveTimer = 0.0;
+						shownMatch = false;
+						potentialMoves = findPotentialMoves();
+
+						if (suggestedGem != null)
+						{
+							suggestedGem.highlighted = false;
+							suggestedGem = null;
+						}
+					}
 				});
 				// case State.Refilling:
 				//	updateRefilling();
@@ -260,7 +308,7 @@ class PlayBoard extends FlxGroup
 
 	function updateMatching()
 	{
-		var matches = findAllMatches();
+		var matches = findAllMatches(this.grid);
 
 		if (matches.length > 0)
 		{
@@ -416,9 +464,23 @@ class PlayBoard extends FlxGroup
 		}
 	}
 
-	function updateIdle()
+	var shownMatch = false;
+	var suggestedGem:Gem = null;
+
+	function updateIdle(elapsed:Float)
 	{
-		if (FlxG.mouse.justPressed && state == State.Idle)
+		moveTimer += elapsed;
+
+		if (moveTimer > 10 && !shownMatch)
+		{
+			shownMatch = true;
+			var move = potentialMoves[0].move;
+
+			suggestedGem = grid[move.x][move.y];
+			suggestedGem.highlighted = true;
+		}
+
+		if (FlxG.mouse.justPressed)
 		{
 			var cell = getCellAtMouse();
 			if (cell != null)
@@ -478,14 +540,14 @@ class PlayBoard extends FlxGroup
 		return {x: Math.floor(x / cellSize), y: Math.floor(y / cellSize)};
 	}
 
-	function findAllMatches():Array<MatchGroup>
+	function findAllMatches(workingGrid:Array<Array<Gem>>):Array<MatchGroup>
 	{
 		var matches = new Array<MatchGroup>();
 
 		var colMatches = new Array<MatchGroup>();
 		var rowMatches = new Array<MatchGroup>();
 
-		for (y in 0...grid[0].length)
+		for (y in 0...workingGrid[0].length)
 		{
 			for (m in findMatchesInRow(y))
 			{
@@ -493,7 +555,7 @@ class PlayBoard extends FlxGroup
 			}
 		}
 
-		for (x in 0...grid.length)
+		for (x in 0...workingGrid.length)
 		{
 			for (m in findMatchesInColumn(x))
 			{
@@ -643,6 +705,135 @@ class PlayBoard extends FlxGroup
 		}
 
 		return matches;
+	}
+
+	function findPotentialMoves():Array<ScoredRankedMatch>
+	{
+		var start = Timer.stamp();
+		var moves = new Array<ScoredRankedMatch>();
+		var workingGrid = grid.copy();
+
+		for (x in 0...workingGrid.length)
+		{
+			for (y in 0...workingGrid[0].length)
+			{
+				var possibleMoves:Array<MoveDirection> = getMoves(x, y);
+				for (move in possibleMoves)
+				{
+					var targetX = x;
+					var targetY = y;
+
+					switch (move)
+					{
+						case MoveDirection.Up:
+							targetY -= 1;
+						case MoveDirection.Down:
+							targetY += 1;
+						case MoveDirection.Left:
+							targetX -= 1;
+						case MoveDirection.Right:
+							targetX += 1;
+					}
+
+					var temp = workingGrid[x][y];
+					workingGrid[x][y] = workingGrid[targetX][targetY];
+					workingGrid[targetX][targetY] = temp;
+
+					var matches = findAllMatches(workingGrid);
+					if (matches.length > 0)
+					{
+						var isKeyGem = matches.map((match) ->
+						{
+							var matchGemType = workingGrid[match[0].x][match[0].y].gemTypeId;
+							return temp.gemTypeId == matchGemType;
+						}).contains(true);
+
+						if (isKeyGem)
+						{
+							var score = 0;
+							for (match in matches)
+							{
+								score += match.length;
+							}
+
+							moves.push({move: {x: x, y: y, direction: move}, matches: matches, score: score});
+						}
+					}
+
+					temp = workingGrid[x][y];
+					workingGrid[x][y] = workingGrid[targetX][targetY];
+					workingGrid[targetX][targetY] = temp;
+				}
+			}
+		}
+		var endMatch = Timer.stamp();
+
+		var collatedMatches = new Array<
+			{
+				matches:Array<ScoredRankedMatch>,
+				score:Int
+			}>();
+
+		for (m in moves)
+		{
+			var mcmGroup = collatedMatches.filter((cm) -> cm.score == m.score);
+
+			if (mcmGroup.length == 0)
+			{
+				collatedMatches.push({matches: [m], score: m.score});
+			}
+			else
+			{
+				mcmGroup[0].matches.push(m);
+			}
+		}
+		collatedMatches.sort((a, b) -> b.score - a.score);
+
+		var sortedMatches = new Array<ScoredRankedMatch>();
+
+		for (cm in collatedMatches)
+		{
+			FlxG.random.shuffle(cm.matches);
+			sortedMatches = sortedMatches.concat(cm.matches);
+		}
+
+		var endSort = Timer.stamp();
+
+		FlxG.log.add("Match time: " + (endMatch - start) + " | Collate time: " + (endSort - endMatch));
+
+		for (m in sortedMatches)
+		{
+			FlxG.log.add("Move: " + m.move.x + ", " + m.move.y + " | " + m.move.direction + "(" + m.score + ")");
+		}
+
+		return sortedMatches;
+	}
+
+	function getMoves(x:Int, y:Int):Array<MoveDirection>
+	{
+		var possibleMoves = new Array<MoveDirection>();
+
+		if (x > 0)
+		{
+			possibleMoves.push(MoveDirection.Left);
+		}
+
+		if (x < grid.length - 1)
+		{
+			possibleMoves.push(MoveDirection.Right);
+		}
+
+		if (y > 0)
+		{
+			possibleMoves.push(MoveDirection.Up);
+		}
+
+		if (y < grid[0].length - 1)
+		{
+			possibleMoves.push(MoveDirection.Down);
+		}
+
+		return possibleMoves;
 	}
 
 	function deMatchBoard(matches:Array<MatchGroup>)

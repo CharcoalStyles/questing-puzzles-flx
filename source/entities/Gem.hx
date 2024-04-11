@@ -20,6 +20,7 @@ class Gem extends FlxSprite
 	var targetScale:FlxPoint;
 
 	public var selected(default, set):Bool = false;
+	public var highlighted(default, set):Bool = false;
 	public var gemTypeId:Int;
 
 	var angleTween:FlxTween;
@@ -56,6 +57,14 @@ class Gem extends FlxSprite
 		this.exists = true;
 		this.visible = true;
 		this.selected = false;
+
+		if (angleTween != null)
+			angleTween.cancel();
+		if (colourTween != null)
+		{
+			FlxG.log.add("Cancelling colour tween");
+			colourTween.cancel();
+		}
 
 		setType(type);
 	}
@@ -110,6 +119,8 @@ class Gem extends FlxSprite
 	{
 		if (newSelected)
 		{
+			if (colourTween != null)
+				colourTween.cancel();
 			startRocking();
 			colourTween = FlxTween.color(this, 0.6, this.originalColor, FlxColor.WHITE, {
 				type: FlxTweenType.PINGPONG,
@@ -127,6 +138,24 @@ class Gem extends FlxSprite
 		}
 		this.selected = newSelected;
 		return newSelected;
+	}
+
+	function set_highlighted(value:Bool):Bool
+	{
+		if (value)
+		{
+			colourTween = FlxTween.color(this, 0.3, this.originalColor, FlxColor.WHITE, {
+				type: FlxTweenType.PINGPONG,
+				ease: FlxEase.quintInOut,
+			});
+		}
+		else
+		{
+			if (colourTween != null)
+				colourTween.cancel();
+			this.color = this.originalColor;
+		}
+		return value;
 	}
 
 	function startRocking()
