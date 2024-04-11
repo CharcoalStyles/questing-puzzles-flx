@@ -4,7 +4,6 @@ import entities.Gem.GemType;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import flixel.tweens.FlxEase;
@@ -54,7 +53,7 @@ enum State
 	SwappingRevert;
 	Matching;
 	PostMatch;
-	Refilling;
+	Shuffle;
 }
 
 enum MoveDirection
@@ -111,14 +110,14 @@ class PlayBoard extends FlxGroup
 		boardHeight = rows;
 
 		boardState = [
-			[1, 2, 6, 4, 5, 1, 2, 3],
-			[2, 6, 4, 5, 1, 2, 3, 4],
-			[6, 4, 6, 6, 2, 3, 3, 5],
-			[4, 5, 6, 2, 3, 4, 3, 1],
-			[5, 1, 2, 3, 4, 5, 1, 2],
-			[1, 2, 3, 4, 5, 1, 2, 3],
-			[2, 3, 4, 5, 1, 2, 3, 4],
-			[3, 4, 5, 1, 2, 3, 4, 5]
+			[6, 6, 4, 2, 3, 3, 4, 4],
+			[1, 1, 6, 4, 5, 5, 1, 1],
+			[2, 2, 5, 1, 2, 2, 4, 4],
+			[1, 1, 3, 3, 5, 5, 1, 1],
+			[2, 2, 5, 1, 2, 2, 4, 4],
+			[1, 1, 3, 3, 5, 5, 1, 1],
+			[2, 2, 5, 1, 2, 2, 4, 4],
+			[1, 1, 3, 3, 5, 5, 1, 1],
 		];
 
 		gemFrames = KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png", "assets/data/spritesheet_tilesGrey.xml");
@@ -147,7 +146,7 @@ class PlayBoard extends FlxGroup
 				bkgrndTile.color = 0x00505050;
 				bkgrndTiles.add(bkgrndTile);
 
-				var gt = GemType.random(null); // bsToGt[boardState[x][y]]; // GemType.random(); //
+				var gt = bsToGt[boardState[x][y] - 1]; // GemType.random(); //
 
 				var g = gemPool.get();
 				g.init(boardX + x * cellSize, boardY + y * cellSize, FlxPoint.get(cellSize, cellSize), FlxPoint.get(margin, margin), gemFrames, gt);
@@ -161,7 +160,7 @@ class PlayBoard extends FlxGroup
 
 		while (matches.length > 0 && count < 1000)
 		{
-			deMatchBoard(matches);
+			deMatchBoard(grid, matches);
 			matches = findAllMatches(this.grid);
 			count += 1;
 		}
@@ -173,14 +172,20 @@ class PlayBoard extends FlxGroup
 
 		potentialMoves = findPotentialMoves();
 
+		traceBoard(grid, false);
+	}
+
+	function traceBoard(board:Array<Array<Gem>>, isId:Bool)
+	{
 		var deb = "[";
-		for (x in 0...boardWidth)
+		for (x in 0...board.length)
 		{
 			deb += "[";
-			for (y in 0...boardHeight)
+			for (y in 0...board[0].length)
 			{
-				if (grid[x][y] != null)
-					deb += grid[x][y].gemTypeId + ", ";
+				var g = board[x][y];
+				if (board[x][y] != null)
+					deb += (isId ? g.id : g.gemTypeId) + ", ";
 				else
 					deb += "-, ";
 			}
@@ -257,20 +262,31 @@ class PlayBoard extends FlxGroup
 						state = State.Matching;
 					else
 					{
-						state = State.Idle;
-						moveTimer = 0.0;
-						shownMatch = false;
-						potentialMoves = findPotentialMoves();
-
-						if (suggestedGem != null)
-						{
-							suggestedGem.highlighted = false;
-							suggestedGem = null;
-						}
+						resetToIdle();
 					}
 				});
-				// case State.Refilling:
-				//	updateRefilling();
+			case State.Shuffle:
+				onGemMovedFinished(resetToIdle);
+		}
+	}
+
+	function resetToIdle()
+	{
+		state = State.Idle;
+		moveTimer = 0.0;
+		shownMatch = false;
+		potentialMoves = findPotentialMoves();
+
+		if (potentialMoves.length == 0)
+		{
+			FlxG.log.add("No moves left");
+			shuffleBoard();
+		}
+
+		if (suggestedGem != null)
+		{
+			suggestedGem.highlighted = false;
+			suggestedGem = null;
 		}
 	}
 
@@ -707,11 +723,11 @@ class PlayBoard extends FlxGroup
 		return matches;
 	}
 
-	function findPotentialMoves():Array<ScoredRankedMatch>
+	function findPotentialMoves(?inGrid:Array<Array<Gem>>):Array<ScoredRankedMatch>
 	{
 		var start = Timer.stamp();
 		var moves = new Array<ScoredRankedMatch>();
-		var workingGrid = grid.copy();
+		var workingGrid = (inGrid == null ? grid : inGrid).copy();
 
 		for (x in 0...workingGrid.length)
 		{
@@ -836,13 +852,77 @@ class PlayBoard extends FlxGroup
 		return possibleMoves;
 	}
 
-	function deMatchBoard(matches:Array<MatchGroup>)
+	function deMatchBoard(board:Array<Array<Gem>>, matches:Array<MatchGroup>)
 	{
 		for (m in matches)
 		{
 			var g = m[Math.floor(m.length / 2)];
-			var oId = grid[g.x][g.y].gemTypeId;
-			grid[g.x][g.y].setType(GemType.random([oId]));
+			var oId = board[g.x][g.y].gemTypeId;
+			board[g.x][g.y].setType(GemType.random([oId]));
 		}
+	}
+
+	function shuffleBoard()
+	{
+		var targetGrid = grid.copy();
+
+		var gridSpaces = new Array<CellIndex>();
+		var gems = new Array<GemGrid>();
+
+		for (x in 0...targetGrid.length)
+		{
+			for (y in 0...targetGrid[0].length)
+			{
+				gridSpaces.push({x: x, y: y});
+				gems.push({x: x, y: y, gem: targetGrid[x][y]});
+			}
+		}
+
+		var potentialMoves = findPotentialMoves();
+		var updates = new Array<UpdatedGem>();
+		while (potentialMoves.length == 0)
+		{
+			var workingGems = gems.copy();
+			FlxG.random.shuffle(workingGems);
+
+			while (workingGems.length > 0)
+			{
+				var gem1 = workingGems.pop();
+				var gem2 = workingGems.pop();
+
+				var temp = targetGrid[gem1.x][gem1.y];
+				targetGrid[gem1.x][gem1.y] = targetGrid[gem2.x][gem2.y];
+				targetGrid[gem2.x][gem2.y] = temp;
+
+				updates.push({
+					original: {x: gem1.x, y: gem1.y},
+					updated: {x: gem2.x, y: gem2.y},
+					targetPosition: FlxPoint.get(targetGrid[gem2.x][gem2.y].x, targetGrid[gem2.x][gem2.y].y)
+				});
+
+				updates.push({
+					original: {x: gem2.x, y: gem2.y},
+					updated: {x: gem1.x, y: gem1.y},
+					targetPosition: FlxPoint.get(targetGrid[gem1.x][gem1.y].x, targetGrid[gem1.x][gem1.y].y)
+				});
+			}
+
+			deMatchBoard(targetGrid, findAllMatches(targetGrid));
+			potentialMoves = findPotentialMoves(targetGrid);
+		}
+
+		for (u in updates)
+		{
+			var gem = targetGrid[u.original.x][u.original.y];
+
+			var index = gemMoves.push(false);
+			gem.move(u.targetPosition.x, u.targetPosition.y, 0.3, (t) ->
+			{
+				gemMoves[index - 1] = true;
+			});
+		}
+
+		grid = targetGrid;
+		state = State.Shuffle;
 	}
 }
