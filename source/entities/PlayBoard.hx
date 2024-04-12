@@ -81,7 +81,7 @@ class PlayBoard extends FlxGroup
 	var cellSize:Int;
 
 	var state = State.Idle;
-	var potentialMoves:Array<ScoredRankedMatch> = null;
+	var previousState = State.Idle;
 
 	var moveTimer:Float = 0.0;
 
@@ -97,6 +97,9 @@ class PlayBoard extends FlxGroup
 
 	var bkgrndTiles:FlxGroup;
 	var gems:FlxGroup;
+
+	public var potentialMoves:Array<ScoredRankedMatch> = null;
+	public var onStateChange:State->Void;
 
 	public function new(rows:Int, cols:Int)
 	{
@@ -211,32 +214,6 @@ class PlayBoard extends FlxGroup
 			FlxG.switchState(new MainMenuState());
 		}
 
-		if (FlxG.keys.justPressed.M)
-		{
-			var srMoves = findPotentialMoves();
-			for (m in srMoves)
-			{
-				FlxG.log.add("Move: " + m.move.x + ", " + m.move.y + " | " + m.move.direction + "(" + m.matches.length + ")");
-			}
-		}
-
-		if (FlxG.keys.justPressed.F)
-		{
-			for (x in 0...boardWidth)
-			{
-				var r = "";
-				for (y in 0...boardHeight)
-				{
-					if (grid[x][y] != null)
-						r += grid[x][y].gemTypeId + ", ";
-					else
-						r += "-, ";
-				}
-
-				FlxG.log.add(r);
-			}
-		}
-
 		switch (state)
 		{
 			case State.Idle:
@@ -267,6 +244,58 @@ class PlayBoard extends FlxGroup
 				});
 			case State.Shuffle:
 				onGemMovedFinished(resetToIdle);
+		}
+
+		if (state != previousState)
+		{
+			onStateChange(state);
+			previousState = state;
+		}
+	}
+
+	public function handleclick(screenX:Int, screenY:Int)
+	{
+		var cell = getCellAtScreenPosition(screenX, screenY);
+		if (cell != null)
+		{
+			var clickedGem = grid[cell.x][cell.y];
+
+			if (selected == null)
+			{
+				var selectedGem = clickedGem;
+				selectedGem.selected = true;
+				selected = {x: cell.x, y: cell.y, gem: selectedGem};
+			}
+			else
+			{
+				if (selected.x == cell.x && selected.y == cell.y)
+				{
+					selected.gem.selected = false;
+					selected = null;
+				}
+				else
+				{
+					var dx = cell.x - selected.x;
+					var dy = cell.y - selected.y;
+
+					if (Math.abs(dx) + Math.abs(dy) == 1)
+					{
+						selected.gem.selected = false;
+						userSwap = [selected, {x: cell.x, y: cell.y, gem: clickedGem}];
+						swapCells(userSwap[0], userSwap[1]);
+						selected = null;
+
+						state = State.Swapping;
+					}
+					else
+					{
+						selected.gem.selected = false;
+
+						selected = {x: cell.x, y: cell.y, gem: clickedGem};
+						selected.gem.selected = true;
+					}
+				}
+			}
 		}
 	}
 
@@ -495,58 +524,12 @@ class PlayBoard extends FlxGroup
 			suggestedGem = grid[move.x][move.y];
 			suggestedGem.highlighted = true;
 		}
-
-		if (FlxG.mouse.justPressed)
-		{
-			var cell = getCellAtMouse();
-			if (cell != null)
-			{
-				var clickedGem = grid[cell.x][cell.y];
-
-				if (selected == null)
-				{
-					var selectedGem = clickedGem;
-					selectedGem.selected = true;
-					selected = {x: cell.x, y: cell.y, gem: selectedGem};
-				}
-				else
-				{
-					if (selected.x == cell.x && selected.y == cell.y)
-					{
-						selected.gem.selected = false;
-						selected = null;
-					}
-					else
-					{
-						var dx = cell.x - selected.x;
-						var dy = cell.y - selected.y;
-
-						if (Math.abs(dx) + Math.abs(dy) == 1)
-						{
-							selected.gem.selected = false;
-							userSwap = [selected, {x: cell.x, y: cell.y, gem: clickedGem}];
-							swapCells(userSwap[0], userSwap[1]);
-							selected = null;
-
-							state = State.Swapping;
-						}
-						else
-						{
-							selected.gem.selected = false;
-
-							selected = {x: cell.x, y: cell.y, gem: clickedGem};
-							selected.gem.selected = true;
-						}
-					}
-				}
-			}
-		}
 	}
 
-	function getCellAtMouse():CellIndex
+	function getCellAtScreenPosition(X:Int, Y:Int):CellIndex
 	{
-		var x = FlxG.mouse.x - boardX;
-		var y = FlxG.mouse.y - boardY;
+		var x = X - boardX;
+		var y = Y - boardY;
 
 		if (x < 0 || y < 0 || x >= boardWidth * cellSize || y >= boardHeight * cellSize)
 		{
@@ -815,12 +798,11 @@ class PlayBoard extends FlxGroup
 
 		var endSort = Timer.stamp();
 
-		FlxG.log.add("Match time: " + (endMatch - start) + " | Collate time: " + (endSort - endMatch));
-
 		for (m in sortedMatches)
 		{
 			FlxG.log.add("Move: " + m.move.x + ", " + m.move.y + " | " + m.move.direction + "(" + m.score + ")");
 		}
+		FlxG.log.add("Match time: " + (endMatch - start) + " | Collate time: " + (endSort - endMatch));
 
 		return sortedMatches;
 	}
@@ -924,5 +906,32 @@ class PlayBoard extends FlxGroup
 
 		grid = targetGrid;
 		state = State.Shuffle;
+	}
+
+	public function doMove(move:ScoredRankedMatch)
+	{
+		var targetX = move.move.x;
+		var targetY = move.move.y;
+
+		var direction = move.move.direction;
+
+		var targetX2 = targetX;
+		var targetY2 = targetY;
+
+		switch (direction)
+		{
+			case MoveDirection.Up:
+				targetY2 -= 1;
+			case MoveDirection.Down:
+				targetY2 += 1;
+			case MoveDirection.Left:
+				targetX2 -= 1;
+			case MoveDirection.Right:
+				targetX2 += 1;
+		}
+
+		swapCells({x: targetX, y: targetY, gem: grid[targetX][targetY]}, {x: targetX2, y: targetY2, gem: grid[targetX2][targetY2]});
+
+		state = State.Swapping;
 	}
 }
