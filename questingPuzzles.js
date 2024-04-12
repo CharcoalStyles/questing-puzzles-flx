@@ -8600,10 +8600,11 @@ var entities_PlayBoard = function(rows,cols) {
 	this.gemMoves = null;
 	this.userSwap = null;
 	this.selected = null;
+	this.potentialMoves = null;
 	this.bsToGt = [entities_GemType.RED,entities_GemType.GREEN,entities_GemType.BLUE,entities_GemType.YELLOW,entities_GemType.PURPLE,entities_GemType.ORANGE];
 	this.boardState = [];
 	this.moveTimer = 0.0;
-	this.potentialMoves = null;
+	this.previousState = entities_State.Idle;
 	this.state = entities_State.Idle;
 	flixel_group_FlxTypedGroup.call(this);
 	flixel_FlxG.mouse.set_visible(true);
@@ -8729,8 +8730,8 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			deb += "],";
 		}
 		deb += "]";
-		haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 195, className : "entities.PlayBoard", methodName : "traceBoard"});
-		haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 196, className : "entities.PlayBoard", methodName : "traceBoard"});
+		haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 198, className : "entities.PlayBoard", methodName : "traceBoard"});
+		haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 199, className : "entities.PlayBoard", methodName : "traceBoard"});
 	}
 	,update: function(elapsed) {
 		var _gthis = this;
@@ -8747,36 +8748,6 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 						flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
 					}
 				});
-			}
-		}
-		var _this = flixel_FlxG.keys.justPressed;
-		if(_this.keyManager.checkStatusUnsafe(77,_this.status)) {
-			var srMoves = this.findPotentialMoves();
-			var _g = 0;
-			while(_g < srMoves.length) {
-				var m = srMoves[_g];
-				++_g;
-				flixel_FlxG.log.advanced("Move: " + m.move.x + ", " + m.move.y + " | " + Std.string(m.move.direction) + "(" + m.matches.length + ")",flixel_system_debug_log_LogStyle.NORMAL);
-			}
-		}
-		var _this = flixel_FlxG.keys.justPressed;
-		if(_this.keyManager.checkStatusUnsafe(70,_this.status)) {
-			var _g = 0;
-			var _g1 = this.boardWidth;
-			while(_g < _g1) {
-				var x = _g++;
-				var r = "";
-				var _g2 = 0;
-				var _g3 = this.boardHeight;
-				while(_g2 < _g3) {
-					var y = _g2++;
-					if(this.grid[x][y] != null) {
-						r += this.grid[x][y].gemTypeId + ", ";
-					} else {
-						r += "-, ";
-					}
-				}
-				flixel_FlxG.log.advanced(r,flixel_system_debug_log_LogStyle.NORMAL);
 			}
 		}
 		switch(this.state._hx_index) {
@@ -8809,6 +8780,38 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		case 5:
 			this.onGemMovedFinished($bind(this,this.resetToIdle));
 			break;
+		}
+		if(this.state != this.previousState) {
+			this.onStateChange(this.state);
+			this.previousState = this.state;
+		}
+	}
+	,handleclick: function(screenX,screenY) {
+		var cell = this.getCellAtScreenPosition(screenX,screenY);
+		if(cell != null) {
+			var clickedGem = this.grid[cell.x][cell.y];
+			if(this.selected == null) {
+				var selectedGem = clickedGem;
+				selectedGem.set_selected(true);
+				this.selected = { x : cell.x, y : cell.y, gem : selectedGem};
+			} else if(this.selected.x == cell.x && this.selected.y == cell.y) {
+				this.selected.gem.set_selected(false);
+				this.selected = null;
+			} else {
+				var dx = cell.x - this.selected.x;
+				var dy = cell.y - this.selected.y;
+				if(Math.abs(dx) + Math.abs(dy) == 1) {
+					this.selected.gem.set_selected(false);
+					this.userSwap = [this.selected,{ x : cell.x, y : cell.y, gem : clickedGem}];
+					this.swapCells(this.userSwap[0],this.userSwap[1]);
+					this.selected = null;
+					this.state = entities_State.Swapping;
+				} else {
+					this.selected.gem.set_selected(false);
+					this.selected = { x : cell.x, y : cell.y, gem : clickedGem};
+					this.selected.gem.set_selected(true);
+				}
+			}
 		}
 	}
 	,resetToIdle: function() {
@@ -9137,38 +9140,10 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			this.suggestedGem = this.grid[move.x][move.y];
 			this.suggestedGem.set_highlighted(true);
 		}
-		if(flixel_FlxG.mouse._leftButton.current == 2) {
-			var cell = this.getCellAtMouse();
-			if(cell != null) {
-				var clickedGem = this.grid[cell.x][cell.y];
-				if(this.selected == null) {
-					var selectedGem = clickedGem;
-					selectedGem.set_selected(true);
-					this.selected = { x : cell.x, y : cell.y, gem : selectedGem};
-				} else if(this.selected.x == cell.x && this.selected.y == cell.y) {
-					this.selected.gem.set_selected(false);
-					this.selected = null;
-				} else {
-					var dx = cell.x - this.selected.x;
-					var dy = cell.y - this.selected.y;
-					if(Math.abs(dx) + Math.abs(dy) == 1) {
-						this.selected.gem.set_selected(false);
-						this.userSwap = [this.selected,{ x : cell.x, y : cell.y, gem : clickedGem}];
-						this.swapCells(this.userSwap[0],this.userSwap[1]);
-						this.selected = null;
-						this.state = entities_State.Swapping;
-					} else {
-						this.selected.gem.set_selected(false);
-						this.selected = { x : cell.x, y : cell.y, gem : clickedGem};
-						this.selected.gem.set_selected(true);
-					}
-				}
-			}
-		}
 	}
-	,getCellAtMouse: function() {
-		var x = flixel_FlxG.mouse.x - this.boardX;
-		var y = flixel_FlxG.mouse.y - this.boardY;
+	,getCellAtScreenPosition: function(X,Y) {
+		var x = X - this.boardX;
+		var y = Y - this.boardY;
 		if(x < 0 || y < 0 || x >= this.boardWidth * this.cellSize || y >= this.boardHeight * this.cellSize) {
 			return null;
 		}
@@ -9429,13 +9404,13 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			sortedMatches = sortedMatches.concat(cm.matches);
 		}
 		var endSort = new Date().getTime() / 1000;
-		flixel_FlxG.log.advanced("Match time: " + (endMatch - start) + " | Collate time: " + (endSort - endMatch),flixel_system_debug_log_LogStyle.NORMAL);
 		var _g = 0;
 		while(_g < sortedMatches.length) {
 			var m = sortedMatches[_g];
 			++_g;
 			flixel_FlxG.log.advanced("Move: " + m.move.x + ", " + m.move.y + " | " + Std.string(m.move.direction) + "(" + m.score + ")",flixel_system_debug_log_LogStyle.NORMAL);
 		}
+		flixel_FlxG.log.advanced("Match time: " + (endMatch - start) + " | Collate time: " + (endSort - endMatch),flixel_system_debug_log_LogStyle.NORMAL);
 		return sortedMatches;
 	}
 	,getMoves: function(x,y) {
@@ -9552,6 +9527,29 @@ entities_PlayBoard.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		}
 		this.grid = targetGrid;
 		this.state = entities_State.Shuffle;
+	}
+	,doMove: function(move) {
+		var targetX = move.move.x;
+		var targetY = move.move.y;
+		var direction = move.move.direction;
+		var targetX2 = targetX;
+		var targetY2 = targetY;
+		switch(direction._hx_index) {
+		case 0:
+			--targetY2;
+			break;
+		case 1:
+			++targetY2;
+			break;
+		case 2:
+			--targetX2;
+			break;
+		case 3:
+			++targetX2;
+			break;
+		}
+		this.swapCells({ x : targetX, y : targetY, gem : this.grid[targetX][targetY]},{ x : targetX2, y : targetY2, gem : this.grid[targetX2][targetY2]});
+		this.state = entities_State.Swapping;
 	}
 	,__class__: entities_PlayBoard
 });
@@ -71555,7 +71553,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 857680;
+	this.version = 282463;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -119289,6 +119287,7 @@ states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
 	,__class__: states_MainMenuState
 });
 var states_PlayState = function() {
+	this.isPlayerTurn = false;
 	flixel_FlxState.call(this);
 };
 $hxClasses["states.PlayState"] = states_PlayState;
@@ -119296,12 +119295,28 @@ states_PlayState.__name__ = "states.PlayState";
 states_PlayState.__super__ = flixel_FlxState;
 states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 	create: function() {
+		var _gthis = this;
 		flixel_FlxState.prototype.create.call(this);
 		flixel_FlxG.mouse.set_visible(true);
 		flixel_FlxG.camera.set_antialiasing(true);
-		this.add(new entities_PlayBoard(8,8));
+		this.board = new entities_PlayBoard(8,8);
+		this.add(this.board);
+		this.board.onStateChange = function(state) {
+			flixel_FlxG.log.advanced("State changed to: " + Std.string(state),flixel_system_debug_log_LogStyle.NORMAL);
+			if(state._hx_index == 0) {
+				var match = _gthis.board.potentialMoves[0];
+				if(match != null) {
+					_gthis.board.doMove(match);
+				}
+			} else {
+				_gthis.isPlayerTurn = false;
+			}
+		};
 	}
 	,update: function(elapsed) {
+		if(flixel_FlxG.mouse._leftButton.current == 2) {
+			this.board.handleclick(flixel_FlxG.mouse.x,flixel_FlxG.mouse.y);
+		}
 		flixel_FlxState.prototype.update.call(this,elapsed);
 	}
 	,__class__: states_PlayState
