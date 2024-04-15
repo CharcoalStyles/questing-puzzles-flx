@@ -62,7 +62,6 @@ class Gem extends FlxSprite
 			angleTween.cancel();
 		if (colourTween != null)
 		{
-			FlxG.log.add("Cancelling colour tween");
 			colourTween.cancel();
 		}
 
@@ -179,12 +178,12 @@ class Gem extends FlxSprite
 
 class GemType
 {
-	public static var RED:GemType = new GemType(0, "tileGrey_04.png", 0xffFF0000);
-	public static var GREEN:GemType = new GemType(1, "tileGrey_05.png", 0xff00FF00);
-	public static var BLUE:GemType = new GemType(2, "tileGrey_06.png", 0xff0000FF);
-	public static var YELLOW:GemType = new GemType(3, "tileGrey_07.png", 0xffFFFF00);
-	public static var PURPLE:GemType = new GemType(4, "tileGrey_08.png", 0xffFF00FF);
-	public static var ORANGE:GemType = new GemType(5, "tileGrey_09.png", 0xffFFA500);
+	public static var RED:GemType = new GemType(0, "tileGrey_04.png", 0xffFF0000, "Red");
+	public static var GREEN:GemType = new GemType(1, "tileGrey_05.png", 0xff00FF00, "Green");
+	public static var BLUE:GemType = new GemType(2, "tileGrey_06.png", 0xff0000FF, "Blue");
+	public static var YELLOW:GemType = new GemType(3, "tileGrey_07.png", 0xffFFFF00, "Yellow");
+	public static var PURPLE:GemType = new GemType(4, "tileGrey_08.png", 0xffFF00FF, "Purple");
+	public static var ORANGE:GemType = new GemType(5, "tileGrey_09.png", 0xffFFA500, "Orange");
 
 	public static var ALL:Array<GemType> = [RED, GREEN, BLUE, YELLOW, PURPLE, ORANGE];
 	public static var random = (?notIds:Array<Int>) ->
@@ -196,11 +195,15 @@ class GemType
 	public var id:Int;
 	public var frame:String;
 	public var color:FlxColor;
+	public var name:String;
+	public var shortName:String;
 
-	function new(id:Int, uFrame:String, c:FlxColor)
+	function new(id:Int, uFrame:String, c:FlxColor, n:String)
 	{
 		this.id = id;
 		frame = uFrame;
 		color = c;
+		name = n;
+		shortName = n.substring(0, 1);
 	}
 }

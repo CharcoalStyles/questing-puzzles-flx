@@ -1,15 +1,27 @@
 package states;
 
-import entities.PlayBoard.State;
 import entities.PlayBoard;
+import entities.Sidebar;
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
 
 class PlayState extends FlxState
 {
 	var board:PlayBoard;
 
-	var isPlayerTurn:Bool = false;
+	var isPlayerTurn:Bool = true;
+	var isPlayerTurnNext:Bool = false;
+	var firstTurn:Bool = true;
+
+	var timer:Float = 0;
+	var triggerTime:Float = 1.5;
+
+	var currentState:State = State.Idle;
+
+	var playerSidebar:Sidebar;
+	var aiSidebar:Sidebar;
 
 	override public function create()
 	{
@@ -22,27 +34,72 @@ class PlayState extends FlxState
 
 		board.onStateChange = (state) ->
 		{
-			FlxG.log.add("State changed to: " + state);
+			currentState = state;
+			FlxG.log.add("State changed to " + Std.string(state));
+
 			switch (state)
 			{
 				case State.Idle:
-					var match = board.potentialMoves[0];
-					if (match != null)
-					{
-						board.doMove(match);
-					}
+					isPlayerTurn = isPlayerTurnNext;
+				case State.PostMatch:
+					postMatchUpdateOnce();
 				default:
-					isPlayerTurn = false;
 			}
+			timer = 0;
 		}
+		playerSidebar = new Sidebar(true);
+		add(playerSidebar);
+		aiSidebar = new Sidebar(false);
+		add(aiSidebar);
 	}
 
 	override public function update(elapsed:Float)
 	{
-		if (FlxG.mouse.justPressed)
-		{
-			board.handleclick(FlxG.mouse.x, FlxG.mouse.y);
-		}
 		super.update(elapsed);
+
+		switch (currentState)
+		{
+			case State.Idle:
+				idleUpdate(elapsed);
+			case State.Matching:
+			default:
+		}
+	}
+
+	function idleUpdate(elapsed:Float)
+	{
+		if (isPlayerTurn)
+		{
+			if (FlxG.mouse.justPressed)
+			{
+				board.handleclick(FlxG.mouse.x, FlxG.mouse.y);
+				isPlayerTurnNext = false;
+				timer = 0;
+			}
+		}
+		else
+		{
+			timer += elapsed;
+			if (timer >= triggerTime)
+			{
+				var match = board.potentialMoves[0];
+				if (match != null)
+				{
+					board.doMove(match);
+					isPlayerTurnNext = true;
+					timer = 0;
+				}
+			}
+		}
+	}
+
+	function postMatchUpdateOnce()
+	{
+		var sb = isPlayerTurn ? playerSidebar : aiSidebar;
+		var am = board.activeMatches;
+		for (g in am)
+		{
+			sb.addMana(g.gemTypeId, 1, g.pos);
+		}
 	}
 }

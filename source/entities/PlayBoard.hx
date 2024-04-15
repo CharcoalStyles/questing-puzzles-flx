@@ -39,6 +39,12 @@ typedef GemGrid =
 	gem:Gem
 }
 
+typedef MatchTypePosition =
+{
+	gemTypeId:Int,
+	pos:FlxPoint
+}
+
 typedef UpdatedGem =
 {
 	original:CellIndex,
@@ -53,6 +59,7 @@ enum State
 	SwappingRevert;
 	Matching;
 	PostMatch;
+	EndTurn;
 	Shuffle;
 }
 
@@ -98,6 +105,7 @@ class PlayBoard extends FlxGroup
 	var bkgrndTiles:FlxGroup;
 	var gems:FlxGroup;
 
+	public var activeMatches:Array<MatchTypePosition> = null;
 	public var potentialMoves:Array<ScoredRankedMatch> = null;
 	public var onStateChange:State->Void;
 
@@ -111,17 +119,6 @@ class PlayBoard extends FlxGroup
 
 		boardWidth = cols;
 		boardHeight = rows;
-
-		boardState = [
-			[6, 6, 4, 2, 3, 3, 4, 4],
-			[1, 1, 6, 4, 5, 5, 1, 1],
-			[2, 2, 5, 1, 2, 2, 4, 4],
-			[1, 1, 3, 3, 5, 5, 1, 1],
-			[2, 2, 5, 1, 2, 2, 4, 4],
-			[1, 1, 3, 3, 5, 5, 1, 1],
-			[2, 2, 5, 1, 2, 2, 4, 4],
-			[1, 1, 3, 3, 5, 5, 1, 1],
-		];
 
 		gemFrames = KennyAtlasLoader.fromTexturePackerXml("assets/images/spritesheet_tilesGrey.png", "assets/data/spritesheet_tilesGrey.xml");
 
@@ -149,7 +146,7 @@ class PlayBoard extends FlxGroup
 				bkgrndTile.color = 0x00505050;
 				bkgrndTiles.add(bkgrndTile);
 
-				var gt = GemType.random(); // bsToGt[boardState[x][y] - 1]; // GemType.random(); //
+				var gt = GemType.random();
 
 				var g = gemPool.get();
 				g.init(boardX + x * cellSize, boardY + y * cellSize, FlxPoint.get(cellSize, cellSize), FlxPoint.get(margin, margin), gemFrames, gt);
@@ -167,8 +164,6 @@ class PlayBoard extends FlxGroup
 			matches = findAllMatches(this.grid);
 			count += 1;
 		}
-
-		FlxG.log.add("Cycled " + count + " times");
 
 		add(bkgrndTiles);
 		add(gems);
@@ -239,9 +234,11 @@ class PlayBoard extends FlxGroup
 						state = State.Matching;
 					else
 					{
-						resetToIdle();
+						state = State.EndTurn;
 					}
 				});
+			case EndTurn:
+				resetToIdle();
 			case State.Shuffle:
 				onGemMovedFinished(resetToIdle);
 		}
@@ -308,7 +305,6 @@ class PlayBoard extends FlxGroup
 
 		if (potentialMoves.length == 0)
 		{
-			FlxG.log.add("No moves left");
 			shuffleBoard();
 		}
 
@@ -375,6 +371,13 @@ class PlayBoard extends FlxGroup
 				}
 			}
 			flatMatches.sort((a, b) -> a.y - b.y);
+			activeMatches = flatMatches.map((m) ->
+			{
+				return {
+					gemTypeId: m.gem.gemTypeId,
+					pos: FlxPoint.get(m.gem.x, m.gem.y)
+				};
+			});
 
 			byColMatches = byColMatches.filter((c) -> c.length > 0);
 			byColMatches = byColMatches.map((c) ->
@@ -797,12 +800,6 @@ class PlayBoard extends FlxGroup
 		}
 
 		var endSort = Timer.stamp();
-
-		for (m in sortedMatches)
-		{
-			FlxG.log.add("Move: " + m.move.x + ", " + m.move.y + " | " + m.move.direction + "(" + m.score + ")");
-		}
-		FlxG.log.add("Match time: " + (endMatch - start) + " | Collate time: " + (endSort - endMatch));
 
 		return sortedMatches;
 	}
