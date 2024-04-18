@@ -21,7 +21,7 @@ class Gem extends FlxSprite
 
 	public var selected(default, set):Bool = false;
 	public var highlighted(default, set):Bool = false;
-	public var gemTypeId:Int;
+	public var manaType:ManaType;
 
 	var angleTween:FlxTween;
 	var colourTween:FlxTween;
@@ -35,6 +35,7 @@ class Gem extends FlxSprite
 		Gem.count++;
 
 		this.debugText = new FlxText(0, 0, 100, "");
+		this.debugText.setFormat(null, 8, 0xffffffff, "left", FlxTextBorderStyle.OUTLINE_FAST, 0xff101010);
 
 		kill();
 	}
@@ -43,7 +44,7 @@ class Gem extends FlxSprite
 	{
 		this.originalColor = type.color;
 		this.color = type.color;
-		this.gemTypeId = type.id;
+		this.manaType = type.manaType;
 
 		this.frame = this.frames.getByName(type.frame);
 	}
@@ -100,7 +101,7 @@ class Gem extends FlxSprite
 
 		this.debugText.x = this.x;
 		this.debugText.y = this.y;
-		this.debugText.text = Std.string(this.gemTypeId);
+		this.debugText.text = Std.string(this.manaType);
 	}
 
 	public function move(x:Float, y:Float, duration:Float, onComplete:FlxTween->Void, ?ease:EaseFunction):FlxTween
@@ -176,31 +177,47 @@ class Gem extends FlxSprite
 	}
 }
 
+enum ManaType
+{
+	FIRE;
+	EARTH;
+	WATER;
+	AIR;
+	LIGHT;
+	DARK;
+}
+
 class GemType
 {
-	public static var RED:GemType = new GemType(0, "tileGrey_04.png", 0xffFF0000, "Red");
-	public static var GREEN:GemType = new GemType(1, "tileGrey_05.png", 0xff00FF00, "Green");
-	public static var BLUE:GemType = new GemType(2, "tileGrey_06.png", 0xff0000FF, "Blue");
-	public static var YELLOW:GemType = new GemType(3, "tileGrey_07.png", 0xffFFFF00, "Yellow");
-	public static var PURPLE:GemType = new GemType(4, "tileGrey_08.png", 0xffFF00FF, "Purple");
-	public static var ORANGE:GemType = new GemType(5, "tileGrey_09.png", 0xffFFA500, "Orange");
+	public static var RED:GemType = new GemType(ManaType.FIRE, "tileGrey_04.png", 0xffFF0000, "Fire");
+	public static var GREEN:GemType = new GemType(ManaType.EARTH, "tileGrey_05.png", 0xff00FF00, "Earth");
+	public static var BLUE:GemType = new GemType(ManaType.WATER, "tileGrey_06.png", 0xff0000FF, "Water");
+	public static var YELLOW:GemType = new GemType(ManaType.LIGHT, "tileGrey_07.png", 0xffFFFF00, "Light");
+	public static var PURPLE:GemType = new GemType(ManaType.DARK, "tileGrey_08.png", 0xffFF00FF, "Dark");
+	public static var ORANGE:GemType = new GemType(ManaType.AIR, "tileGrey_09.png", 0xffFFA500, "Air");
 
 	public static var ALL:Array<GemType> = [RED, GREEN, BLUE, YELLOW, PURPLE, ORANGE];
-	public static var random = (?notIds:Array<Int>) ->
+	public static var random = (?notIds:Array<ManaType>) ->
 	{
-		var filtered = ALL.filter((gt) -> (notIds == null ? [] : notIds).indexOf(gt.id) == -1);
+		var filtered = ALL.filter((gt) -> (notIds == null ? [] : notIds).indexOf(gt.manaType) == -1);
 		return filtered[Math.floor(Math.random() * filtered.length)];
 	};
 
-	public var id:Int;
+	public static var fromManaType = (mt:ManaType) ->
+	{
+		var idx = ALL.filter((gt) -> gt.manaType == mt);
+		return idx.length > 0 ? idx[0] : null;
+	};
+
+	public var manaType:ManaType;
 	public var frame:String;
 	public var color:FlxColor;
 	public var name:String;
 	public var shortName:String;
 
-	function new(id:Int, uFrame:String, c:FlxColor, n:String)
+	function new(mt:ManaType, uFrame:String, c:FlxColor, n:String)
 	{
-		this.id = id;
+		manaType = mt;
 		frame = uFrame;
 		color = c;
 		name = n;

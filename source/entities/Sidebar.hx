@@ -1,9 +1,9 @@
 package entities;
 
-import entities.Gem.GemType;
+import entities.Character;
+import entities.Gem;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.effects.particles.FlxEmitter;
 import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import flixel.text.FlxText;
@@ -14,13 +14,16 @@ import flixel.util.FlxPool;
 
 class Sidebar extends FlxGroup
 {
-	var allStores:Array<{bar:FlxBar, label:FlxText, particles:FlxPool<Mparticle>}>;
+	var allStores:Map<ManaType, {bar:FlxBar, label:FlxText, particles:FlxPool<Mparticle>}>;
 	var isLeft:Bool;
+	var character:Character;
+	var spellUis:Array<SpellUi>;
 
-	public function new(isLeft:Bool)
+	public function new(char:Character, isLeft:Bool)
 	{
 		super();
 		this.isLeft = isLeft;
+		this.character = char;
 
 		var background:FlxSprite = new FlxSprite(0, 0);
 		var height = Std.int(Math.min(FlxG.height, FlxG.width));
@@ -44,7 +47,7 @@ class Sidebar extends FlxGroup
 
 		var offsetX = 32;
 
-		allStores = new Array();
+		allStores = new Map();
 
 		var i = 0;
 
@@ -58,7 +61,7 @@ class Sidebar extends FlxGroup
 			add(label);
 
 			var bar:FlxBar = new FlxBar(baseX + 24, workingY, FlxBarFillDirection.LEFT_TO_RIGHT, 100, Std.int(label.height));
-			bar.createFilledBar(0xff606060, gt.color, true, gt.color);
+			bar.createFilledBar(0xff202020, gt.color, true, gt.color);
 			add(bar);
 
 			label = new FlxText(baseX + 130, workingY, 64, "0/100");
@@ -74,19 +77,30 @@ class Sidebar extends FlxGroup
 			});
 			em.preAllocate(20);
 
-			allStores.push({
-				bar: bar,
-				label: label,
-				particles: em
-			});
+			allStores.set(gt.manaType, {bar: bar, label: label, particles: em});
 
 			workingY += Math.ceil(bar.height + paddingY);
 
 			i++;
 		}
+
+		var hr:FlxSprite = new FlxSprite(baseX, workingY, null);
+		hr.makeGraphic(width, 2, 0xff000000);
+		add(hr);
+
+		workingY += 10;
+
+		for (spell in character.spells)
+		{
+			var spellUi = new SpellUi(baseX, workingY, width, spell);
+			spellUis.push(spellUi);
+			add(spellUi);
+
+			workingY += 60;
+		}
 	}
 
-	public function addMana(gemTypeIndex:Int, amount:Int, origin:FlxPoint)
+	public function addMana(gemTypeIndex:ManaType, amount:Int, origin:FlxPoint)
 	{
 		var store = allStores[gemTypeIndex];
 		var bar = store.bar;
@@ -112,6 +126,18 @@ class Sidebar extends FlxGroup
 				bar.value += amount / subParts;
 				store.label.text = Std.string(Math.floor(bar.value)) + "/100";
 			});
+		}
+	}
+
+	public function handleClick(point:FlxPoint)
+	{
+		for (spellUi in spellUis)
+		{
+			if (spellUi.overlaps(point))
+			{
+				// character.castSpell(spellUi.spell);
+				return;
+			}
 		}
 	}
 
@@ -170,4 +196,57 @@ class Mparticle extends FlxSprite
 			});
 		}
 	};
+}
+
+class SpellUi extends FlxGroup
+{
+	var border:FlxSprite;
+	var manaTexts:Array<FlxText>;
+	var spell:Spell;
+
+	public function new(X:Int, Y:Int, width:Int, spell:Spell)
+	{
+		super();
+
+		this.spell = spell;
+
+		var workingY = Y;
+
+		border = new FlxSprite(X, Y, null);
+		border.makeGraphic(width, 50, 0xffffffff);
+		border.color = 0xff000000;
+		add(border);
+
+		var bkgrnd:FlxSprite = new FlxSprite(X + 2, Y + 2, null);
+		bkgrnd.makeGraphic(width - 4, 46, 0xff202020);
+		add(bkgrnd);
+
+		var name:FlxText = new FlxText(X + 5, workingY + 5, width - 10, spell.name);
+		name.setFormat(null, 12, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		name.borderSize = 2;
+		add(name);
+
+		workingY += 7;
+		var workingX = X + 2;
+		for (type in spell.manaCosts.keys())
+		{
+			var gt = GemType.fromManaType(type);
+			var amount = spell.manaCosts.get(type);
+			if (amount == null || amount == 0)
+				continue;
+			var mc:FlxText = new FlxText(workingX + 5, workingY + 20);
+			mc.text = gt.name + " (" + amount + ")";
+			mc.setFormat(null, 12, gt.color, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.WHITE);
+			mc.borderSize = 1;
+			add(mc);
+			workingX += Std.int(mc.width + 5);
+		}
+	}
+
+	public function overlaps(point:FlxPoint):Bool
+	{
+		return border.overlapsPoint(point);
+	}
+
+	public function onManaUpdate() {}
 }

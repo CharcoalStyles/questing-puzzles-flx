@@ -1,6 +1,7 @@
 package entities;
 
 import entities.Gem.GemType;
+import entities.Gem.ManaType;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -41,7 +42,7 @@ typedef GemGrid =
 
 typedef MatchTypePosition =
 {
-	gemTypeId:Int,
+	manaType:ManaType,
 	pos:FlxPoint
 }
 
@@ -183,7 +184,7 @@ class PlayBoard extends FlxGroup
 			{
 				var g = board[x][y];
 				if (board[x][y] != null)
-					deb += (isId ? g.id : g.gemTypeId) + ", ";
+					deb += (isId ? Std.string(g.id) : g.manaType.getName()) + ", ";
 				else
 					deb += "-, ";
 			}
@@ -374,7 +375,7 @@ class PlayBoard extends FlxGroup
 			activeMatches = flatMatches.map((m) ->
 			{
 				return {
-					gemTypeId: m.gem.gemTypeId,
+					manaType: m.gem.manaType,
 					pos: FlxPoint.get(m.gem.x, m.gem.y)
 				};
 			});
@@ -644,14 +645,14 @@ class PlayBoard extends FlxGroup
 
 	function findMatchesInRow(y:Int):Array<MatchGroup>
 	{
-		var lastGemTypeID = -1;
+		var lastManaType:ManaType = null;
 		var matches = new Array<MatchGroup>();
 		var workingMatch = new MatchGroup();
 
 		for (x in 0...grid.length)
 		{
 			var gem = grid[x][y];
-			if (gem.gemTypeId == lastGemTypeID)
+			if (gem.manaType == lastManaType)
 			{
 				workingMatch.push({x: x, y: y});
 			}
@@ -664,7 +665,7 @@ class PlayBoard extends FlxGroup
 
 				workingMatch = new MatchGroup();
 				workingMatch.push({x: x, y: y});
-				lastGemTypeID = gem.gemTypeId;
+				lastManaType = gem.manaType;
 			}
 		}
 
@@ -678,14 +679,14 @@ class PlayBoard extends FlxGroup
 
 	function findMatchesInColumn(x:Int):Array<MatchGroup>
 	{
-		var lastGemTypeID = -1;
+		var lastManaType:ManaType = null;
 		var matches = new Array<MatchGroup>();
 		var workingMatch = new MatchGroup();
 
 		for (y in 0...grid[0].length)
 		{
 			var gem = grid[x][y];
-			if (gem.gemTypeId == lastGemTypeID)
+			if (gem.manaType == lastManaType)
 			{
 				workingMatch.push({x: x, y: y});
 			}
@@ -697,7 +698,7 @@ class PlayBoard extends FlxGroup
 				}
 				workingMatch = new MatchGroup();
 				workingMatch.push({x: x, y: y});
-				lastGemTypeID = gem.gemTypeId;
+				lastManaType = gem.manaType;
 			}
 		}
 
@@ -711,7 +712,6 @@ class PlayBoard extends FlxGroup
 
 	function findPotentialMoves(?inGrid:Array<Array<Gem>>):Array<ScoredRankedMatch>
 	{
-		var start = Timer.stamp();
 		var moves = new Array<ScoredRankedMatch>();
 		var workingGrid = (inGrid == null ? grid : inGrid).copy();
 
@@ -746,8 +746,8 @@ class PlayBoard extends FlxGroup
 					{
 						var isKeyGem = matches.map((match) ->
 						{
-							var matchGemType = workingGrid[match[0].x][match[0].y].gemTypeId;
-							return temp.gemTypeId == matchGemType;
+							var matchGemType = workingGrid[match[0].x][match[0].y].manaType;
+							return temp.manaType == matchGemType;
 						}).contains(true);
 
 						if (isKeyGem)
@@ -768,7 +768,6 @@ class PlayBoard extends FlxGroup
 				}
 			}
 		}
-		var endMatch = Timer.stamp();
 
 		var collatedMatches = new Array<
 			{
@@ -798,8 +797,6 @@ class PlayBoard extends FlxGroup
 			FlxG.random.shuffle(cm.matches);
 			sortedMatches = sortedMatches.concat(cm.matches);
 		}
-
-		var endSort = Timer.stamp();
 
 		return sortedMatches;
 	}
@@ -836,7 +833,7 @@ class PlayBoard extends FlxGroup
 		for (m in matches)
 		{
 			var g = m[Math.floor(m.length / 2)];
-			var oId = board[g.x][g.y].gemTypeId;
+			var oId = board[g.x][g.y].manaType;
 			board[g.x][g.y].setType(GemType.random([oId]));
 		}
 	}
