@@ -906,7 +906,7 @@ ApplicationMain.create = function(config) {
 	app.meta.h["name"] = "Questing Puzzles";
 	app.meta.h["packageName"] = "com.example.myapp";
 	app.meta.h["version"] = "0.0.1";
-	var attributes = { allowHighDPI : true, alwaysOnTop : false, borderless : false, element : null, frameRate : 60, height : 720, hidden : false, maximized : false, minimized : false, parameters : { }, resizable : false, title : "Questing Puzzles", width : 1280, x : null, y : null};
+	var attributes = { allowHighDPI : true, alwaysOnTop : false, borderless : false, element : null, frameRate : 60, height : 1080, hidden : false, maximized : false, minimized : false, parameters : { }, resizable : false, title : "Questing Puzzles", width : 1920, x : null, y : null};
 	attributes.context = { antialiasing : 0, background : 0, colorDepth : 32, depth : true, hardware : true, stencil : true, type : null, vsync : false};
 	if(app.__window == null) {
 		if(config != null) {
@@ -4540,22 +4540,66 @@ Xml.prototype = {
 	,__class__: Xml
 };
 var entities_Character = function() {
+	this.health = new utils_IntObservableActual(0);
 };
 $hxClasses["entities.Character"] = entities_Character;
 entities_Character.__name__ = "entities.Character";
 entities_Character.prototype = {
-	__class__: entities_Character
+	clearObservers: function() {
+		utils_IntObservable.clearObservers(this.health);
+		var manaType = this.mana.keys();
+		while(manaType.hasNext()) {
+			var manaType1 = manaType.next();
+			utils_FloatObservable.clearObservers(this.mana.get(manaType1));
+		}
+	}
+	,__class__: entities_Character
 };
 var entities_Spell = function(n,d,mc,e) {
 	this.name = n;
 	this.description = d;
-	this.manaCosts = mc;
+	this.manaCosts = new haxe_ds_EnumValueMap();
+	var manaType = mc.keys();
+	while(manaType.hasNext()) {
+		var manaType1 = manaType.next();
+		var this1 = this.manaCosts;
+		var v = new utils_FloatObservableActual(mc.get(manaType1));
+		this1.set(manaType1,v);
+	}
 	this.effect = e;
 };
 $hxClasses["entities.Spell"] = entities_Spell;
 entities_Spell.__name__ = "entities.Spell";
 entities_Spell.prototype = {
-	__class__: entities_Spell
+	run: function(enemy,self,board) {
+		var valid = true;
+		var manaType = this.manaCosts.keys();
+		while(manaType.hasNext()) {
+			var manaType1 = manaType.next();
+			var manaRequired = this.manaCosts.get(manaType1) == null ? -1 : this.manaCosts.get(manaType1).value;
+			var manaAvailable = self.mana.get(manaType1) == null ? -1 : self.mana.get(manaType1).value;
+			if(manaAvailable != -1 && manaRequired != -1) {
+				if(manaAvailable < manaRequired) {
+					valid = false;
+					break;
+				}
+			}
+		}
+		if(!valid) {
+			return;
+		}
+		var manaType = this.manaCosts.keys();
+		while(manaType.hasNext()) {
+			var manaType1 = manaType.next();
+			var manaRequired = this.manaCosts.get(manaType1) == null ? -1 : this.manaCosts.get(manaType1).value;
+			var thisMana = self.mana.get(manaType1);
+			if(manaRequired != -1) {
+				utils_FloatObservable.subA(thisMana,manaRequired);
+			}
+		}
+		this.effect(enemy,self,board);
+	}
+	,__class__: entities_Spell
 };
 var flixel_util_IFlxDestroyable = function() { };
 $hxClasses["flixel.util.IFlxDestroyable"] = flixel_util_IFlxDestroyable;
@@ -9670,6 +9714,7 @@ var entities_Sidebar = function(char,isLeft) {
 	flixel_group_FlxTypedGroup.call(this);
 	this.isLeft = isLeft;
 	this.character = char;
+	this.spellUis = [];
 	var background = new flixel_FlxSprite(0,0);
 	var height = Math.min(flixel_FlxG.height,flixel_FlxG.width) | 0;
 	var width = (Math.max(flixel_FlxG.height,flixel_FlxG.width) - height) / 2 | 0;
@@ -9724,9 +9769,26 @@ var entities_Sidebar = function(char,isLeft) {
 	while(_g < _g1.length) {
 		var spell = _g1[_g];
 		++_g;
-		var spellUi = new entities_SpellUi(baseX,workingY,width,spell);
-		this.spellUis.push(spellUi);
-		this.add(spellUi);
+		var spellUi = [new entities_SpellUi(baseX,workingY,width,spell)];
+		this.spellUis.push(spellUi[0]);
+		this.add(spellUi[0]);
+		var mt = spell.manaCosts.keys();
+		while(mt.hasNext()) {
+			var mt1 = [mt.next()];
+			var playerMana = this.character.mana.get(mt1[0]);
+			if(playerMana != null) {
+				utils_FloatObservable.addObserver(playerMana,new utils_CallbackObserver((function(mt,spellUi) {
+					return function(sender,data) {
+						var store = _gthis.allStores.get(mt[0]);
+						var bar = store.bar;
+						haxe_Log.trace("manaType: " + Std.string(mt[0]) + " mana: " + data,{ fileName : "source/entities/Sidebar.hx", lineNumber : 112, className : "entities.Sidebar", methodName : "new"});
+						bar.set_value(data);
+						store.label.set_text(Std.string(Math.floor(bar.get_value())) + "/100");
+						spellUi[0].onManaUpdate(data,mt[0]);
+					};
+				})(mt1,spellUi)));
+			}
+		}
 		workingY += 60;
 	}
 };
@@ -9734,8 +9796,9 @@ $hxClasses["entities.Sidebar"] = entities_Sidebar;
 entities_Sidebar.__name__ = "entities.Sidebar";
 entities_Sidebar.__super__ = flixel_group_FlxTypedGroup;
 entities_Sidebar.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
-	addMana: function(gemTypeIndex,amount,origin) {
-		var store = this.allStores.get(gemTypeIndex);
+	addMana: function(mt,amount,origin) {
+		var _gthis = this;
+		var store = this.allStores.get(mt);
 		var bar = store.bar;
 		var em = store.particles;
 		var subParts = 1;
@@ -9779,21 +9842,23 @@ entities_Sidebar.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			var point = flixel_math_FlxBasePoint.pool.get().set(x2,y2);
 			point._inPool = false;
 			tmp.emit(origin,point,partScale,function() {
-				bar.set_value(bar.get_value() + amount / subParts);
-				store.label.set_text(Std.string(Math.floor(bar.get_value())) + "/100");
+				utils_FloatObservable.addA(_gthis.character.mana.get(mt),amount / subParts);
 			});
 		}
 	}
 	,handleClick: function(point) {
+		var spell = null;
 		var _g = 0;
 		var _g1 = this.spellUis;
 		while(_g < _g1.length) {
 			var spellUi = _g1[_g];
 			++_g;
-			if(spellUi.overlaps(point)) {
-				return;
+			spell = spellUi.overlaps(point);
+			if(spell != null) {
+				break;
 			}
 		}
+		return spell;
 	}
 	,update: function(elapsed) {
 		flixel_group_FlxTypedGroup.prototype.update.call(this,elapsed);
@@ -9856,9 +9921,12 @@ entities_Mparticle.prototype = $extend(flixel_FlxSprite.prototype,{
 	,__class__: entities_Mparticle
 });
 var entities_SpellUi = function(X,Y,width,spell) {
+	this.isActivated = false;
 	flixel_group_FlxTypedGroup.call(this);
 	this.spell = spell;
 	var workingY = Y;
+	this.manaText = new haxe_ds_EnumValueMap();
+	this.manaChecks = new haxe_ds_EnumValueMap();
 	this.border = new flixel_FlxSprite(X,Y,null);
 	this.border.makeGraphic(width,50,-1);
 	this.border.set_color(-16777216);
@@ -9876,7 +9944,8 @@ var entities_SpellUi = function(X,Y,width,spell) {
 	while(type.hasNext()) {
 		var type1 = type.next();
 		var gt = entities_GemType.fromManaType(type1);
-		var amount = spell.manaCosts.get(type1);
+		var cost = spell.manaCosts.get(type1);
+		var amount = cost.value;
 		if(amount == null || amount == 0) {
 			continue;
 		}
@@ -9885,6 +9954,8 @@ var entities_SpellUi = function(X,Y,width,spell) {
 		mc.setFormat(null,12,gt.color,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-1);
 		mc.set_borderSize(1);
 		this.add(mc);
+		this.manaText.set(type1,mc);
+		this.manaChecks.set(type1,false);
 		workingX += mc.get_width() + 5 | 0;
 	}
 };
@@ -9893,9 +9964,25 @@ entities_SpellUi.__name__ = "entities.SpellUi";
 entities_SpellUi.__super__ = flixel_group_FlxTypedGroup;
 entities_SpellUi.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	overlaps: function(point) {
-		return this.border.overlapsPoint(point);
+		if(this.border.overlapsPoint(point)) {
+			return this.spell;
+		} else {
+			return null;
+		}
 	}
-	,onManaUpdate: function() {
+	,onManaUpdate: function(totalNumber,manaType) {
+		var cost = this.spell.manaCosts.get(manaType).value;
+		var check = this.manaChecks.get(manaType);
+		var mc = this.manaText.get(manaType);
+		if(cost != null) {
+			if(totalNumber >= cost && !check) {
+				mc.set_color(-16711936);
+				this.manaChecks.set(manaType,true);
+			} else if(totalNumber < cost && check) {
+				mc.set_color(-65536);
+				this.manaChecks.set(manaType,false);
+			}
+		}
 	}
 	,__class__: entities_SpellUi
 });
@@ -26917,7 +27004,7 @@ flixel_group_FlxTypedSpriteGroup.prototype = $extend(flixel_FlxSprite.prototype,
 		}
 		sprite.set_x(sprite.x - this.x);
 		sprite.set_y(sprite.y - this.y);
-		sprite._cameras = null;
+		sprite.set_cameras(null);
 		return this.group.remove(sprite,splice);
 	}
 	,replace: function(oldObject,newObject) {
@@ -27391,7 +27478,7 @@ flixel_group_FlxTypedSpriteGroup.prototype = $extend(flixel_FlxSprite.prototype,
 		Sprite.set_camera(Camera);
 	}
 	,camerasTransform: function(Sprite,Cameras) {
-		Sprite._cameras = Cameras;
+		Sprite.set_cameras(Cameras);
 	}
 	,offsetTransform: function(Sprite,Offset) {
 		var this1 = Sprite.offset;
@@ -71907,7 +71994,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 537693;
+	this.version = 455343;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -119651,6 +119738,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		flixel_FlxState.prototype.create.call(this);
 		flixel_FlxG.mouse.set_visible(true);
 		flixel_FlxG.camera.set_antialiasing(true);
+		this.globalState = flixel_FlxG.plugins.get(utils_GlobalState);
 		this.board = new entities_PlayBoard(8,8);
 		this.add(this.board);
 		this.board.onStateChange = function(state) {
@@ -119669,78 +119757,10 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			}
 			_gthis.timer = 0;
 		};
-		this.makePlayer();
-		this.makeAi();
-		this.playerSidebar = new entities_Sidebar(this.player,true);
+		this.playerSidebar = new entities_Sidebar(this.globalState.player,true);
 		this.add(this.playerSidebar);
-		this.aiSidebar = new entities_Sidebar(this.ai,false);
+		this.aiSidebar = new entities_Sidebar(this.globalState.ai,false);
 		this.add(this.aiSidebar);
-	}
-	,makePlayer: function() {
-		this.player = new entities_Character();
-		this.player.name = "Player";
-		this.player.portrait = "";
-		this.player.level = 1;
-		this.player.maxHealth = 20;
-		this.player.health = 20;
-		this.player.maxMana = new haxe_ds_EnumValueMap();
-		this.player.maxMana.set(entities_ManaType.FIRE,30);
-		this.player.maxMana.set(entities_ManaType.WATER,25);
-		this.player.maxMana.set(entities_ManaType.EARTH,20);
-		this.player.maxMana.set(entities_ManaType.AIR,15);
-		this.player.maxMana.set(entities_ManaType.LIGHT,25);
-		this.player.maxMana.set(entities_ManaType.DARK,15);
-		this.player.mana = new haxe_ds_EnumValueMap();
-		this.player.mana.set(entities_ManaType.FIRE,0);
-		this.player.mana.set(entities_ManaType.WATER,0);
-		this.player.mana.set(entities_ManaType.EARTH,0);
-		this.player.mana.set(entities_ManaType.AIR,0);
-		this.player.mana.set(entities_ManaType.LIGHT,0);
-		this.player.mana.set(entities_ManaType.DARK,0);
-		this.player.spells = [];
-		var tmp = this.player.spells;
-		var _g = new haxe_ds_EnumValueMap();
-		_g.set(entities_ManaType.FIRE,5);
-		_g.set(entities_ManaType.DARK,2);
-		tmp.push(new entities_Spell("Fireball","Deals 5 damage to target enemy",_g,function(e,s,b) {
-			e.health -= 5;
-		}));
-		var tmp = this.player.spells;
-		var _g = new haxe_ds_EnumValueMap();
-		_g.set(entities_ManaType.WATER,5);
-		tmp.push(new entities_Spell("Heal","Heals 5 health",_g,function(e,s,b) {
-			e.health += 5;
-		}));
-	}
-	,makeAi: function() {
-		this.ai = new entities_Character();
-		this.ai.name = "AI";
-		this.ai.portrait = "";
-		this.ai.level = 1;
-		this.ai.maxHealth = 20;
-		this.ai.health = 20;
-		this.ai.maxMana = new haxe_ds_EnumValueMap();
-		this.ai.maxMana.set(entities_ManaType.FIRE,30);
-		this.ai.maxMana.set(entities_ManaType.WATER,25);
-		this.ai.maxMana.set(entities_ManaType.EARTH,20);
-		this.ai.maxMana.set(entities_ManaType.AIR,15);
-		this.ai.maxMana.set(entities_ManaType.LIGHT,25);
-		this.ai.maxMana.set(entities_ManaType.DARK,15);
-		this.ai.mana = new haxe_ds_EnumValueMap();
-		this.ai.mana.set(entities_ManaType.FIRE,0);
-		this.ai.mana.set(entities_ManaType.WATER,0);
-		this.ai.mana.set(entities_ManaType.EARTH,0);
-		this.ai.mana.set(entities_ManaType.AIR,0);
-		this.ai.mana.set(entities_ManaType.LIGHT,0);
-		this.ai.mana.set(entities_ManaType.DARK,0);
-		this.ai.spells = [];
-		var tmp = this.ai.spells;
-		var _g = new haxe_ds_EnumValueMap();
-		_g.set(entities_ManaType.LIGHT,15);
-		_g.set(entities_ManaType.DARK,15);
-		tmp.push(new entities_Spell("Decimate","Take 1/10th of health, shields and mana",_g,function(e,s,b) {
-			e.health -= 5;
-		}));
 	}
 	,update: function(elapsed) {
 		flixel_FlxState.prototype.update.call(this,elapsed);
@@ -119788,12 +119808,89 @@ var utils_GlobalState = function() {
 	this.controllerId = 0;
 	this.isUsingController = false;
 	flixel_FlxBasic.call(this);
+	this.makePlayer();
+	this.makeAi();
 };
 $hxClasses["utils.GlobalState"] = utils_GlobalState;
 utils_GlobalState.__name__ = "utils.GlobalState";
 utils_GlobalState.__super__ = flixel_FlxBasic;
 utils_GlobalState.prototype = $extend(flixel_FlxBasic.prototype,{
-	__class__: utils_GlobalState
+	makePlayer: function() {
+		this.player = new entities_Character();
+		this.player.name = "Player";
+		this.player.portrait = "";
+		this.player.level = 1;
+		this.player.maxHealth = 20;
+		var this1 = new utils_IntObservableActual(20);
+		this.player.health = this1;
+		this.player.maxMana = new haxe_ds_EnumValueMap();
+		this.player.maxMana.set(entities_ManaType.FIRE,30);
+		this.player.maxMana.set(entities_ManaType.WATER,25);
+		this.player.maxMana.set(entities_ManaType.EARTH,20);
+		this.player.maxMana.set(entities_ManaType.AIR,15);
+		this.player.maxMana.set(entities_ManaType.LIGHT,25);
+		this.player.maxMana.set(entities_ManaType.DARK,15);
+		this.player.mana = new haxe_ds_EnumValueMap();
+		this.player.mana.set(entities_ManaType.FIRE,new utils_FloatObservableActual(0));
+		this.player.mana.set(entities_ManaType.WATER,new utils_FloatObservableActual(0));
+		this.player.mana.set(entities_ManaType.EARTH,new utils_FloatObservableActual(0));
+		this.player.mana.set(entities_ManaType.AIR,new utils_FloatObservableActual(0));
+		this.player.mana.set(entities_ManaType.LIGHT,new utils_FloatObservableActual(0));
+		this.player.mana.set(entities_ManaType.DARK,new utils_FloatObservableActual(0));
+		this.player.spells = [];
+		var tmp = this.player.spells;
+		var _g = new haxe_ds_EnumValueMap();
+		_g.set(entities_ManaType.FIRE,5);
+		_g.set(entities_ManaType.DARK,2);
+		tmp.push(new entities_Spell("Fireball","Deals 5 damage to target enemy",_g,function(e,s,b) {
+			utils_IntObservable.subA(e.health,5);
+		}));
+		var tmp = this.player.spells;
+		var _g = new haxe_ds_EnumValueMap();
+		_g.set(entities_ManaType.WATER,5);
+		tmp.push(new entities_Spell("Heal","Heals 5 health",_g,function(e,s,b) {
+			utils_IntObservable.addA(e.health,5);
+		}));
+		var tmp = this.player.spells;
+		var _g = new haxe_ds_EnumValueMap();
+		_g.set(entities_ManaType.LIGHT,2);
+		_g.set(entities_ManaType.DARK,2);
+		tmp.push(new entities_Spell("Reset","Resetes health to 15",_g,function(e,s,b) {
+			utils_IntObservable.set(e.health,15);
+		}));
+	}
+	,makeAi: function() {
+		this.ai = new entities_Character();
+		this.ai.name = "AI";
+		this.ai.portrait = "";
+		this.ai.level = 1;
+		this.ai.maxHealth = 20;
+		var this1 = new utils_IntObservableActual(20);
+		this.ai.health = this1;
+		this.ai.maxMana = new haxe_ds_EnumValueMap();
+		this.ai.maxMana.set(entities_ManaType.FIRE,30);
+		this.ai.maxMana.set(entities_ManaType.WATER,25);
+		this.ai.maxMana.set(entities_ManaType.EARTH,20);
+		this.ai.maxMana.set(entities_ManaType.AIR,15);
+		this.ai.maxMana.set(entities_ManaType.LIGHT,25);
+		this.ai.maxMana.set(entities_ManaType.DARK,15);
+		this.ai.mana = new haxe_ds_EnumValueMap();
+		this.ai.mana.set(entities_ManaType.FIRE,new utils_FloatObservableActual(0));
+		this.ai.mana.set(entities_ManaType.WATER,new utils_FloatObservableActual(0));
+		this.ai.mana.set(entities_ManaType.EARTH,new utils_FloatObservableActual(0));
+		this.ai.mana.set(entities_ManaType.AIR,new utils_FloatObservableActual(0));
+		this.ai.mana.set(entities_ManaType.LIGHT,new utils_FloatObservableActual(0));
+		this.ai.mana.set(entities_ManaType.DARK,new utils_FloatObservableActual(0));
+		this.ai.spells = [];
+		var tmp = this.ai.spells;
+		var _g = new haxe_ds_EnumValueMap();
+		_g.set(entities_ManaType.LIGHT,3);
+		_g.set(entities_ManaType.DARK,3);
+		tmp.push(new entities_Spell("Decimate","Take 1/10th of health, shields and mana",_g,function(e,s,b) {
+			utils_IntObservable.mulAF(e.health,0.1);
+		}));
+	}
+	,__class__: utils_GlobalState
 });
 var utils_KennyAtlasLoader = function() { };
 $hxClasses["utils.KennyAtlasLoader"] = utils_KennyAtlasLoader;
@@ -119889,6 +119986,210 @@ utils_KennyAtlasLoader.fromTexturePackerXml = function(source,xml) {
 		frames.addAtlasFrame(rect1,sourceSize,point1,name);
 	}
 	return frames;
+};
+var utils_Observer = function() { };
+$hxClasses["utils.Observer"] = utils_Observer;
+utils_Observer.__name__ = "utils.Observer";
+utils_Observer.__isInterface__ = true;
+utils_Observer.prototype = {
+	__class__: utils_Observer
+};
+var utils_CallbackObserver = function(onObservation) {
+	this.callback = onObservation;
+};
+$hxClasses["utils.CallbackObserver"] = utils_CallbackObserver;
+utils_CallbackObserver.__name__ = "utils.CallbackObserver";
+utils_CallbackObserver.__interfaces__ = [utils_Observer];
+utils_CallbackObserver.prototype = {
+	notified: function(sender,data) {
+		this.callback(sender,data);
+	}
+	,__class__: utils_CallbackObserver
+};
+var utils_Observable = function() {
+	this.observers = [];
+};
+$hxClasses["utils.Observable"] = utils_Observable;
+utils_Observable.__name__ = "utils.Observable";
+utils_Observable.prototype = {
+	notify: function(data) {
+		var _g = 0;
+		var _g1 = this.observers;
+		while(_g < _g1.length) {
+			var obs = _g1[_g];
+			++_g;
+			obs.notified(this,data);
+		}
+	}
+	,addObserver: function(observer) {
+		this.observers.push(observer);
+	}
+	,removeObserver: function(observer) {
+		var index = this.observers.indexOf(observer);
+		if(index != -1) {
+			this.observers.splice(index,1);
+		}
+	}
+	,clearObservers: function() {
+		var _g = 0;
+		var _g1 = this.observers;
+		while(_g < _g1.length) {
+			var obs = _g1[_g];
+			++_g;
+			this.removeObserver(obs);
+		}
+	}
+	,__class__: utils_Observable
+};
+var utils_IntObservableActual = function(value) {
+	utils_Observable.call(this);
+	this.set_value(value);
+};
+$hxClasses["utils.IntObservableActual"] = utils_IntObservableActual;
+utils_IntObservableActual.__name__ = "utils.IntObservableActual";
+utils_IntObservableActual.__super__ = utils_Observable;
+utils_IntObservableActual.prototype = $extend(utils_Observable.prototype,{
+	set_value: function(value) {
+		this.value = value;
+		this.notify(this.value);
+		return this.value;
+	}
+	,__class__: utils_IntObservableActual
+	,__properties__: {set_value:"set_value"}
+});
+var utils_FloatObservableActual = function(value) {
+	utils_Observable.call(this);
+	this.set_value(value);
+};
+$hxClasses["utils.FloatObservableActual"] = utils_FloatObservableActual;
+utils_FloatObservableActual.__name__ = "utils.FloatObservableActual";
+utils_FloatObservableActual.__super__ = utils_Observable;
+utils_FloatObservableActual.prototype = $extend(utils_Observable.prototype,{
+	set_value: function(value) {
+		this.value = value;
+		this.notify(this.value);
+		return this.value;
+	}
+	,__class__: utils_FloatObservableActual
+	,__properties__: {set_value:"set_value"}
+});
+var utils_IntObservable = {};
+utils_IntObservable._new = function(value) {
+	return new utils_IntObservableActual(value);
+};
+utils_IntObservable.addObserver = function(this1,observer) {
+	this1.addObserver(observer);
+	observer.notified(this1,this1.value);
+};
+utils_IntObservable.removeObserver = function(this1,observer) {
+	this1.removeObserver(observer);
+};
+utils_IntObservable.clearObservers = function(this1) {
+	this1.clearObservers();
+};
+utils_IntObservable.set = function(this1,value) {
+	return this1.set_value(value);
+};
+utils_IntObservable.add = function(this1,value) {
+	return this1.value + value;
+};
+utils_IntObservable.addA = function(this1,value) {
+	return this1.set_value(utils_IntObservable.add(this1,value));
+};
+utils_IntObservable.sub = function(this1,value) {
+	return this1.value - value;
+};
+utils_IntObservable.subA = function(this1,value) {
+	return this1.set_value(utils_IntObservable.sub(this1,value));
+};
+utils_IntObservable.mul = function(this1,value) {
+	return this1.value * value;
+};
+utils_IntObservable.mulA = function(this1,value) {
+	return this1.set_value(utils_IntObservable.mul(this1,value));
+};
+utils_IntObservable.mulF = function(this1,value) {
+	return this1.value * value | 0;
+};
+utils_IntObservable.mulAF = function(this1,value) {
+	return this1.set_value(utils_IntObservable.mulF(this1,value));
+};
+utils_IntObservable.div = function(this1,value) {
+	return this1.value / value | 0;
+};
+utils_IntObservable.divA = function(this1,value) {
+	return this1.set_value(utils_IntObservable.div(this1,value));
+};
+utils_IntObservable.divAF = function(this1,value) {
+	return this1.value / value | 0;
+};
+utils_IntObservable.less = function(this1,value) {
+	return this1.value < value;
+};
+utils_IntObservable.lessEq = function(this1,value) {
+	return this1.value <= value;
+};
+utils_IntObservable.greater = function(this1,value) {
+	return this1.value > value;
+};
+utils_IntObservable.greaterEq = function(this1,value) {
+	return this1.value >= value;
+};
+var utils_FloatObservable = {};
+utils_FloatObservable._new = function(value) {
+	return new utils_FloatObservableActual(value);
+};
+utils_FloatObservable.get = function(this1) {
+	return this1.value;
+};
+utils_FloatObservable.addObserver = function(this1,observer) {
+	this1.addObserver(observer);
+	observer.notified(this1,this1.value);
+};
+utils_FloatObservable.removeObserver = function(this1,observer) {
+	this1.removeObserver(observer);
+};
+utils_FloatObservable.clearObservers = function(this1) {
+	this1.clearObservers();
+};
+utils_FloatObservable.set = function(this1,value) {
+	return this1.set_value(value);
+};
+utils_FloatObservable.add = function(this1,value) {
+	return this1.value + value;
+};
+utils_FloatObservable.addA = function(this1,value) {
+	return this1.set_value(utils_FloatObservable.add(this1,value));
+};
+utils_FloatObservable.sub = function(this1,value) {
+	return this1.value - value;
+};
+utils_FloatObservable.subA = function(this1,value) {
+	return this1.set_value(utils_FloatObservable.sub(this1,value));
+};
+utils_FloatObservable.mul = function(this1,value) {
+	return this1.value * value;
+};
+utils_FloatObservable.mulA = function(this1,value) {
+	return this1.set_value(utils_FloatObservable.mul(this1,value));
+};
+utils_FloatObservable.div = function(this1,value) {
+	return this1.value / value;
+};
+utils_FloatObservable.divA = function(this1,value) {
+	return this1.set_value(utils_FloatObservable.div(this1,value));
+};
+utils_FloatObservable.less = function(this1,value) {
+	return this1.value < value;
+};
+utils_FloatObservable.lessEq = function(this1,value) {
+	return this1.value <= value;
+};
+utils_FloatObservable.greater = function(this1,value) {
+	return this1.value > value;
+};
+utils_FloatObservable.greaterEq = function(this1,value) {
+	return this1.value >= value;
 };
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
@@ -120147,7 +120448,7 @@ flixel_FlxG.fixedTimestep = true;
 flixel_FlxG.timeScale = 1.0;
 flixel_FlxG.animationTimeScale = 1.0;
 flixel_FlxG.worldDivisions = 6;
-flixel_FlxG.VERSION = new flixel_system_FlxVersion(5,7,0);
+flixel_FlxG.VERSION = new flixel_system_FlxVersion(5,8,0);
 flixel_FlxG.elapsed = 0;
 flixel_FlxG.maxElapsed = 0.1;
 flixel_FlxG.scaleMode = new flixel_system_scaleModes_RatioScaleMode();
