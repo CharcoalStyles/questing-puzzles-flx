@@ -11,6 +11,7 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxPool;
+import utils.Observer;
 
 class Sidebar extends FlxGroup
 {
@@ -24,6 +25,8 @@ class Sidebar extends FlxGroup
 		super();
 		this.isLeft = isLeft;
 		this.character = char;
+
+		spellUis = [];
 
 		var background:FlxSprite = new FlxSprite(0, 0);
 		var height = Std.int(Math.min(FlxG.height, FlxG.width));
@@ -96,13 +99,31 @@ class Sidebar extends FlxGroup
 			spellUis.push(spellUi);
 			add(spellUi);
 
+			for (mt in spell.manaCosts.keys())
+			{
+				var playerMana = character.mana[mt];
+				if (playerMana != null)
+				{
+					playerMana.addObserver(new CallbackObserver<Float>((sender, ?data) ->
+					{
+						var store = allStores[mt];
+						var bar = store.bar;
+
+						trace("manaType: " + mt + " mana: " + data);
+						bar.value = data;
+						store.label.text = Std.string(Math.floor(bar.value)) + "/100";
+						spellUi.onManaUpdate(data, mt);
+					}));
+				}
+			}
+
 			workingY += 60;
 		}
 	}
 
-	public function addMana(gemTypeIndex:ManaType, amount:Int, origin:FlxPoint)
+	public function addMana(mt:ManaType, amount:Int, origin:FlxPoint)
 	{
-		var store = allStores[gemTypeIndex];
+		var store = allStores[mt];
 		var bar = store.bar;
 		var em = store.particles;
 		var subParts = 1;
@@ -123,22 +144,21 @@ class Sidebar extends FlxGroup
 		{
 			em.get().emit(origin, new FlxPoint(bar.x, bar.y), partScale, () ->
 			{
-				bar.value += amount / subParts;
-				store.label.text = Std.string(Math.floor(bar.value)) + "/100";
+				character.mana[mt].addA(amount / subParts);
 			});
 		}
 	}
 
 	public function handleClick(point:FlxPoint)
 	{
+		var spell:Null<Spell> = null;
 		for (spellUi in spellUis)
 		{
-			if (spellUi.overlaps(point))
-			{
-				// character.castSpell(spellUi.spell);
-				return;
-			}
+			spell = spellUi.overlaps(point);
+			if (spell != null)
+				break;
 		}
+		return spell;
 	}
 
 	override function update(elapsed:Float)
@@ -201,8 +221,10 @@ class Mparticle extends FlxSprite
 class SpellUi extends FlxGroup
 {
 	var border:FlxSprite;
-	var manaTexts:Array<FlxText>;
+	var manaText:Map<ManaType, FlxText>;
+	var manaChecks:Map<ManaType, Bool>;
 	var spell:Spell;
+	var isActivated:Bool = false;
 
 	public function new(X:Int, Y:Int, width:Int, spell:Spell)
 	{
@@ -211,6 +233,9 @@ class SpellUi extends FlxGroup
 		this.spell = spell;
 
 		var workingY = Y;
+
+		manaText = new Map();
+		manaChecks = new Map();
 
 		border = new FlxSprite(X, Y, null);
 		border.makeGraphic(width, 50, 0xffffffff);
@@ -231,7 +256,8 @@ class SpellUi extends FlxGroup
 		for (type in spell.manaCosts.keys())
 		{
 			var gt = GemType.fromManaType(type);
-			var amount = spell.manaCosts.get(type);
+			var cost = spell.manaCosts.get(type);
+			var amount:Float = cost.get();
 			if (amount == null || amount == 0)
 				continue;
 			var mc:FlxText = new FlxText(workingX + 5, workingY + 20);
@@ -239,14 +265,32 @@ class SpellUi extends FlxGroup
 			mc.setFormat(null, 12, gt.color, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.WHITE);
 			mc.borderSize = 1;
 			add(mc);
+			manaText.set(type, mc);
+			manaChecks.set(type, false);
 			workingX += Std.int(mc.width + 5);
 		}
 	}
 
-	public function overlaps(point:FlxPoint):Bool
+	public function overlaps(point:FlxPoint):Null<Spell>
 	{
-		return border.overlapsPoint(point);
+		return border.overlapsPoint(point) ? spell : null;
 	}
 
-	public function onManaUpdate() {}
+	public function onManaUpdate(totalNumber:Float, manaType:ManaType)
+	{
+		var cost = spell.manaCosts.get(manaType).get();
+		var check = manaChecks.get(manaType);
+		var mc = manaText.get(manaType);
+		if (cost != null)
+			if (totalNumber >= cost && !check)
+			{
+				mc.color = 0xff00ff00;
+				manaChecks.set(manaType, true);
+			}
+			else if (totalNumber < cost && check)
+			{
+				mc.color = 0xffff0000;
+				manaChecks.set(manaType, false);
+			}
+	}
 }

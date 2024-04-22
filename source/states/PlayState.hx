@@ -6,6 +6,7 @@ import entities.PlayBoard;
 import entities.Sidebar;
 import flixel.FlxG;
 import flixel.FlxState;
+import utils.GlobalState;
 
 class PlayState extends FlxState
 {
@@ -25,12 +26,15 @@ class PlayState extends FlxState
 
 	var player:Character;
 	var ai:Character;
+	var globalState:GlobalState;
 
 	override public function create()
 	{
 		super.create();
 		FlxG.mouse.visible = true;
 		FlxG.camera.antialiasing = true;
+
+		globalState = FlxG.plugins.get(GlobalState);
 
 		board = new PlayBoard(8, 8); // var rows = 8;
 		add(board);
@@ -51,81 +55,10 @@ class PlayState extends FlxState
 			timer = 0;
 		}
 
-		makePlayer();
-		makeAi();
-
-		playerSidebar = new Sidebar(player, true);
+		playerSidebar = new Sidebar(globalState.player, true);
 		add(playerSidebar);
-		aiSidebar = new Sidebar(ai, false);
+		aiSidebar = new Sidebar(globalState.ai, false);
 		add(aiSidebar);
-	}
-
-	function makePlayer()
-	{
-		player = new Character();
-		player.name = "Player";
-		player.portrait = "";
-		player.level = 1;
-		player.maxHealth = 20;
-		player.health = 20;
-		player.maxMana = new Map();
-		player.maxMana.set(ManaType.FIRE, 30);
-		player.maxMana.set(ManaType.WATER, 25);
-		player.maxMana.set(ManaType.EARTH, 20);
-		player.maxMana.set(ManaType.AIR, 15);
-		player.maxMana.set(ManaType.LIGHT, 25);
-		player.maxMana.set(ManaType.DARK, 15);
-		player.mana = new Map();
-		player.mana.set(ManaType.FIRE, 0);
-		player.mana.set(ManaType.WATER, 0);
-		player.mana.set(ManaType.EARTH, 0);
-		player.mana.set(ManaType.AIR, 0);
-		player.mana.set(ManaType.LIGHT, 0);
-		player.mana.set(ManaType.DARK, 0);
-
-		player.spells = new Array();
-		player.spells.push(new Spell("Fireball", "Deals 5 damage to target enemy", [ManaType.FIRE => 5, ManaType.DARK => 2], (e, s, b) ->
-		{
-			e.health -= 5;
-		}));
-		player.spells.push(new Spell("Heal", "Heals 5 health", [ManaType.WATER => 5], (e, s, b) ->
-		{
-			e.health += 5;
-		}));
-	}
-
-	function makeAi()
-	{
-		ai = new Character();
-		ai.name = "AI";
-		ai.portrait = "";
-		ai.level = 1;
-		ai.maxHealth = 20;
-		ai.health = 20;
-		ai.maxMana = new Map();
-		ai.maxMana.set(ManaType.FIRE, 30);
-		ai.maxMana.set(ManaType.WATER, 25);
-		ai.maxMana.set(ManaType.EARTH, 20);
-		ai.maxMana.set(ManaType.AIR, 15);
-		ai.maxMana.set(ManaType.LIGHT, 25);
-		ai.maxMana.set(ManaType.DARK, 15);
-		ai.mana = new Map();
-		ai.mana.set(ManaType.FIRE, 0);
-		ai.mana.set(ManaType.WATER, 0);
-		ai.mana.set(ManaType.EARTH, 0);
-		ai.mana.set(ManaType.AIR, 0);
-		ai.mana.set(ManaType.LIGHT, 0);
-		ai.mana.set(ManaType.DARK, 0);
-
-		ai.spells = new Array();
-		ai.spells.push(new Spell("Decimate", "Take 1/10th of health, shields and mana", [ManaType.LIGHT => 15, ManaType.DARK => 15], (e, s, b) ->
-		{
-			e.health -= 5;
-		}));
-		// ai.spells.push(new Spell("Heal", "Heals 5 health", [ManaType.WATER => 5], (e, s, b) ->
-		// {
-		// 	e.health += 5;
-		// }));
 	}
 
 	override public function update(elapsed:Float)
