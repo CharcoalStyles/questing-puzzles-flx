@@ -77,6 +77,12 @@ class Gem extends FlxSprite
 			this.frames = gemFrames;
 		}
 
+		// set the position of the sprite, including the padding
+		var targetX = x + padding.x / 2;
+		var targetY = y + padding.y / 2;
+
+		this.respawn(targetX, targetY, type);
+
 		var maxW = Math.max(frame.frame.width, frame.frame.width);
 		var maxH = Math.max(frame.frame.height, frame.frame.height);
 
@@ -85,12 +91,6 @@ class Gem extends FlxSprite
 		var scaleY = (targetSize.y - padding.y) / maxH;
 		targetScale = FlxPoint.get(scaleX, scaleY);
 		this.scale.set(scaleX, scaleY);
-
-		// set the position of the sprite, including the padding
-		var targetX = x + padding.x / 2;
-		var targetY = y + padding.y / 2;
-
-		this.respawn(targetX, targetY, type);
 
 		this.updateHitbox();
 	}
@@ -112,7 +112,7 @@ class Gem extends FlxSprite
 	override public function draw():Void
 	{
 		super.draw();
-		this.debugText.draw();
+		// this.debugText.draw();
 	}
 
 	public function set_selected(newSelected)
@@ -189,12 +189,12 @@ enum ManaType
 
 class GemType
 {
-	public static var RED:GemType = new GemType(ManaType.FIRE, "tileGrey_04.png", 0xffFF0000, "Fire");
-	public static var GREEN:GemType = new GemType(ManaType.EARTH, "tileGrey_05.png", 0xff00FF00, "Earth");
-	public static var BLUE:GemType = new GemType(ManaType.WATER, "tileGrey_06.png", 0xff0000FF, "Water");
-	public static var YELLOW:GemType = new GemType(ManaType.LIGHT, "tileGrey_07.png", 0xffFFFF00, "Light");
-	public static var PURPLE:GemType = new GemType(ManaType.DARK, "tileGrey_08.png", 0xffFF00FF, "Dark");
-	public static var ORANGE:GemType = new GemType(ManaType.AIR, "tileGrey_09.png", 0xffFFA500, "Air");
+	public static var RED:GemType = new GemType(ManaType.FIRE, "tileGrey_40.png", 0xfffa9189, "Fire");
+	public static var GREEN:GemType = new GemType(ManaType.EARTH, "tileGrey_41.png", 0xffb3f5bc, "Earth");
+	public static var BLUE:GemType = new GemType(ManaType.WATER, "tileGrey_42.png", 0xffd6f6ff, "Water");
+	public static var YELLOW:GemType = new GemType(ManaType.LIGHT, "tileGrey_33.png", 0xfff9ffb5, "Light");
+	public static var PURPLE:GemType = new GemType(ManaType.DARK, "tileGrey_32.png", 0xffd1bdff, "Dark");
+	public static var ORANGE:GemType = new GemType(ManaType.AIR, "tileGrey_31.png", 0xffaaaaaa, "Air");
 
 	public static var ALL:Array<GemType> = [RED, GREEN, BLUE, YELLOW, PURPLE, ORANGE];
 	public static var random = (?notIds:Array<ManaType>) ->

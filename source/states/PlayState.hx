@@ -1,6 +1,7 @@
 package states;
 
 import entities.Character;
+import entities.Gem.GemType;
 import entities.Gem.ManaType;
 import entities.PlayBoard;
 import entities.Sidebar;
@@ -46,6 +47,16 @@ class PlayState extends FlxState
 			{
 				case State.Idle:
 					isPlayerTurn = isPlayerTurnNext;
+					if (isPlayerTurn)
+					{
+						playerSidebar.isActive = true;
+						aiSidebar.isActive = false;
+					}
+					else
+					{
+						playerSidebar.isActive = false;
+						aiSidebar.isActive = true;
+					}
 				case State.SwappingRevert:
 					isPlayerTurnNext = true;
 				case State.PostMatch:
@@ -56,6 +67,7 @@ class PlayState extends FlxState
 		}
 
 		playerSidebar = new Sidebar(globalState.player, true);
+		playerSidebar.isActive = true;
 		add(playerSidebar);
 		aiSidebar = new Sidebar(globalState.ai, false);
 		add(aiSidebar);
@@ -64,6 +76,18 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			FlxG.switchState(new MainMenuState());
+		}
+
+		if (FlxG.keys.justPressed.ONE)
+		{
+			for (gt in GemType.ALL)
+			{
+				FlxG.log.add("Player Mana: " + globalState.player.mana.get(gt.manaType).get() + " (" + gt.manaType + ")");
+			}
+		}
 
 		switch (currentState)
 		{
@@ -80,9 +104,22 @@ class PlayState extends FlxState
 		{
 			if (FlxG.mouse.justPressed)
 			{
-				board.handleclick(FlxG.mouse.x, FlxG.mouse.y);
-				isPlayerTurnNext = false;
-				timer = 0;
+				var mousePos = FlxG.mouse.getPosition();
+				if (board.isPointInside(mousePos))
+				{
+					board.handleclick(mousePos);
+					isPlayerTurnNext = false;
+					timer = 0;
+				}
+				else if (playerSidebar.isPointInside(FlxG.mouse.getPosition()))
+				{
+					var spell = playerSidebar.handleClick(mousePos);
+					if (spell != null)
+					{
+						spell.run(globalState.ai, globalState.player, board);
+					}
+				}
+				else if (aiSidebar.isPointInside(FlxG.mouse.getPosition())) {}
 			}
 		}
 		else

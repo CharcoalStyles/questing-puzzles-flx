@@ -52,7 +52,7 @@ class GlobalState extends FlxBasic
 		{
 			e.health += 5;
 		}));
-		player.spells.push(new Spell("Reset", "Resetes health to 15", [ManaType.LIGHT => 2, ManaType.DARK => 2], (e, s, b) ->
+		player.spells.push(new Spell("Reset", "Resets health to 15", [ManaType.LIGHT => 5, ManaType.DARK => 5], (e, s, b) ->
 		{
 			e.health.set(15);
 		}));
@@ -61,7 +61,7 @@ class GlobalState extends FlxBasic
 	function makeAi()
 	{
 		ai = new Character();
-		ai.name = "AI";
+		ai.name = "Goblin";
 		ai.portrait = "";
 		ai.level = 1;
 		ai.maxHealth = 20;
@@ -82,9 +82,20 @@ class GlobalState extends FlxBasic
 		ai.mana.set(ManaType.DARK, new FloatObservable(0));
 
 		ai.spells = new Array();
-		ai.spells.push(new Spell("Decimate", "Take 1/10th of health, shields and mana", [ManaType.LIGHT => 3, ManaType.DARK => 3], (e, s, b) ->
+		ai.spells.push(new Spell("Throw Rock", "It's a little pointy. Deals 2 damage.", [ManaType.FIRE => 2, ManaType.DARK => 2], (e, s, b) ->
 		{
-			e.health *= 0.1;
+			e.health -= 2;
 		}));
+		ai.spells.push(new Spell("Warcry", "The noise isn't scary, but it's breath is. Removes 2 from all mana.",
+			[ManaType.FIRE => 2, ManaType.LIGHT => 2, ManaType.WATER => 2], (e, s, b) ->
+			{
+				for (m in e.mana.keys())
+				{
+					if (e.mana.get(m).get() > 2)
+						e.mana.get(m).sub(2);
+					else
+						e.mana.get(m).set(0);
+				}
+			}));
 	}
 }

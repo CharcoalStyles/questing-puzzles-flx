@@ -7,11 +7,12 @@ import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
+import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxPool;
-import haxe.Timer;
 import states.MainMenuState;
 import utils.KennyAtlasLoader;
+import utils.UiFlxGroup;
 
 typedef CellIndex =
 {
@@ -74,7 +75,7 @@ enum MoveDirection
 
 typedef MatchGroup = Array<CellIndex>;
 
-class PlayBoard extends FlxGroup
+class PlayBoard extends UiFlxGroup
 {
 	var gemFrames:FlxAtlasFrames;
 	var gemPool:FlxPool<Gem>;
@@ -132,6 +133,8 @@ class PlayBoard extends FlxGroup
 		boardX = Math.floor((FlxG.width - (cellSize * cols)) / 2);
 		boardY = Math.floor((FlxG.height - (cellSize * rows)) / 2);
 
+		setScreenArea(new FlxRect(boardX, boardY, cellSize * cols, cellSize * rows));
+
 		grid = new Array();
 		bkgrndTiles = new FlxGroup();
 		gems = new FlxGroup();
@@ -144,7 +147,7 @@ class PlayBoard extends FlxGroup
 				var bkgrndTile = new FlxSprite(boardX + (x) * cellSize, boardY + (y) * cellSize, "assets/images/BackTile_16.png");
 				bkgrndTile.scale.set(cellSize / bkgrndTile.width, cellSize / bkgrndTile.height);
 				bkgrndTile.updateHitbox();
-				bkgrndTile.color = 0x00505050;
+				bkgrndTile.color = 0x00303030;
 				bkgrndTiles.add(bkgrndTile);
 
 				var gt = GemType.random();
@@ -205,11 +208,6 @@ class PlayBoard extends FlxGroup
 	{
 		super.update(elapsed);
 
-		if (FlxG.keys.justPressed.ESCAPE)
-		{
-			FlxG.switchState(new MainMenuState());
-		}
-
 		switch (state)
 		{
 			case State.Idle:
@@ -251,9 +249,9 @@ class PlayBoard extends FlxGroup
 		}
 	}
 
-	public function handleclick(screenX:Int, screenY:Int)
+	public function handleclick(position:FlxPoint)
 	{
-		var cell = getCellAtScreenPosition(screenX, screenY);
+		var cell = getCellAtScreenPosition(position);
 		if (cell != null)
 		{
 			var clickedGem = grid[cell.x][cell.y];
@@ -530,10 +528,10 @@ class PlayBoard extends FlxGroup
 		}
 	}
 
-	function getCellAtScreenPosition(X:Int, Y:Int):CellIndex
+	function getCellAtScreenPosition(position:FlxPoint):CellIndex
 	{
-		var x = X - boardX;
-		var y = Y - boardY;
+		var x = position.x - boardX;
+		var y = position.y - boardY;
 
 		if (x < 0 || y < 0 || x >= boardWidth * cellSize || y >= boardHeight * cellSize)
 		{
