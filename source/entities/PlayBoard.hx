@@ -926,4 +926,21 @@ class PlayBoard extends UiFlxGroup
 
 		state = State.Swapping;
 	}
+
+	public function getRandomGem(notTypes:Array<ManaType>):Gem
+	{
+		var flatGrid:Array<Gem> = [];
+		for (x in 0...grid.length)
+		{
+			for (y in 0...grid[0].length)
+			{
+				flatGrid.push(grid[x][y]);
+			}
+		}
+
+		var workingGrid = flatGrid.filter((g) -> !notTypes.contains(g.manaType));
+		FlxG.random.shuffle(workingGrid);
+
+		return workingGrid[0];
+	}
 }

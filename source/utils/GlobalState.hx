@@ -1,8 +1,10 @@
 package utils;
 
 import entities.Character;
+import entities.Gem.GemType;
 import entities.Gem.ManaType;
 import flixel.FlxBasic;
+import flixel.FlxG;
 import utils.Observer.FloatObservable;
 import utils.Observer.IntObservable;
 
@@ -27,7 +29,7 @@ class GlobalState extends FlxBasic
 		player.portrait = "";
 		player.level = 1;
 		player.maxHealth = 20;
-		player.health = new IntObservable(20);
+		player.health = new IntObservable(15);
 		player.maxMana = new Map();
 		player.maxMana.set(ManaType.FIRE, 30);
 		player.maxMana.set(ManaType.WATER, 25);
@@ -37,7 +39,7 @@ class GlobalState extends FlxBasic
 		player.maxMana.set(ManaType.DARK, 15);
 		player.mana = new Map();
 		player.mana.set(ManaType.FIRE, new FloatObservable(0));
-		player.mana.set(ManaType.WATER, new FloatObservable(0));
+		player.mana.set(ManaType.WATER, new FloatObservable(5));
 		player.mana.set(ManaType.EARTH, new FloatObservable(0));
 		player.mana.set(ManaType.AIR, new FloatObservable(0));
 		player.mana.set(ManaType.LIGHT, new FloatObservable(0));
@@ -50,11 +52,15 @@ class GlobalState extends FlxBasic
 		}));
 		player.spells.push(new Spell("Heal", "Heals 5 health", [ManaType.WATER => 5], (e, s, b) ->
 		{
-			e.health += 5;
+			s.health.set((s.health + 5) > s.maxHealth ? s.maxHealth : s.health + 5);
 		}));
-		player.spells.push(new Spell("Reset", "Resets health to 15", [ManaType.LIGHT => 5, ManaType.DARK => 5], (e, s, b) ->
+		player.spells.push(new Spell("Light 'em up!", "Randomly sets 7 gems to Fire", [ManaType.LIGHT => 5, ManaType.DARK => 5], (e, s, b) ->
 		{
-			e.health.set(15);
+			for (i in 0...7)
+			{
+				var gem = b.getRandomGem([FIRE]);
+				gem.setType(GemType.RED);
+			}
 		}));
 	}
 

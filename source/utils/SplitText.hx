@@ -1,6 +1,8 @@
 package utils;
 
+import flixel.FlxG;
 import flixel.group.FlxGroup;
+import flixel.math.FlxRect;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -18,6 +20,19 @@ class SplitText extends FlxTypedGroup<FlxText>
 	public var y(default, set):Float;
 	public var width:Float;
 	public var height:Float;
+
+	public var onMouseIn:Void->Void;
+	public var onMouseOut:Void->Void;
+	public var onClick:Void->Void;
+
+	private var lastMouseOver:Bool;
+
+	public var rect(get, never):FlxRect;
+
+	function get_rect():FlxRect
+	{
+		return new FlxRect(x, y, width, height);
+	}
 
 	function set_x(value:Float):Float
 	{
@@ -126,6 +141,45 @@ class SplitText extends FlxTypedGroup<FlxText>
 		x = X;
 		y = Y;
 		height = members[0].height;
+
+		onMouseIn = null;
+		onMouseOut = null;
+		onClick = null;
+		lastMouseOver = false;
+	}
+
+	override function update(elapsed:Float)
+	{
+		super.update(elapsed);
+
+		if (onMouseIn != null || onMouseOut != null || onClick != null)
+		{
+			var mouseOver = rect.containsPoint(FlxG.mouse.getPosition());
+
+			if (mouseOver)
+			{
+				if (FlxG.mouse.justPressed)
+				{
+					if (onClick != null)
+					{
+						onClick();
+					}
+				}
+				else if (!lastMouseOver && onMouseIn != null)
+				{
+					onMouseIn();
+				}
+			}
+			else
+			{
+				if (lastMouseOver && onMouseOut != null)
+				{
+					onMouseOut();
+				}
+			}
+
+			lastMouseOver = mouseOver;
+		}
 	}
 
 	private var tweens:Array<FlxTween> = [];
