@@ -10302,17 +10302,19 @@ entities_effects_CsEmitter.prototype = $extend(flixel_util_FlxPool.prototype,{
 			})(particle);
 		}
 	}
-	,emit: function(x,y,amount,onComplete,customUpdate) {
-		var particle;
+	,emit: function(x,y,amount) {
+		var particles = [];
 		var _g = 0;
 		var _g1 = amount;
 		while(_g < _g1) {
 			var i = _g++;
-			particle = this.get();
-			particle.set_x(x);
-			particle.set_y(y);
+			var particle = this.get();
+			this.activeMembers.add(particle);
+			particle.reset(x,y);
 			particle.revive();
+			particles.push(particle);
 		}
+		return particles;
 	}
 	,__class__: entities_effects_CsEmitter
 });
@@ -10577,7 +10579,7 @@ entities_effects_CsParticle.prototype = $extend(flixel_effects_particles_FlxPart
 	update: function(elapsed) {
 		flixel_effects_particles_FlxParticle.prototype.update.call(this,elapsed);
 		if(this.alphaExtended != null) {
-			this.set_alpha(utils_ExtendedLerp.lerp(this.alphaExtended,this.age / this.lifespan));
+			this.set_alpha(utils_ExtendedLerp.flerp(this.alphaExtended,this.age / this.lifespan));
 		}
 		if(this.customUpdate != null) {
 			this.customUpdate();
@@ -72591,7 +72593,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 18813;
+	this.version = 957506;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -120403,7 +120405,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 var utils_ExtendedLerp = function() { };
 $hxClasses["utils.ExtendedLerp"] = utils_ExtendedLerp;
 utils_ExtendedLerp.__name__ = "utils.ExtendedLerp";
-utils_ExtendedLerp.lerp = function(stops,t) {
+utils_ExtendedLerp.flerp = function(stops,t) {
 	if(stops.length == 0) {
 		throw haxe_Exception.thrown("No stops provided");
 	}
@@ -120423,6 +120425,17 @@ utils_ExtendedLerp.lerp = function(stops,t) {
 	var v1 = stops[i].value;
 	var v2 = stops[i + 1].value;
 	return v1 + (v2 - v1) * (t - t1) / (t2 - t1);
+};
+utils_ExtendedLerp.ilerp = function(stops,t) {
+	var result = new Array(stops.length);
+	var _g = 0;
+	var _g1 = stops.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var stop = stops[i];
+		result[i] = { t : stop.t, value : stop.value * 1.0};
+	}
+	return utils_ExtendedLerp.flerp(result,t) | 0;
 };
 var utils_GlobalState = function() {
 	this.controllerId = 0;
