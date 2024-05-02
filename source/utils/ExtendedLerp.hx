@@ -1,14 +1,14 @@
 package utils;
 
-typedef ExtendedLerpStop =
+typedef ExtendedLerpStop<T> =
 {
 	t:Float,
-	value:Float
+	value:T
 };
 
 class ExtendedLerp
 {
-	public static function lerp(stops:Array<ExtendedLerpStop>, t:Float)
+	public static function flerp(stops:Array<ExtendedLerpStop<Float>>, t:Float):Float
 	{
 		if (stops.length == 0)
 		{
@@ -40,5 +40,10 @@ class ExtendedLerp
 		var v2 = stops[i + 1].value;
 
 		return v1 + (v2 - v1) * (t - t1) / (t2 - t1);
+	}
+
+	public static function ilerp(stops:Array<ExtendedLerpStop<Int>>, t:Float):Int
+	{
+		return Std.int(flerp(stops.map(function(stop) return {t: stop.t, value: stop.value * 1.0}), t));
 	}
 }

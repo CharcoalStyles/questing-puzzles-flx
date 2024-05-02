@@ -9,6 +9,17 @@ import flixel.util.FlxPool;
 import utils.ExtendedLerp.ExtendedLerpStop;
 import utils.ExtendedLerp;
 
+typedef ParticleOverrideProps =
+{
+	?velocityRange:FlxPoint,
+	?scaleRange:FlxPoint,
+	?scaleExtended:Array<ExtendedLerpStop<Float>>,
+	?colorRange:FlxColor,
+	?alphaRange:FlxPoint,
+	?alphaExtended:Array<ExtendedLerpStop<Float>>,
+	?lifespan:Float
+}
+
 class CsEmitter extends FlxPool<CsParticle>
 {
 	public var activeMembers:FlxGroup;
@@ -66,18 +77,18 @@ class CsEmitter extends FlxPool<CsParticle>
 		}
 	}
 
-	public function emit(x:Float, y:Float, amount:Int, onComplete:() -> Void, customUpdate:() -> Void)
+	public function emit(x:Float, y:Float, amount:Int)
 	{
-		var particle:CsParticle;
+		var particles:Array<CsParticle> = [];
 		for (i in 0...amount)
 		{
-			particle = this.get();
-			particle.x = x;
-			particle.y = y;
-			// particle.onComplete = onComplete;
-			// particle.customUpdate = customUpdate;
+			var particle = this.get();
+			activeMembers.add(particle);
+			particle.reset(x, y);
 			particle.revive();
+			particles.push(particle);
 		}
+		return particles;
 	}
 }
 
@@ -86,7 +97,7 @@ class CsParticle extends FlxParticle
 	public var onComplete:() -> Void;
 	public var customUpdate:() -> Void;
 
-	public var alphaExtended:Array<ExtendedLerpStop>;
+	public var alphaExtended:Array<ExtendedLerpStop<Float>>;
 
 	public function new()
 	{
@@ -101,7 +112,7 @@ class CsParticle extends FlxParticle
 
 		if (alphaExtended != null)
 		{
-			this.alpha = ExtendedLerp.lerp(alphaExtended, age / lifespan);
+			this.alpha = ExtendedLerp.flerp(alphaExtended, age / lifespan);
 		}
 
 		if (customUpdate != null)
