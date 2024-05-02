@@ -71,6 +71,9 @@ class PlayState extends FlxState
 		add(playerSidebar);
 		aiSidebar = new Sidebar(globalState.ai, false);
 		add(aiSidebar);
+
+		globalState.createEmitter();
+		add(globalState.emitter.activeMembers);
 	}
 
 	override public function update(elapsed:Float)

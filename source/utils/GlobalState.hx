@@ -3,8 +3,10 @@ package utils;
 import entities.Character;
 import entities.Gem.GemType;
 import entities.Gem.ManaType;
+import entities.effects.CsEmitter;
 import flixel.FlxBasic;
 import flixel.FlxG;
+import haxe.Timer;
 import utils.Observer.FloatObservable;
 import utils.Observer.IntObservable;
 
@@ -14,12 +16,19 @@ class GlobalState extends FlxBasic
 	public var controllerId:Int = 0;
 	public var player:Character;
 	public var ai:Character;
+	public var emitter:CsEmitter;
 
 	public function new()
 	{
 		super();
+		emitter = new CsEmitter();
 		makePlayer();
 		makeAi();
+	}
+
+	public function createEmitter()
+	{
+		emitter = new CsEmitter();
 	}
 
 	function makePlayer()
@@ -56,10 +65,16 @@ class GlobalState extends FlxBasic
 		}));
 		player.spells.push(new Spell("Light 'em up!", "Randomly sets 7 gems to Fire", [ManaType.LIGHT => 5, ManaType.DARK => 5], (e, s, b) ->
 		{
-			for (i in 0...7)
+			var gems = [for (i in 0...7) b.getRandomGem([FIRE])];
+			for (i in 0...gems.length)
 			{
-				var gem = b.getRandomGem([FIRE]);
-				gem.setType(GemType.RED);
+				FlxG.log.add("Setting gem " + i);
+				Timer.delay(() ->
+				{
+					var gem = gems[i];
+					gem.setType(GemType.RED);
+					emitter.burstEmit(gem.x + gem.width / 2, gem.y + gem.height / 2, 50, GemType.RED.color);
+				}, i * 250);
 			}
 		}));
 	}

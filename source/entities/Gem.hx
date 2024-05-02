@@ -22,6 +22,7 @@ class Gem extends FlxSprite
 	public var selected(default, set):Bool = false;
 	public var highlighted(default, set):Bool = false;
 	public var manaType:ManaType;
+  public var gemType:GemType;
 
 	var angleTween:FlxTween;
 	var colourTween:FlxTween;
@@ -42,6 +43,7 @@ class Gem extends FlxSprite
 
 	public function setType(type:GemType)
 	{
+    this.gemType = type;
 		this.originalColor = type.color;
 		this.color = type.color;
 		this.manaType = type.manaType;
