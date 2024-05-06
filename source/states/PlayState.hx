@@ -2,12 +2,19 @@ package states;
 
 import entities.Character;
 import entities.Gem.GemType;
-import entities.Gem.ManaType;
 import entities.PlayBoard;
 import entities.Sidebar;
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.util.FlxTimer;
 import utils.GlobalState;
+
+enum Play_State
+{
+	Idle;
+	BoardMatching;
+	SpellEffect;
+}
 
 class PlayState extends FlxState
 {
@@ -20,7 +27,8 @@ class PlayState extends FlxState
 	var timer:Float = 0;
 	var triggerTime:Float = 1.5;
 
-	var currentState:State = State.Idle;
+	var currentState:Play_State = Idle;
+	var currentBoardState:BoardState = BoardState.Idle;
 
 	var playerSidebar:Sidebar;
 	var aiSidebar:Sidebar;
@@ -42,11 +50,20 @@ class PlayState extends FlxState
 
 		board.onStateChange = (state) ->
 		{
-			currentState = state;
+			currentBoardState = state;
 			switch (state)
 			{
-				case State.Idle:
-					isPlayerTurn = isPlayerTurnNext;
+				case BoardState.Idle:
+					if (currentState == SpellEffect)
+					{
+						// reset the game state after the board has finished matching
+						currentState = Idle;
+					}
+					else
+					{
+						isPlayerTurn = isPlayerTurnNext;
+					}
+
 					if (isPlayerTurn)
 					{
 						playerSidebar.isActive = true;
@@ -57,9 +74,9 @@ class PlayState extends FlxState
 						playerSidebar.isActive = false;
 						aiSidebar.isActive = true;
 					}
-				case State.SwappingRevert:
+				case BoardState.SwappingRevert:
 					isPlayerTurnNext = true;
-				case State.PostMatch:
+				case BoardState.PostMatch:
 					postMatchUpdateOnce();
 				default:
 			}
@@ -69,8 +86,11 @@ class PlayState extends FlxState
 		playerSidebar = new Sidebar(globalState.player, true);
 		playerSidebar.isActive = true;
 		add(playerSidebar);
+		globalState.player.sidebar = playerSidebar;
+
 		aiSidebar = new Sidebar(globalState.ai, false);
 		add(aiSidebar);
+		globalState.ai.sidebar = aiSidebar;
 
 		globalState.createEmitter();
 		add(globalState.emitter.activeMembers);
@@ -81,6 +101,8 @@ class PlayState extends FlxState
 		super.update(elapsed);
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
+			globalState.player.clearObservers();
+			globalState.ai.clearObservers();
 			FlxG.switchState(new MainMenuState());
 		}
 
@@ -94,9 +116,8 @@ class PlayState extends FlxState
 
 		switch (currentState)
 		{
-			case State.Idle:
+			case Play_State.Idle:
 				idleUpdate(elapsed);
-			case State.Matching:
 			default:
 		}
 	}
@@ -116,10 +137,27 @@ class PlayState extends FlxState
 				}
 				else if (playerSidebar.isPointInside(FlxG.mouse.getPosition()))
 				{
+					currentState = Play_State.SpellEffect;
 					var spell = playerSidebar.handleClick(mousePos);
 					if (spell != null)
 					{
-						spell.run(globalState.ai, globalState.player, board);
+						var nextState = spell.run(globalState.ai, globalState.player, board);
+
+						FlxTimer.wait(nextState.delay / 1000, () ->
+						{
+							if (nextState.nextState == Play_State.BoardMatching)
+							{
+								board.setState(BoardState.Matching);
+							}
+							else
+							{
+								currentState = nextState.nextState;
+							}
+						});
+					}
+					else
+					{
+						currentState = Play_State.Idle;
 					}
 				}
 				else if (aiSidebar.isPointInside(FlxG.mouse.getPosition())) {}

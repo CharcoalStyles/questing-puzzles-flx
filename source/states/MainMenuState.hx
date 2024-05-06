@@ -1,11 +1,14 @@
 package states;
 
+import entities.effects.CsEmitter;
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import haxe.io.Eof;
 import utils.GlobalState;
 import utils.SplitText;
 
@@ -71,7 +74,21 @@ class MainMenuState extends FlxState
 		if (FlxG.mouse.justPressed)
 		{
 			var color = FlxG.random.color(0xa0a0a0, 0xe0e0e0);
-			globalState.emitter.burstEmit(FlxG.mouse.x, FlxG.mouse.y, 50, color);
+			var partScale = FlxPoint.get(0.5, 0.5);
+			for (i in 0...50)
+			{
+				var p = globalState.emitter.emit(FlxG.mouse.x, FlxG.mouse.y);
+				var em = CsEmitter.burstEmit(color, null, {
+					lifespan: () -> 0.5,
+					scaleExtended: () -> [
+						{
+							t: 0,
+							value: partScale
+						},
+					]
+				});
+				p.setEffectStates([em]);
+			}
 		}
 	}
 }

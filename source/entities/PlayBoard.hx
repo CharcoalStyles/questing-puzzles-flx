@@ -54,7 +54,7 @@ typedef UpdatedGem =
 	targetPosition:FlxPoint
 };
 
-enum State
+enum BoardState
 {
 	Idle;
 	Swapping;
@@ -89,8 +89,8 @@ class PlayBoard extends UiFlxGroup
 
 	var cellSize:Int;
 
-	var state = State.Idle;
-	var previousState = State.Idle;
+	var state = BoardState.Idle;
+	var previousState = BoardState.Idle;
 
 	var moveTimer:Float = 0.0;
 
@@ -109,7 +109,7 @@ class PlayBoard extends UiFlxGroup
 
 	public var activeMatches:Array<MatchTypePosition> = null;
 	public var potentialMoves:Array<ScoredRankedMatch> = null;
-	public var onStateChange:State->Void;
+	public var onStateChange:BoardState->Void;
 
 	public function new(rows:Int, cols:Int)
 	{
@@ -210,35 +210,35 @@ class PlayBoard extends UiFlxGroup
 
 		switch (state)
 		{
-			case State.Idle:
+			case BoardState.Idle:
 				updateIdle(elapsed);
-			case State.Swapping:
+			case BoardState.Swapping:
 				onGemMovedFinished(() ->
 				{
-					state = State.Matching;
+					state = BoardState.Matching;
 				});
 			case SwappingRevert:
 				onGemMovedFinished(() ->
 				{
-					state = State.Idle;
+					state = BoardState.Idle;
 				});
 			default:
-			case State.Matching:
+			case BoardState.Matching:
 				updateMatching();
-			case State.PostMatch:
+			case BoardState.PostMatch:
 				onGemMovedFinished(() ->
 				{
 					var matches = findAllMatches(this.grid);
 					if (matches.length > 0)
-						state = State.Matching;
+						state = BoardState.Matching;
 					else
 					{
-						state = State.EndTurn;
+						state = BoardState.EndTurn;
 					}
 				});
 			case EndTurn:
 				resetToIdle();
-			case State.Shuffle:
+			case BoardState.Shuffle:
 				onGemMovedFinished(resetToIdle);
 		}
 
@@ -247,6 +247,11 @@ class PlayBoard extends UiFlxGroup
 			onStateChange(state);
 			previousState = state;
 		}
+	}
+
+	public function setState(state:BoardState)
+	{
+		this.state = state;
 	}
 
 	public function handleclick(position:FlxPoint)
@@ -281,7 +286,7 @@ class PlayBoard extends UiFlxGroup
 						swapCells(userSwap[0], userSwap[1]);
 						selected = null;
 
-						state = State.Swapping;
+						state = BoardState.Swapping;
 					}
 					else
 					{
@@ -297,7 +302,7 @@ class PlayBoard extends UiFlxGroup
 
 	function resetToIdle()
 	{
-		state = State.Idle;
+		state = BoardState.Idle;
 		moveTimer = 0.0;
 		shownMatch = false;
 		potentialMoves = findPotentialMoves();
@@ -501,13 +506,13 @@ class PlayBoard extends UiFlxGroup
 				}
 			}
 
-			state = State.PostMatch;
+			state = BoardState.PostMatch;
 		}
 		else
 		{
 			swapCells(userSwap[0], userSwap[1]);
 			userSwap = null;
-			state = State.SwappingRevert;
+			state = BoardState.SwappingRevert;
 		}
 	}
 
@@ -897,7 +902,7 @@ class PlayBoard extends UiFlxGroup
 		}
 
 		grid = targetGrid;
-		state = State.Shuffle;
+		state = BoardState.Shuffle;
 	}
 
 	public function doMove(move:ScoredRankedMatch)
@@ -924,7 +929,7 @@ class PlayBoard extends UiFlxGroup
 
 		swapCells({x: targetX, y: targetY, gem: grid[targetX][targetY]}, {x: targetX2, y: targetY2, gem: grid[targetX2][targetY2]});
 
-		state = State.Swapping;
+		state = BoardState.Swapping;
 	}
 
 	public function getRandomGem(notTypes:Array<ManaType>):Gem

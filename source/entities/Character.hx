@@ -1,6 +1,7 @@
 package entities;
 
 import entities.Gem.ManaType;
+import states.PlayState.Play_State;
 import utils.Observer.FloatObservable;
 import utils.Observer.IntObservable;
 
@@ -15,6 +16,8 @@ class Character
 	public var mana:Map<ManaType, FloatObservable>;
 	public var spells:Array<Spell>;
 
+	public var sidebar:Sidebar;
+
 	public function new() {}
 
 	public function clearObservers():Void
@@ -27,18 +30,25 @@ class Character
 	}
 }
 
+typedef SpellEffect = (enemy:Character, self:Character, board:PlayBoard) -> {
+	delay: Float,
+	nextState: Play_State
+};
+
 class Spell
 {
 	public var name:String;
 	public var description:String;
 	public var manaCosts:Map<ManaType, FloatObservable>;
+	public var isMatchable:Bool;
 
-	private var effect:(enemy:Character, self:Character, board:PlayBoard) -> Void;
+	private var effect:SpellEffect;
 
-	public function new(n:String, d:String, mc:Map<ManaType, Int>, e:(enemy:Character, self:Character, board:PlayBoard) -> Void)
+	public function new(n:String, d:String, matchable:Bool, mc:Map<ManaType, Int>, e:SpellEffect)
 	{
 		name = n;
 		description = d;
+		isMatchable = matchable;
 		manaCosts = [];
 		for (manaType in mc.keys())
 		{
@@ -47,7 +57,11 @@ class Spell
 		effect = e;
 	}
 
-	public function run(enemy:Character, self:Character, board:PlayBoard):Void
+	public function run(enemy:Character, self:Character, board:PlayBoard):
+		{
+			delay:Float,
+			nextState:Play_State
+		}
 	{
 		var valid = true;
 		for (manaType in manaCosts.keys())
@@ -67,7 +81,10 @@ class Spell
 
 		if (!valid)
 		{
-			return;
+			return {
+				delay: 0,
+				nextState: Play_State.Idle
+			};
 		}
 
 		for (manaType in manaCosts.keys())
@@ -80,6 +97,6 @@ class Spell
 			}
 		}
 
-		effect(enemy, self, board);
+		return effect(enemy, self, board);
 	}
 }

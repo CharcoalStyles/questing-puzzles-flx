@@ -19,7 +19,6 @@ class KennyAtlasLoader
 		var frames = FlxAtlasFrames.findFrame(graphic);
 		if (frames != null)
 		{
-			FlxG.log.add("Found cached frames");
 			return frames;
 		}
 
