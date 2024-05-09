@@ -367,6 +367,7 @@ class SpellUi extends FlxGroup
 
 	public function onManaUpdate(totalNumber:Float, manaType:ManaType)
 	{
+		// update to do a check to see if the mana type isin the manaCosts.
 		var cost = spell.manaCosts.get(manaType).get();
 		var check = manaChecks.get(manaType);
 
