@@ -1,0 +1,134 @@
+// DamageEnemy.hxscript
+
+// Damages the enemy's health by the `damage` argument.
+
+//Available Libraries:
+// - Math - Haxe Math functions
+
+// Available objects:
+// - self:Character The character that cast the spell
+// - enemy:Character The character that is being damaged
+// - board:PlayBoard The board that the spell is being cast on
+// - emitter:CsEmitter The global particle emitter
+// - tools: a collection of tools:
+//   - random:FlxRandom The global random number generator
+//   - getPoint(x, y):FlxPoint Returns a FlxPoint with the given coordinates
+//   - centreRect(rect):FlxPoint Returns a FlxPoint with the centre of the given rectangle
+//   - burstEmit(colour, lifespan, options):CsEmitter.burstEmit Returns a CsEmitter.burstEmit
+//   - stringToColor(str):Int Returns a hexadecimal colour code from a string
+
+// Args callback:
+//   - effectCallback:Function(args:EffectArgs):Void
+
+// Args from the spell:
+//   Required arguments:
+//   - damage:Int The amount of damage to be dealt
+//   optional arguments:
+//   - colour:String The colour of the particles
+
+// Returns:
+//   - delay:Int The amount of time to wait before the next state
+//   - nextState:Int The state to transition to; 0 = Idle, 1 = BoardMatching
+
+var origin = tools.centreRect(self.sidebar.spellUis[0].rect);
+var target = tools.centreRect(enemy.sidebar.healthText.getScreenBounds());
+
+var p = emitter.emit(self.x, self.y);
+
+var colour = 0xffff0000;
+if (args.colour != null)
+{
+  colour = tools.stringToColor(args.colour);
+}
+
+p.setEffectStates([
+  {
+    lifespan: () -> 2.5,
+    target: (p) -> {
+      origin: tools.getPoint(origin.x, origin.y),
+      target: tools.getPoint(target.x, target.y),
+      // ease: FlxEase.expoIn
+    },
+    angularVelocityExtended: () -> [
+      {
+        t: 0,
+        value: tools.random.float(45, 90),
+      }
+    ],
+    colourExtended: () -> [
+      {
+        t: 0,
+        value: colour
+      }
+    ],
+    customUpdate: (p) ->
+    {
+      var t = Math.floor(p.percent * 100);
+      if (t % 3 == 0)
+      {
+        for (i in 0...10)
+        {
+          var p2 = emitter.emit(p.x, p.y);
+          p2.setEffectStates([
+            tools.burstEmit(colour, 50, {
+              lifespan: () -> 0.5,
+              scaleExtended: () -> [
+                {
+                  t: 0,
+                  value: tools.getPoint(0.5, 0.5),
+                }
+              ],
+              alphaExtended: () -> [
+                {
+                  t: 0,
+                  value: 1
+                },
+                {
+                  t: 1,
+                  value: 0
+                },
+              ]
+            })
+          ]);
+        }
+      }
+    },
+    onComplete: (p) ->
+    {
+      effectCallback({
+        damageEnemy: args.damage
+      });
+
+      for (i in 0...20)
+      {
+        var p3 = emitter.emit(p.x, p.y);
+        p3.setEffectStates([
+          tools.burstEmit(colour, 250, {
+            lifespan: () -> 0.75,
+            alphaExtended: () -> [
+              {
+                t: 0,
+                value: 1
+              },
+              {
+                t: 0.75,
+                value: 0.5
+              },
+              {
+                t: 1,
+                value: 0
+              },
+            ]
+          })
+        ]);
+      }
+    }
+  }
+]);
+
+var ret = {
+  delay: 3,
+  nextState: 0
+}
+
+ret;
