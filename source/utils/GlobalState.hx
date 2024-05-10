@@ -3,18 +3,16 @@ package utils;
 import entities.Character;
 import entities.Gem.GemType;
 import entities.Gem.ManaType;
-import entities.PlayBoard.BoardState;
 import entities.effects.CsEmitter;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.math.FlxPoint;
-import flixel.tweens.FlxEase;
-import flixel.util.FlxColor;
 import haxe.Timer;
 import states.PlayState.Play_State;
-import utils.CsMath.centreRect;
 import utils.Observer.FloatObservable;
 import utils.Observer.IntObservable;
+
+var nextState = [Play_State.Idle, Play_State.BoardMatching];
 
 class GlobalState extends FlxBasic
 {
@@ -61,101 +59,9 @@ class GlobalState extends FlxBasic
 		player.mana.set(ManaType.DARK, new FloatObservable(0));
 
 		player.spells = new Array();
-		player.spells.push(new Spell("Fireball", "Deals 5 damage to target enemy", false, [ManaType.FIRE => 5, ManaType.DARK => 2], (e, s, b) ->
-		{
-			var origin = centreRect(s.sidebar.spellUis[0].rect);
-			var target = centreRect(e.sidebar.healthText.getScreenBounds());
+		player.spells.push(Loader.loadSpell("Fireball"));
 
-			var p = emitter.emit(origin.x, origin.y);
-			p.setEffectStates([
-				{
-					lifespan: () -> 2.5,
-					target: (p) -> {
-						origin: FlxPoint.get(origin.x, origin.y),
-						target: FlxPoint.get(target.x, target.y),
-						ease: FlxEase.expoIn
-					},
-					angularVelocityExtended: () -> [
-						{
-							t: 0,
-							value: FlxG.random.float(45, 90),
-						}
-					],
-					colorExtended: () -> [
-						{
-							t: 0,
-							value: FlxColor.RED
-						}
-					],
-					customUpdate: (p) ->
-					{
-						var t = Std.int(p.percent * 100);
-						if (t % 3 == 0)
-						{
-							for (i in 0...10)
-							{
-								var p2 = emitter.emit(p.x, p.y);
-								p2.setEffectStates([
-									CsEmitter.burstEmit(FlxColor.RED, 50, {
-										lifespan: () -> 0.5,
-										scaleExtended: () -> [
-											{
-												t: 0,
-												value: FlxPoint.get(0.5, 0.5),
-											}
-										],
-										alphaExtended: () -> [
-											{
-												t: 0,
-												value: 1
-											},
-											{
-												t: 1,
-												value: 0
-											},
-										]
-									})
-								]);
-							}
-						}
-					},
-					onComplete: (p) ->
-					{
-						e.health -= 5;
-
-						for (i in 0...20)
-						{
-							var p3 = emitter.emit(p.x, p.y);
-							p3.setEffectStates([
-								CsEmitter.burstEmit(FlxColor.RED, 250, {
-									lifespan: () -> 0.75,
-									alphaExtended: () -> [
-										{
-											t: 0,
-											value: 1
-										},
-										{
-											t: 0.75,
-											value: 0.5
-										},
-										{
-											t: 1,
-											value: 0
-										},
-									]
-								})
-							]);
-						}
-					}
-				}
-			]);
-
-			return {
-				delay: 3,
-				nextState: Play_State.Idle
-			};
-		}));
-		player.spells.push(new Spell("Heal", "Heals 5 health", false, [ManaType.WATER => 5], (e, s, b) ->
+		player.spells.push(new Spell("Heal", "Heals 5 health", [ManaType.WATER => 5], (e, s, b) ->
 		{
 			s.health.set((s.health + 5) > s.maxHealth ? s.maxHealth : s.health + 5);
 			return {
@@ -163,7 +69,8 @@ class GlobalState extends FlxBasic
 				nextState: Play_State.Idle
 			};
 		}));
-		player.spells.push(new Spell("Light 'em up!", "Randomly sets 7 gems to Fire", true, [ManaType.LIGHT => 5, ManaType.DARK => 5], (e, s, b) ->
+    
+		player.spells.push(new Spell("Light 'em up!", "Randomly sets 7 gems to Fire", [ManaType.LIGHT => 5, ManaType.DARK => 5], (e, s, b) ->
 		{
 			var gems = [for (i in 0...7) b.getRandomGem([FIRE])];
 			for (i in 0...gems.length)
@@ -234,7 +141,7 @@ class GlobalState extends FlxBasic
 		ai.mana.set(ManaType.DARK, new FloatObservable(0));
 
 		ai.spells = new Array();
-		ai.spells.push(new Spell("Throw Rock", "It's a little pointy. Deals 2 damage.", false, [ManaType.FIRE => 2, ManaType.DARK => 2], (e, s, b) ->
+		ai.spells.push(new Spell("Throw Rock", "It's a little pointy. Deals 2 damage.", [ManaType.FIRE => 2, ManaType.DARK => 2], (e, s, b) ->
 		{
 			e.health -= 2;
 			return {
@@ -242,7 +149,7 @@ class GlobalState extends FlxBasic
 				nextState: Play_State.Idle
 			};
 		}));
-		ai.spells.push(new Spell("Warcry", "The noise isn't scary, but it's breath is. Removes 2 from all mana.", false,
+		ai.spells.push(new Spell("Warcry", "The noise isn't scary, but it's breath is. Removes 2 from all mana.",
 			[ManaType.FIRE => 2, ManaType.LIGHT => 2, ManaType.WATER => 2], (e, s, b) ->
 			{
 				for (m in e.mana.keys())

@@ -18,7 +18,7 @@ typedef ParticleProps =
 	?angularVelocityExtended:() -> Array<ExtendedLerpStop<Float>>,
 	?velocityExtended:() -> Array<ExtendedLerpStop<FlxPoint>>,
 	?scaleExtended:() -> Array<ExtendedLerpStop<FlxPoint>>,
-	?colorExtended:() -> Array<ExtendedLerpStop<FlxColor>>,
+	?colourExtended:() -> Array<ExtendedLerpStop<FlxColor>>,
 	?alphaExtended:() -> Array<ExtendedLerpStop<Float>>,
 	?onComplete:(particle:CsParticle) -> Void,
 	?customUpdate:(particle:CsParticle) -> Void,
@@ -79,7 +79,7 @@ class CsEmitter extends FlxPool<CsParticle>
 					value: FlxPoint.get(0.25, 0.25)
 				}
 			],
-			colorExtended: () -> [
+			colourExtended: () -> [
 				{
 					t: 0,
 					value: color
@@ -131,9 +131,9 @@ class CsEmitter extends FlxPool<CsParticle>
 		{
 			props.scaleExtended = overrideProps.scaleExtended;
 		}
-		if (overrideProps.colorExtended != null)
+		if (overrideProps.colourExtended != null)
 		{
-			props.colorExtended = overrideProps.colorExtended;
+			props.colourExtended = overrideProps.colourExtended;
 		}
 		if (overrideProps.alphaExtended != null)
 		{
@@ -156,7 +156,7 @@ class CsParticle extends FlxParticle
 	public var accelerationExtended:Array<ExtendedLerpStop<FlxPoint>> = null;
 	public var alphaExtended:Array<ExtendedLerpStop<Float>> = null;
 	public var angularVelocityExtended:Array<ExtendedLerpStop<Float>> = null;
-	public var colorExtended:Array<ExtendedLerpStop<FlxColor>> = null;
+	public var colourExtended:Array<ExtendedLerpStop<FlxColor>> = null;
 	public var velocityExtended:Array<ExtendedLerpStop<FlxPoint>> = null;
 	public var scaleExtended:Array<ExtendedLerpStop<FlxPoint>> = null;
 	public var target:TargetProps;
@@ -222,9 +222,9 @@ class CsParticle extends FlxParticle
 		{
 			this.angularVelocity = ExtendedLerp.flerp(angularVelocityExtended, percent);
 		}
-		if (colorExtended != null)
+		if (colourExtended != null)
 		{
-			this.color = ExtendedLerp.clerp(colorExtended, percent);
+			this.color = ExtendedLerp.clerp(colourExtended, percent);
 		}
 		if (velocityExtended != null)
 		{
@@ -263,9 +263,9 @@ class CsParticle extends FlxParticle
 		{
 			scaleExtended = props.scaleExtended();
 		}
-		if (props.colorExtended != null)
+		if (props.colourExtended != null)
 		{
-			colorExtended = props.colorExtended();
+			colourExtended = props.colourExtended();
 		}
 		if (props.alphaExtended != null)
 		{
@@ -306,7 +306,7 @@ class CsParticle extends FlxParticle
 		lifespan = 1;
 
 		alphaExtended = null;
-		colorExtended = null;
+		colourExtended = null;
 		velocityExtended = null;
 		scaleExtended = null;
 		angularVelocityExtended = null;

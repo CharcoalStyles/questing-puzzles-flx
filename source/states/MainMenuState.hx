@@ -5,10 +5,7 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.text.FlxText;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import haxe.io.Eof;
 import utils.GlobalState;
 import utils.SplitText;
 

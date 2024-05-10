@@ -1,0 +1,12 @@
+{
+  "name": "Throw Rock",
+  "description": "It's a little pointy. Deals 2 damage.",
+  "mana": {
+    "Fire": 2,
+    "Dark": 2
+  },
+  "effect": "DamageEnemy",
+  "args": {
+    "damage": 2
+  }
+}

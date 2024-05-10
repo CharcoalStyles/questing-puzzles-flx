@@ -27,7 +27,7 @@ typedef CellMove =
 	direction:MoveDirection
 }
 
-typedef ScoredRankedMatch =
+typedef ScoredMatch =
 {
 	move:CellMove,
 	matches:Array<MatchGroup>,
@@ -108,7 +108,7 @@ class PlayBoard extends UiFlxGroup
 	var gems:FlxGroup;
 
 	public var activeMatches:Array<MatchTypePosition> = null;
-	public var potentialMoves:Array<ScoredRankedMatch> = null;
+	public var potentialMoves:Array<ScoredMatch> = null;
 	public var onStateChange:BoardState->Void;
 
 	public function new(rows:Int, cols:Int)
@@ -713,9 +713,9 @@ class PlayBoard extends UiFlxGroup
 		return matches;
 	}
 
-	function findPotentialMoves(?inGrid:Array<Array<Gem>>):Array<ScoredRankedMatch>
+	function findPotentialMoves(?inGrid:Array<Array<Gem>>):Array<ScoredMatch>
 	{
-		var moves = new Array<ScoredRankedMatch>();
+		var moves = new Array<ScoredMatch>();
 		var workingGrid = (inGrid == null ? grid : inGrid).copy();
 
 		for (x in 0...workingGrid.length)
@@ -774,7 +774,7 @@ class PlayBoard extends UiFlxGroup
 
 		var collatedMatches = new Array<
 			{
-				matches:Array<ScoredRankedMatch>,
+				matches:Array<ScoredMatch>,
 				score:Int
 			}>();
 
@@ -793,7 +793,7 @@ class PlayBoard extends UiFlxGroup
 		}
 		collatedMatches.sort((a, b) -> b.score - a.score);
 
-		var sortedMatches = new Array<ScoredRankedMatch>();
+		var sortedMatches = new Array<ScoredMatch>();
 
 		for (cm in collatedMatches)
 		{
@@ -905,7 +905,7 @@ class PlayBoard extends UiFlxGroup
 		state = BoardState.Shuffle;
 	}
 
-	public function doMove(move:ScoredRankedMatch)
+	public function doMove(move:ScoredMatch)
 	{
 		var targetX = move.move.x;
 		var targetY = move.move.y;

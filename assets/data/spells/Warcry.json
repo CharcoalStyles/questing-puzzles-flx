@@ -1,0 +1,18 @@
+{
+  "name": "Warcry",
+  "description": "The noise isn't scary, but it's breath is. Removes 3 from all mana.",
+  "mana": {
+    "Fire": 2,
+    "Light": 2,
+    "Water": 2
+  },
+  "effect": "RemoveEnemyMana",
+  "args": {
+    "Fire" : 3,
+    "Water" : 3,
+    "Earth" : 3,
+    "Air" : 3,
+    "Light" : 3,
+    "Dark" : 3
+  }
+}

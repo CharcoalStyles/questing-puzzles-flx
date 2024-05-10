@@ -40,15 +40,13 @@ class Spell
 	public var name:String;
 	public var description:String;
 	public var manaCosts:Map<ManaType, FloatObservable>;
-	public var isMatchable:Bool;
 
 	private var effect:SpellEffect;
 
-	public function new(n:String, d:String, matchable:Bool, mc:Map<ManaType, Int>, e:SpellEffect)
+	public function new(n:String, d:String, mc:Map<ManaType, Int>, e:SpellEffect)
 	{
 		name = n;
 		description = d;
-		isMatchable = matchable;
 		manaCosts = [];
 		for (manaType in mc.keys())
 		{

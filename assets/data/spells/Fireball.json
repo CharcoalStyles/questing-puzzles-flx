@@ -1,0 +1,12 @@
+{
+  "name": "Fireball",
+  "description": "Deals 5 damage to target enemy",
+  "mana": {
+    "Fire": 5,
+    "Dark": 2
+  },
+  "effect": "DamageEnemy",
+  "args": {
+    "damage": 5
+  }
+}

@@ -2,6 +2,8 @@
 
 Just want a place to keep track of what I want to do next. Might as well make it public.
 
+Also there will be notes, they will be silly as I usually commit changes when it's really late.
+
 - [ ] New particle system
   - [x] Basic Pooling system
   - [x] Extended FlxParticle
@@ -17,6 +19,18 @@ Just want a place to keep track of what I want to do next. Might as well make it
     - First pass done and works on main menu on click and the "Light it up!" spell in game
   - [ ] Emitter function for gem match
     - I can't even remember what I meant by this. Right now it seems the same as the mana gain effect.
+- [ ] Data driven everything
+  - Yes! Rather than adding more actual fun game stuff, I spent time doing silly technical things. 😀
+  - [ ] Characters
+    - [ ] Characters definition in `Modding.md` (In Progress)
+    - [ ] Working (in game) characters
+  - [x] Spells
+    - [x] Spells definition in `Modding.md`
+    - [x] Working (in game) spells
+  - [x] Effects
+    - [x] Effects definition in `Modding.md`
+    - [x] Working (in game) effects
+    - This will be ongoing, there's **a lot** of work to do here. But the first full spell is in (Fireball, for the player).
 - [ ] x-match system
   - [ ] New turn on 4+ match
   - [ ] UI and/or text effect for new turn
@@ -32,3 +46,5 @@ Just want a place to keep track of what I want to do next. Might as well make it
     - Also, this might solve it's self when I move spells to data files
   - [ ] Add easings to the particle system, somehow, the stops make it weird.
   - [ ] Split out the particle system into a library?
+- [ ] Add Modding library [Polymod](https://polymod.io/)
+  - [ ] Get the demo working in HTML5

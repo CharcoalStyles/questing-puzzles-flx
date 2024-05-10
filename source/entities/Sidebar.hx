@@ -225,7 +225,7 @@ class Sidebar extends UiFlxGroup
 				CsEmitter.burstEmit(colour, 200, {
 					lifespan: () -> FlxG.random.float(0.5, 1.0),
 					alphaExtended: () -> [{t: 0, value: 1}],
-					colorExtended: () -> [{t: 0, value: colour}],
+					colourExtended: () -> [{t: 0, value: colour}],
 					scaleExtended: () -> [
 						{
 							t: 0,
