@@ -3736,7 +3736,7 @@ ManifestResources.init = function(config) {
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$nokiafc22_$ttf);
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$monsterrat_$ttf);
 	var bundle;
-	var data = "{\"name\":null,\"assets\":\"aoy4:pathy36:assets%2Fsounds%2Fsounds-go-here.txty4:sizezy4:typey4:TEXTy2:idR1y7:preloadtgoR0y41:assets%2Fdata%2Fenemies%2FTestGoblin.jsonR2i210R3R4R5R7R6tgoR0y39:assets%2Fdata%2Fspells%2FThrowRock.jsonR2i190R3R4R5R8R6tgoR0y36:assets%2Fdata%2Fspells%2FWarcry.jsonR2i318R3R4R5R9R6tgoR0y38:assets%2Fdata%2Fspells%2FFireball.jsonR2i181R3R4R5R10R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R4R5R11R6tgoR0y50:assets%2Fdata%2Feffects%2FRemoveEnemyMana.hxscriptR2i904R3R4R5R12R6tgoR0y46:assets%2Fdata%2Feffects%2FDamageEnemy.hxscriptR2i3311R3R4R5R13R6tgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R4R5R14R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R4R5R15R6tgoR0y26:assets%2Fimages%2Fcsty.pngR2i271R3y5:IMAGER5R16R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3R4R5R18R6tgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R17R5R19R6tgoR0y33:assets%2Fimages%2FBackTile_16.pngR2i1238R3R17R5R20R6tgoR0y33:assets%2Fimages%2FBackTile_05.pngR2i556R3R17R5R21R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR23y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R22R5y26:flixel%2Fsounds%2Fbeep.mp3R24aR26y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R27R24aR26R27hgoR2i33629R3R28R5R25R24aR23R25hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R29R30y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i277R3R17R5R35R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R17R5R36R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R17R5R37R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R17R5R38R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R17R5R39R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R17R5R40R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:pathy36:assets%2Fsounds%2Fsounds-go-here.txty4:sizezy4:typey4:TEXTy2:idR1y7:preloadtgoR0y41:assets%2Fdata%2Fenemies%2FTestGoblin.jsonR2i210R3R4R5R7R6tgoR0y35:assets%2Fdata%2Fspells%2FHeal5.jsonR2i144R3R4R5R8R6tgoR0y39:assets%2Fdata%2Fspells%2FThrowRock.jsonR2i216R3R4R5R9R6tgoR0y36:assets%2Fdata%2Fspells%2FWarcry.jsonR2i318R3R4R5R10R6tgoR0y38:assets%2Fdata%2Fspells%2FFireball.jsonR2i181R3R4R5R11R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R4R5R12R6tgoR0y45:assets%2Fdata%2Feffects%2FHealCaster.hxscriptR2i2509R3R4R5R13R6tgoR0y50:assets%2Fdata%2Feffects%2FRemoveEnemyMana.hxscriptR2i904R3R4R5R14R6tgoR0y46:assets%2Fdata%2Feffects%2FDamageEnemy.hxscriptR2i3320R3R4R5R15R6tgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R4R5R16R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R4R5R17R6tgoR0y26:assets%2Fimages%2Fcsty.pngR2i271R3y5:IMAGER5R18R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3R4R5R20R6tgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R19R5R21R6tgoR0y33:assets%2Fimages%2FBackTile_16.pngR2i1238R3R19R5R22R6tgoR0y33:assets%2Fimages%2FBackTile_05.pngR2i556R3R19R5R23R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR25y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R24R5y26:flixel%2Fsounds%2Fbeep.mp3R26aR28y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R29R26aR28R29hgoR2i33629R3R30R5R27R26aR25R27hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R31R32y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i277R3R19R5R37R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R19R5R38R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R19R5R39R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R19R5R40R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R19R5R41R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R19R5R42R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -79016,7 +79016,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 828816;
+	this.version = 601688;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -128385,13 +128385,7 @@ utils_GlobalState.prototype = $extend(flixel_FlxBasic.prototype,{
 		this.player.mana.set(entities_ManaType.DARK,new utils_FloatObservableActual(0));
 		this.player.spells = [];
 		this.player.spells.push(utils_Loader.loadSpell("Fireball"));
-		var tmp = this.player.spells;
-		var _g = new haxe_ds_EnumValueMap();
-		_g.set(entities_ManaType.WATER,5);
-		tmp.push(new entities_Spell("Heal","Heals 5 health",_g,function(e,s,b) {
-			utils_IntObservable.set(s.health,utils_IntObservable.add(s.health,5) > s.maxHealth ? s.maxHealth : utils_IntObservable.add(s.health,5));
-			return { delay : 0, nextState : states_Play_$State.Idle};
-		}));
+		this.player.spells.push(utils_Loader.loadSpell("Heal5"));
 		var tmp = this.player.spells;
 		var _g = new haxe_ds_EnumValueMap();
 		_g.set(entities_ManaType.LIGHT,5);
@@ -128619,42 +128613,41 @@ utils_KennyAtlasLoader.fromTexturePackerXml = function(source,xml) {
 var utils_Loader = function() { };
 $hxClasses["utils.Loader"] = utils_Loader;
 utils_Loader.__name__ = "utils.Loader";
+utils_Loader.stringToManaType = function(str) {
+	switch(str) {
+	case "Air":
+		return entities_ManaType.AIR;
+	case "Dark":
+		return entities_ManaType.DARK;
+	case "Earth":
+		return entities_ManaType.EARTH;
+	case "Fire":
+		return entities_ManaType.FIRE;
+	case "Light":
+		return entities_ManaType.LIGHT;
+	case "Water":
+		return entities_ManaType.WATER;
+	default:
+		return null;
+	}
+};
 utils_Loader.loadSpell = function(name) {
 	var spellJson = openfl_utils_Assets.getText("assets/data/spells/" + name + ".json");
+	haxe_Log.trace(spellJson,{ fileName : "source/utils/Loader.hx", lineNumber : 61, className : "utils.Loader", methodName : "loadSpell"});
 	var spellData = JSON.parse(spellJson);
 	var spellMana = new haxe_ds_EnumValueMap();
 	var manaCount = 0;
 	var _g = 0;
 	var _g1 = Reflect.fields(spellData.mana);
-	_hx_loop1: while(_g < _g1.length) {
+	while(_g < _g1.length) {
 		var mt = _g1[_g];
 		++_g;
-		switch(mt) {
-		case "Air":
-			spellMana.set(entities_ManaType.AIR,spellData.mana[mt]);
-			++manaCount;
-			break _hx_loop1;
-		case "Dark":
-			spellMana.set(entities_ManaType.DARK,spellData.mana[mt]);
-			++manaCount;
-			break _hx_loop1;
-		case "Earth":
-			spellMana.set(entities_ManaType.EARTH,spellData.mana[mt]);
-			++manaCount;
-			break _hx_loop1;
-		case "Fire":
-			spellMana.set(entities_ManaType.FIRE,spellData.mana[mt]);
-			++manaCount;
-			break _hx_loop1;
-		case "Light":
-			spellMana.set(entities_ManaType.LIGHT,spellData.mana[mt]);
-			++manaCount;
-			break _hx_loop1;
-		case "Water":
-			spellMana.set(entities_ManaType.WATER,spellData.mana[mt]);
-			++manaCount;
-			break _hx_loop1;
+		var manaType = utils_Loader.stringToManaType(mt);
+		if(manaType == null) {
+			throw haxe_Exception.thrown("Invalid mana type: " + mt);
 		}
+		spellMana.set(manaType,spellData.mana[mt]);
+		++manaCount;
 	}
 	if(manaCount == 0) {
 		throw haxe_Exception.thrown("No mana found in spell");
@@ -128673,10 +128666,38 @@ utils_Loader.loadEffect = function(name,args) {
 		interp.variables.h["enemy"] = enemy;
 		interp.variables.h["board"] = board;
 		interp.variables.h["emitter"] = globalState.emitter;
-		interp.variables.h["tools"] = { getPoint : flixel_math_FlxPoint.get, centreRect : utils_CsMath.centreRect, random : flixel_FlxG.random, burstEmit : entities_effects_CsEmitter.burstEmit, stringToColor : flixel_util_FlxColor.fromString};
+		var value = { getPoint : flixel_math_FlxPoint.get, centreRect : utils_CsMath.centreRect, random : flixel_FlxG.random, burstEmit : entities_effects_CsEmitter.burstEmit, stringToColor : flixel_util_FlxColor.fromString, delay : function(func,delay) {
+			return haxe_Timer.delay(func,Math.floor(delay * 1000));
+		}};
+		interp.variables.h["tools"] = value;
 		var effectCallback = function(effectArgs) {
-			if(effectArgs.damageEnemy != null) {
-				utils_IntObservable.subA(enemy.health,effectArgs.damageEnemy);
+			if(effectArgs.adjustEnemyHealth != null) {
+				utils_IntObservable.addA(enemy.health,effectArgs.adjustEnemyHealth);
+			}
+			if(effectArgs.adjustPlayerHealth != null) {
+				utils_IntObservable.addA(self.health,effectArgs.adjustPlayerHealth);
+			}
+			if(effectArgs.adjustEnemyMana != null) {
+				var _g = 0;
+				var _g1 = Reflect.fields(effectArgs.adjustEnemyMana);
+				while(_g < _g1.length) {
+					var mt = _g1[_g];
+					++_g;
+					var manaType = utils_Loader.stringToManaType(mt);
+					var manaValue = effectArgs.adjustEnemyMana[mt];
+					enemy.maxMana.set(manaType,enemy.maxMana.get(manaType) + manaValue);
+				}
+			}
+			if(effectArgs.adjustPlayerMana != null) {
+				var _g = 0;
+				var _g1 = Reflect.fields(effectArgs.adjustPlayerMana);
+				while(_g < _g1.length) {
+					var mt = _g1[_g];
+					++_g;
+					var manaType = utils_Loader.stringToManaType(mt);
+					var manaValue = effectArgs.adjustPlayerMana[mt];
+					self.maxMana.set(manaType,self.maxMana.get(manaType) + manaValue);
+				}
 			}
 		};
 		interp.variables.h["effectCallback"] = effectCallback;
