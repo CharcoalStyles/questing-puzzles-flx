@@ -1,0 +1,11 @@
+{
+  "name": "Heal",
+  "description": "Heals 5 health",
+  "mana": {
+    "Water": 5
+  },
+  "effect": "HealCaster",
+  "args": {
+    "heal": 5
+  }
+}

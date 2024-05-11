@@ -65,13 +65,11 @@ Here is an example of a spell:
     "Fire": 2,
     "Dark": 2,
   },
-  "effect": [{
-    "function": "DamageEnemy", // The name of the effect script to call
-    "args": { 
-      "damage": 2, // The arguments to pass to the effect script
-      "colour": "0x909090" // The colour of the particles
-    }
-  }] // The effect(s) of the spell
+  "effect": "DamageEnemy", // The name of the effect script to call
+  "args": { 
+    "damage": 2, // The arguments to pass to the effect script
+    "colour": "0x909090" // The colour of the particles
+  }
 }
 ```
 
@@ -90,40 +88,20 @@ Create a new hxscript file in `assets/data/effects/` with the name of the effect
 Here are some caveats with Haxe scripts:
   - This is a subset of the Haxe language. Here are the specifics [hScript](https://github.com/HaxeFoundation/hscript)
   - Most classes have to be imported in to the scripts from the main Haxe game code. As such, there is currently only one class that is imported: `Math`.
-  - Other tools are passed in, listed below in the top of the sample script and in the [DamageEnemy](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/assets/data/effects/DamageEnemy.hxscript) effect script.
+  - Other tools are passed in, more information below.
   - The `args` property in the spell object is a dictionary of the arguments to pass to the effect script.
 
 Here is an example of an effect, a simple one that reduces the enemy's health by the `damage` argument and lets the user continue their turn:
 
-```hxscript
-///Available Libraries:
-// - Math - Haxe Math functions
-
-// Available objects:
-// - self:Character The character that cast the spell
-// - enemy:Character The character that is being damaged
-// - board:PlayBoard The board that the spell is being cast on
-// - emitter:CsEmitter The global particle emitter
-// - tools: a collection of tools:
-//   - random:FlxRandom The global random number generator
-//   - getPoint(x, y):FlxPoint Returns a FlxPoint with the given coordinates
-//   - centreRect(rect):FlxPoint Returns a FlxPoint with the centre of the given rectangle
-//   - burstEmit(colour, lifespan, options):CsEmitter.burstEmit Returns a CsEmitter.burstEmit
-//   - stringToColor(str):Int Returns a hexadecimal colour code from a string
-
-// Args callback:
-//   - effectCallback:Function(args:EffectArgs):Void
+```haxe
+// SimpleDamageEnemy.hxscript
 
 // Args from the spell:
 //   Required arguments:
 //   - damage:Int The amount of damage to be dealt
 
-// Returns:
-//   - delay:Float The amount of time to wait before the next state is triggered, allowing particle effects to be completed
-//   - nextState:Int The state to transition to; 0 = Idle, 1 = BoardMatching
-
 effectCallback({
-  damageEnemy: args.damage
+  adjustEnemyHealth:  0 -args.damage // adjust enemy health adds the value given, so we make it negative to reduce the health
 });
 
 var ret = {
@@ -134,26 +112,29 @@ var ret = {
 ret;
 ```
 
-The comments aren't required, but they are useful for remembering what is available to the effect script. This is also a very cutdown version of the [DamageEnemy](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/assets/data/effects/DamageEnemy.hxscript) effect script.
+This is a very cutdown version of the [DamageEnemy](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/assets/data/effects/DamageEnemy.hxscript) effect script, just to give a simple entry point to learn about the effect script.
 
-### Objects
+### What's available to the effect script?
 
-#### self
+#### args
 
-The `self` object is the character that cast the spell. It is a [Character](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/source/entities/Character.hx) object that is defined in the main Haxe game code.
+The `args` property is a collection of the arguments prodided to the effect script from the spell object. This is different for every effect, allowing swpells to use the same effect script but with different arguments.
+
+Currently, the only effect available is the [DamageEnemy](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/assets/data/effects/DamageEnemy.hxscript) effect script, which takes the required argument `damage` and the optional argument `colour`. The `damage` argument is an integer that is the amount of damage to be dealt to the enemy. The `colour` argument is a string (CSS style colour code or hexadecimal colour code) that sets the colour of the particle effects.
+
+#### Math
+
+It is a direct insertion of the [Math](https://api.haxe.org/Math.html) class from the Haxe standard library.
+
+#### self and enemy
+
+`self` and `enemy` are [Character](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/source/entities/Character.hx) objects. Self is the character that cast the spell, enemy is the other character in the battle.
 
 The main properties that you'll want to access are:
   - `self.health:Int`: The current health of the character
-  - `self.mana:Map<ManaType, Int>`: The current mana of the character, uses [ManaType](#mana-types) as the key.
-  - `self.spells:Array<Spell>`: The spells that the character can cast.
+  - `self.mana:Map<ManaType, Int>`: The current mana of the character, uses ManaType as the key.
 
-#### enemy
-
-The `enemy` object is the character that is being damaged. It is a [Character](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/source/entities/Character.hx) object that is defined in the main Haxe game code.
-
-The main properties that you'll want to access are:
-  - `enemy.health:Int`: The current health of the character
-  - `enemy.mana:Map<ManaType, Int>`: The current mana of the character, uses [ManaType](#mana-types) as the key.
+Everything in the characters is available, but your milage might vary when modifying anything directly. 
 
 #### board
 
@@ -167,15 +148,15 @@ The main methods that I think you'll want to access are:
   - `board.doMove(move:ScoredMatch)`: Does the move specified by the `move` object.
   - `board.shuffleBoard()`: Shuffles the board.
 
-These are only the start for now; I'll be adding more methods as I go along.
+Everything that is publicly available in the PlayBoard class is available to use. Right now that isn't a lot, but this is just the start; I'll be exposing more as I go along. Also, there is no guarantee that changing anything will actually work.
 
 #### emitter
 
-The `emitter` object is the global particle emitter, it is a [ParticleEmitter](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/source/entities/ParticleEmitter.hx) object that is defined in the main Haxe game code.
+The `emitter` object is the global particle emitter, it is a [CsEmitter](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/source/entities/effects/CsEmitter.hx) object that is defined in the main Haxe game code.
 
 The main property that you'll want to access are:
   - `emitter.emit(x:Float, y:Float):CsParticle`: Emits a particle at the specified position.
-    - and then  you'll mainly want to use the `CsParticle.setEffectStates` method to set the effects on the particle.
+    - and then you'll  want to use the `CsParticle.setEffectStates` method to set the effects on the particle.
 
 #### Tools
 
@@ -184,49 +165,26 @@ The `tools` object is a collection of tools that are available to the effect scr
   - `getPoint(x, y):FlxPoint`: Returns a FlxPoint with the given coordinates.
   - `centreRect(rect):FlxPoint`: Returns a FlxPoint with the centre of the given rectangle.
   - `burstEmit(colour, lifespan, options):CsEmitter.burstEmit`: Returns a CsEmitter.burstEmit.
-  - `stringToColor(str):Int`: Returns a hexadecimal colour code from a string.
+  - `stringToColor(str):Null<FLxColor>`: Returns a FlxColor from a string.
+  - `delay(func:() -> Void, delay:Float):Void`: Delays the execution of the function by the given amount of time in seconds.
 
 These are fairly self explanatory and will grow a lot as I develop the game.
 
-#### efffectCallback
+#### effectCallback
 
 The `effectCallback` is a function that is called from the effect script, it allows the effect script to pass effects to the main game code. It was created because modifying basic objects in the effect script seemed to be ok, but modifying more complex objects (like Characters) was not.
 
 The `effectCallback` is passed an anonymous object with the following optional properties:
-  - `damageEnemy:Int`: The amount of damage to be dealt to the enemy. 
-
-Yes, that's the only one (for now). I've been working on this for a few days and I just wanted to get something out there 😅
+  - `adjustEnemyHealth:Int`: The value to add to the enemy's health. To reduce the enemy's health, use a negative value.
+  - `adjustPlayerHealth:Int`: The value to add to the player's health.
+  - `adjustEnemyMana:DynamicAccess<Int>`: A dictionary of the mana types and their values to add to the enemy's mana.
+  - `adjustPlayerMana:DynamicAccess<Int>`: A dictionary of the mana types and their values to add to the player's mana.
 
 #### returns
 
-The `returns` object is an anonymous object with the following properties:
+Each script will return an object with the following properties:
   - `delay:Float`: The amount of time in seconds to wait before the next state is triggered, allowing particle effects to be completed.
   - `nextState:Int`: The state to transition to; 0 = Idle, 1 = BoardMatching
 
-### Errata
-
-#### ScoredMatch
-
-The `ScoredMatch` object is defined in the main Haxe game code as:
-
-```haxe
-typedef ScoredMatch =
-{
-	move:CellMove,
-	matches:Array<MatchGroup>,
-	score:Int
-}
-```
-
-#### GemGrid
-
-The `GemGrid` object is defined in the main Haxe game code as:
-
-```haxe
-typedef GemGrid =
-{
-	x:Int,
-	y:Int,
-	gem:Gem
-}
-```
+The delay should be calculated on how long the particle effect(s) take to complete.
+And generally, the next state should be the Idle, unless the effect has changed the board state.

@@ -1,0 +1,117 @@
+// HealCaster.hxscript
+
+// Heals the caster by the `heal` argument.
+
+// Args from the spell:
+//   Required arguments:
+//   - heal:Int The amount of damage to be dealt
+//   optional arguments:
+//   - colours: {
+//       start: String The colour of the particles
+//       mid: String The colour of the particles
+//       end: String The colour of the particles
+//     }
+
+var textArea = self.sidebar.healthText.getScreenBounds();
+
+for (i in 0...100)
+{
+  var effectDelay = (i / 10) * 0.085; // ~0.85 sec
+  var x = textArea.x + (textArea.width * tools.random.float());
+  tools.delay(() ->
+  {
+    var p = emitter.emit(x, textArea.y + textArea.height);
+
+    var initVelY = tools.random.float(-70, -120);
+    var sColour = tools.stringToColor("0xa0e0a0");
+    var mColour = tools.stringToColor("0x40ff40");
+    var eColour = tools.stringToColor("0x10c010");
+
+    if (args.colours != null)
+    {
+      sColour = tools.stringToColor(args.colours.start);
+      mColour = tools.stringToColor(args.colours.mid);
+      eColour = tools.stringToColor(args.colours.end);
+    }
+
+    p.setEffectStates([
+      {
+        lifespan: () -> tools.random.float(0.8, 1.2),
+        velocityExtended: () -> [
+          {
+            t: 0,
+            value: tools.getPoint(0,initVelY),
+          },
+          {
+            t: 0.5,
+            value: tools.getPoint(0,initVelY * 0.6),
+          },
+          {
+            t: 1,
+            value: tools.getPoint(0, initVelY * 0.2),
+          }
+        ],
+        scaleExtended: () -> [
+          {
+            t: 0,
+            value: tools.getPoint(1, 1),
+          },
+          {
+            t: 1,
+            value: tools.getPoint(0.25, 0.25),
+          }
+        ],
+        alphaExtended: () -> [
+          {
+            t: 0,
+            value: 0,
+          },
+          {
+            t: 0.1,
+            value: 0.75,
+          },
+          {
+            t: 0.7,
+            value: 0.75,
+          },
+          {
+            t: 1,
+            value: 0,
+          }
+        ],
+        colourExtended: () -> [
+          {
+            t: 0,
+            value: sColour,
+          },
+          {
+            t: 0.5,
+            value: mColour
+          },
+          {
+            t: 1,
+            value: eColour
+          }
+        ]
+      }
+    ]);
+  }, effectDelay);
+}
+
+for (i in 0...args.heal)
+{
+  var timer = i / args.heal + 0.6;
+  tools.delay(() ->
+  {
+      effectCallback({
+        adjustPlayerHealth: 1
+      });
+  }, timer);
+};
+
+var ret = {
+  delay: 2.5,
+  nextState: 0
+}
+
+ret;

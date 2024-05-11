@@ -11,7 +11,8 @@ Also there will be notes, they will be silly as I usually commit changes when it
     - Original FlxParticle LERP just wasn't working for me
     - I've actually stripped out access to the original FlxParticle LERPs. An array with 2 stops at 0 and 1 do the same thing; though I do miss out on easings (for now...)
   - [x] Emitter function to replace current mana gain effect
-  - [ ] Emitter function for health gain
+  - [x] Emitter function for health gain
+    - And it's in a script 😉
   - [x] Emitter function for damage taken
     - Kind of done, Fireball spell has a particle animation right now, but it isn't a generic "lose health" effect.
     - Both heal/damage might just be specific to the "spell" that does the effect
@@ -26,7 +27,7 @@ Also there will be notes, they will be silly as I usually commit changes when it
     - [ ] Working (in game) characters
   - [x] Spells
     - [x] Spells definition in `Modding.md`
-    - [x] Working (in game) spells
+    - [x] Working (in game) spells (x2, Fireball, Heal5)
   - [x] Effects
     - [x] Effects definition in `Modding.md`
     - [x] Working (in game) effects

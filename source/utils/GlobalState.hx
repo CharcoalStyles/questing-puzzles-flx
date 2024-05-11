@@ -60,16 +60,8 @@ class GlobalState extends FlxBasic
 
 		player.spells = new Array();
 		player.spells.push(Loader.loadSpell("Fireball"));
+		player.spells.push(Loader.loadSpell("Heal5"));
 
-		player.spells.push(new Spell("Heal", "Heals 5 health", [ManaType.WATER => 5], (e, s, b) ->
-		{
-			s.health.set((s.health + 5) > s.maxHealth ? s.maxHealth : s.health + 5);
-			return {
-				delay: 0,
-				nextState: Play_State.Idle
-			};
-		}));
-    
 		player.spells.push(new Spell("Light 'em up!", "Randomly sets 7 gems to Fire", [ManaType.LIGHT => 5, ManaType.DARK => 5], (e, s, b) ->
 		{
 			var gems = [for (i in 0...7) b.getRandomGem([FIRE])];

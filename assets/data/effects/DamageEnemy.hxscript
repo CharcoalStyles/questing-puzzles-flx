@@ -96,7 +96,7 @@ p.setEffectStates([
     onComplete: (p) ->
     {
       effectCallback({
-        damageEnemy: args.damage
+        adjustEnemyHealth: 0 -args.damage
       });
 
       for (i in 0...20)

@@ -7,6 +7,7 @@
   },
   "effect": "DamageEnemy",
   "args": {
-    "damage": 2
+    "damage": 2,
+    "colour": "0x909090"
   }
 }
