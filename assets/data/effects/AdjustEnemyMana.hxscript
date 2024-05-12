@@ -1,0 +1,157 @@
+// AdjustEnemyMana.hxscript
+
+// Optional arguments: (but you really should have at least one)
+// - Fire: int
+// - Water: int
+// - Earth: int
+// - Air: int
+// - Light: int
+// - Dark: int
+
+trace("AdjustEnemyMana.hxscript");
+
+function removeManaParticleEffect(manaType, amount, colour) {
+  var mult = 3;
+  for (i in 0...amount * mult){
+    tools.delay(() -> {
+      var yy = tools.stringToManaType(manaType);
+      var store = enemy.sidebar.allStores.get(yy);
+      var mBar = store.bar;
+      var barY = mBar.y + mBar.height / 2;
+      var barX = mBar.x + (mBar.percent / 100) * mBar.width;
+
+      var vx = tools.random.float(250, 350);
+      var vy = tools.random.float(-30, 30);
+
+      var s1 = tools.random.float(0.05,0.15);
+
+      var p = emitter.emit(barX, barY);
+      p.setEffectStates([{
+        lifespan: () -> tools.random.float(0.5, 1.0),
+        velocityExtended: () -> [
+          {
+            t: 0,
+            value: tools.getPoint(vx, vy)
+          },
+          {
+            t: 1,
+            value: tools.getPoint(0, 0)
+          }
+        ],
+        scaleExtended: () -> [
+          {
+            t: 0,
+            value: tools.getPoint(s1, s1),
+          },
+          {
+            t: 1,
+            value: tools.getPoint(0.75, 0.75)
+          }
+        ],
+        angularVelocityExtended: () -> [
+          {
+            t: 0,
+            value: 720
+          }
+        ],
+        colourExtended: () -> [
+          {
+            t: 0,
+            value: colour
+          }
+        ],
+        alphaExtended: () -> [
+          {
+            t: 0,
+            value: 1
+          },
+          {
+            t: 0.8,
+            value: 0.7
+          },
+          {
+            t: 1,
+            value: 0
+          }
+        ],
+        onComplete: (particle) ->
+        {
+          if(i % mult == 0) {
+            var adjustEnemyMana = {};
+            adjustEnemyMana[manaType] = -1;
+            effectCallback({
+              adjustEnemyMana: adjustEnemyMana
+            });
+          }
+        }
+     }]);
+    }, i * 0.1);
+  }
+}
+
+// function addManaParticleEffect(manaType, amount, colour)
+// {
+//   var mult = 3;
+//   for (i in 0...amount * mult){
+//     tools.delay(() -> {
+//       var p = emitter.emit(origin.x, origin.y);
+//       p.setEffectStates([
+//         onComplete: (particle) ->
+//         {
+//           if(i % mult == 0){
+//             var adjustEnemyMana = {};
+//             adjustEnemyMana[manaType] = 1;
+//             eCallback({
+//               adjustEnemyMana: adjustEnemyMana
+//             });
+//           }
+//         }
+//       ]);
+//     }, i * 0.1);
+//   }
+// }
+
+function doManaParticleEffect(manaType, amount, colour)
+{
+  if (amount > 0)
+  {
+    // addManaParticleEffect(manaType, amount, colour);
+  }
+  else
+  {
+    removeManaParticleEffect(manaType, amount * -1, colour);
+  }
+}
+
+var maxMana = 0;
+if (args.Fire != null){
+  doManaParticleEffect("Fire", args.Fire, GemType.RED.colour);
+  maxMana = Math.max(maxMana, args.Fire);
+}
+if (args.Water != null){
+  doManaParticleEffect("Water", args.Water, GemType.BLUE.colour);
+  maxMana = Math.max(maxMana, args.Water);
+}
+if (args.Earth != null){
+  doManaParticleEffect("Earth", args.Earth, GemType.GREEN.colour);
+  maxMana = Math.max(maxMana, args.Earth);
+}
+if (args.Air != null){
+  doManaParticleEffect("Air", args.Air, GemType.ORANGE.colour);
+  maxMana = Math.max(maxMana, args.Air);
+}
+if (args.Light != null){
+  doManaParticleEffect("Light", args.Light, GemType.YELLOW.colour);
+  maxMana = Math.max(maxMana, args.Light);
+}
+if (args.Dark != null){
+  doManaParticleEffect("Dark", args.Dark, GemType.PURPLE.colour);
+  maxMana = Math.max(maxMana, args.Dark);
+}
+
+var ret =  {
+    delay: maxMana * 0.1 + 1.5,
+    nextState: 0
+};
+
+ret;
