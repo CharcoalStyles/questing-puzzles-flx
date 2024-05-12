@@ -22,7 +22,7 @@ class Gem extends FlxSprite
 	public var selected(default, set):Bool = false;
 	public var highlighted(default, set):Bool = false;
 	public var manaType:ManaType;
-  public var gemType:GemType;
+	public var gemType:GemType;
 
 	var angleTween:FlxTween;
 	var colourTween:FlxTween;
@@ -43,9 +43,9 @@ class Gem extends FlxSprite
 
 	public function setType(type:GemType)
 	{
-    this.gemType = type;
-		this.originalColor = type.color;
-		this.color = type.color;
+		this.gemType = type;
+		this.originalColor = type.colour;
+		this.color = type.colour;
 		this.manaType = type.manaType;
 
 		this.frame = this.frames.getByName(type.frame);
@@ -179,14 +179,32 @@ class Gem extends FlxSprite
 	}
 }
 
-enum ManaType
+class ManaType
 {
-	FIRE;
-	EARTH;
-	WATER;
-	AIR;
-	LIGHT;
-	DARK;
+	public static var FIRE = new ManaType("Fire");
+	public static var EARTH = new ManaType("Earth");
+	public static var WATER = new ManaType("Water");
+	public static var AIR = new ManaType("Air");
+	public static var LIGHT = new ManaType("Light");
+	public static var DARK = new ManaType("Dark");
+
+	public static var ALL:Array<ManaType> = [FIRE, EARTH, WATER, AIR, LIGHT, DARK];
+
+	public static function fromString(str:String)
+	{
+		var matches = ALL.filter((mt) -> mt.name == str);
+		if (matches.length == 0)
+			return null;
+		else
+			return matches[0];
+	}
+
+	public var name:String;
+
+	function new(n:String)
+	{
+		name = n;
+	}
 }
 
 class GemType
@@ -213,7 +231,7 @@ class GemType
 
 	public var manaType:ManaType;
 	public var frame:String;
-	public var color:FlxColor;
+	public var colour:FlxColor;
 	public var name:String;
 	public var shortName:String;
 
@@ -221,7 +239,7 @@ class GemType
 	{
 		manaType = mt;
 		frame = uFrame;
-		color = c;
+		colour = c;
 		name = n;
 		shortName = n.substring(0, 1);
 	}

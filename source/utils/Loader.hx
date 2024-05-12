@@ -2,6 +2,7 @@ package utils;
 
 import entities.Character.Spell;
 import entities.Character.SpellEffect;
+import entities.Gem.GemType;
 import entities.Gem.ManaType;
 import entities.effects.CsEmitter;
 import flixel.FlxG;
@@ -34,38 +35,36 @@ typedef EffectArgs =
 
 class Loader
 {
-	public static function stringToManaType(str:String):ManaType
-	{
-		return switch (str)
-		{
-			case "Fire":
-				ManaType.FIRE;
-			case "Earth":
-				ManaType.EARTH;
-			case "Water":
-				ManaType.WATER;
-			case "Air":
-				ManaType.AIR;
-			case "Light":
-				ManaType.LIGHT;
-			case "Dark":
-				ManaType.DARK;
-			default:
-				null;
-		}
-	}
-
+	// public static function stringToManaType(str:String):ManaType
+	// {
+	// 	return switch (str)
+	// 	{
+	// 		case "Fire":
+	// 			ManaType.FIRE;
+	// 		case "Earth":
+	// 			ManaType.EARTH;
+	// 		case "Water":
+	// 			ManaType.WATER;
+	// 		case "Air":
+	// 			ManaType.AIR;
+	// 		case "Light":
+	// 			ManaType.LIGHT;
+	// 		case "Dark":
+	// 			ManaType.DARK;
+	// 		default:
+	// 			null;
+	// 	}
+	// }
 	public static function loadSpell(name:String):Spell
 	{
 		var spellJson = Assets.getText("assets/data/spells/" + name + ".json");
-		trace(spellJson);
 		var spellData:SpellStruct = haxe.Json.parse(spellJson);
 		var spellMana = new Map<ManaType, Int>();
 
 		var manaCount = 0;
 		for (mt in spellData.mana.keys())
 		{
-			var manaType = stringToManaType(mt);
+			var manaType = ManaType.fromString(mt);
 			if (manaType == null)
 			{
 				throw "Invalid mana type: " + mt;
@@ -96,6 +95,7 @@ class Loader
 			var interp = new hscript.Interp();
 
 			interp.variables.set("Math", Math);
+			interp.variables.set("GemType", GemType);
 
 			interp.variables.set("self", self);
 			interp.variables.set("enemy", enemy);
@@ -107,6 +107,7 @@ class Loader
 				random: FlxG.random,
 				burstEmit: CsEmitter.burstEmit,
 				stringToColor: FlxColor.fromString,
+				stringToManaType: ManaType.fromString,
 				delay: (func:() -> Void, delay:Float) -> Timer.delay(func, Math.floor(delay * 1000))
 			});
 			var effectCallback = (effectArgs:EffectArgs) ->
@@ -125,9 +126,9 @@ class Loader
 				{
 					for (mt in effectArgs.adjustEnemyMana.keys())
 					{
-						var manaType = stringToManaType(mt);
+						var manaType = ManaType.fromString(mt);
 						var manaValue = effectArgs.adjustEnemyMana.get(mt);
-						enemy.maxMana.set(manaType, enemy.maxMana.get(manaType) + manaValue);
+						enemy.mana.get(manaType).set(enemy.mana.get(manaType).get() + manaValue);
 					}
 				}
 
@@ -135,9 +136,9 @@ class Loader
 				{
 					for (mt in effectArgs.adjustPlayerMana.keys())
 					{
-						var manaType = stringToManaType(mt);
+						var manaType = ManaType.fromString(mt);
 						var manaValue = effectArgs.adjustPlayerMana.get(mt);
-						self.maxMana.set(manaType, self.maxMana.get(manaType) + manaValue);
+						self.mana.get(manaType).set(self.mana.get(manaType).get() + manaValue);
 					}
 				}
 			};
@@ -156,4 +157,5 @@ class Loader
 			};
 		}
 	}
+  
 }

@@ -126,6 +126,10 @@ Currently, the only effect available is the [DamageEnemy](https://github.com/Cha
 
 It is a direct insertion of the [Math](https://api.haxe.org/Math.html) class from the Haxe standard library.
 
+#### GemType
+
+It is a direct insertion of the [GemType](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/source/entities/Gem.hx) class from the Haxe game code. This is really only used to get the colour of the gems.
+
 #### self and enemy
 
 `self` and `enemy` are [Character](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/source/entities/Character.hx) objects. Self is the character that cast the spell, enemy is the other character in the battle.
@@ -166,6 +170,7 @@ The `tools` object is a collection of tools that are available to the effect scr
   - `centreRect(rect):FlxPoint`: Returns a FlxPoint with the centre of the given rectangle.
   - `burstEmit(colour, lifespan, options):CsEmitter.burstEmit`: Returns a CsEmitter.burstEmit.
   - `stringToColor(str):Null<FLxColor>`: Returns a FlxColor from a string.
+  - `stringToManaType(str):ManaType`: Returns a ManaType from a string.
   - `delay(func:() -> Void, delay:Float):Void`: Delays the execution of the function by the given amount of time in seconds.
 
 These are fairly self explanatory and will grow a lot as I develop the game.

@@ -1,3 +1,11 @@
+## 2024-05-12 22:23:28
+
+Made the `Warcry `spell and it's associated `AdjustEnemyMana` effect work!
+
+As part of this, I changed up the ManaType enum to be a class. This is because my original idea of Enums was informed by how they are used in C# and the Haxe implantation of them are quite different. I'm not sure if I'll ever make use of the Haxe Enums again, but they seem to be fairly powerful, just not in a way I know how to use.
+
+Also, I added the `Warcry` spell to the Player's spells array, mainly for testing, as the AI doesn't use spells yet. That'l be the next thing after I geth the `Light it up!` spell working.
+
 ## 2024-05-12 13:49:04
 
 Added ability to add an ease function to the target effect states from within a script. This was to make the fireball spell work as it did before the transition to the new scripting system.

@@ -187,7 +187,7 @@ class PlayBoard extends UiFlxGroup
 			{
 				var g = board[x][y];
 				if (board[x][y] != null)
-					deb += (isId ? Std.string(g.id) : g.manaType.getName()) + ", ";
+					deb += (isId ? Std.string(g.id) : g.manaType.name) + ", ";
 				else
 					deb += "-, ";
 			}

@@ -23,7 +23,8 @@ import utils.UiFlxGroup;
 
 class Sidebar extends UiFlxGroup
 {
-	var allStores:Map<ManaType, {bar:FlxBar, label:FlxText, colour:FlxColor}>;
+	public var allStores:Map<ManaType, {bar:FlxBar, label:FlxText, colour:FlxColor}>;
+
 	var isLeft:Bool;
 	var character:Character;
 
@@ -136,10 +137,10 @@ class Sidebar extends UiFlxGroup
 			var bar:FlxBar = new FlxBar(paddedWorkingWidth.lCol.left, workingY, FlxBarFillDirection.LEFT_TO_RIGHT, barSize, Std.int(amtLabel.height), null,
 				"", 0, char.maxMana[gt.manaType], true);
 
-			bar.createFilledBar(0xff202020, gt.color, true, gt.color);
+			bar.createFilledBar(0xff202020, gt.colour, true, gt.colour);
 			add(bar);
 
-			allStores.set(gt.manaType, {bar: bar, label: amtLabel, colour: gt.color});
+			allStores.set(gt.manaType, {bar: bar, label: amtLabel, colour: gt.colour});
 
 			var playerMana = character.mana[gt.manaType];
 			if (playerMana != null)
@@ -333,7 +334,7 @@ class SpellUi extends FlxGroup
 				continue;
 			var mc:FlxText = new FlxText(workingX + 5, workingY + 20);
 			mc.text = gt.name + " (" + amount + ")";
-			mc.setFormat(null, 16, gt.color, FlxTextAlign.LEFT);
+			mc.setFormat(null, 16, gt.colour, FlxTextAlign.LEFT);
 			add(mc);
 			manaText.set(type, mc);
 			manaChecks.set(type, false);

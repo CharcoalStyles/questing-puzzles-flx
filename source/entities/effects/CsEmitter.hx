@@ -233,7 +233,6 @@ class CsParticle extends FlxParticle
 
 		if (target != null)
 		{
-			trace(target);
 			var easeName = "linear";
 
 			if (target.easeName != null)

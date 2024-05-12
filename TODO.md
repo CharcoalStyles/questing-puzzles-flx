@@ -18,8 +18,8 @@ Also there will be notes, they will be silly as I usually commit changes when it
     - Both heal/damage might just be specific to the "spell" that does the effect
   - [x] Emitter function for gem change (Also a basic explosion)
     - First pass done and works on main menu on click and the "Light it up!" spell in game
-  - [ ] Emitter function for gem match
-    - I can't even remember what I meant by this. Right now it seems the same as the mana gain effect.
+  - [ ] Add easings to each stop
+    - I think just adding an easing option to a stop and using the esing form the "lowest" stop is the best way to go.
 - [ ] Data driven everything
   - Yes! Rather than adding more actual fun game stuff, I spent time doing silly technical things. 😀
   - [ ] Characters
@@ -27,7 +27,7 @@ Also there will be notes, they will be silly as I usually commit changes when it
     - [ ] Working (in game) characters
   - [x] Spells
     - [x] Spells definition in `Modding.md`
-    - [x] Working (in game) spells (x2, Fireball, Heal5)
+    - [x] Working (in game) spells (x2, Fireball, Heal5, Warcry)
   - [x] Effects
     - [x] Effects definition in `Modding.md`
     - [x] Working (in game) effects
@@ -45,7 +45,6 @@ Also there will be notes, they will be silly as I usually commit changes when it
   - [ ] See if there's some refinements for the particle system generation
     - It's a bit too much to write right now. But also not too bad, I guess.
     - Also, this might solve it's self when I move spells to data files
-  - [ ] Add easings to the particle system, somehow, the stops make it weird.
   - [ ] Split out the particle system into a library?
 - [ ] Add Modding library [Polymod](https://polymod.io/)
   - [ ] Get the demo working in HTML5

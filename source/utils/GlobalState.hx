@@ -42,7 +42,7 @@ class GlobalState extends FlxBasic
 		player.portrait = "";
 		player.level = 1;
 		player.maxHealth = 20;
-		player.health = new IntObservable(15);
+		player.health = new IntObservable(20);
 		player.maxMana = new Map();
 		player.maxMana.set(ManaType.FIRE, 30);
 		player.maxMana.set(ManaType.WATER, 25);
@@ -52,7 +52,7 @@ class GlobalState extends FlxBasic
 		player.maxMana.set(ManaType.DARK, 15);
 		player.mana = new Map();
 		player.mana.set(ManaType.FIRE, new FloatObservable(0));
-		player.mana.set(ManaType.WATER, new FloatObservable(5));
+		player.mana.set(ManaType.WATER, new FloatObservable(0));
 		player.mana.set(ManaType.EARTH, new FloatObservable(0));
 		player.mana.set(ManaType.AIR, new FloatObservable(0));
 		player.mana.set(ManaType.LIGHT, new FloatObservable(0));
@@ -61,10 +61,11 @@ class GlobalState extends FlxBasic
 		player.spells = new Array();
 		player.spells.push(Loader.loadSpell("Fireball"));
 		player.spells.push(Loader.loadSpell("Heal5"));
+		player.spells.push(Loader.loadSpell("Warcry"));
 
 		player.spells.push(new Spell("Light 'em up!", "Randomly sets 7 gems to Fire", [ManaType.LIGHT => 5, ManaType.DARK => 5], (e, s, b) ->
 		{
-			var gems = [for (i in 0...7) b.getRandomGem([FIRE])];
+			var gems = [for (i in 0...7) b.getRandomGem([ManaType.FIRE])];
 			for (i in 0...gems.length)
 			{
 				Timer.delay(() ->
@@ -75,7 +76,7 @@ class GlobalState extends FlxBasic
 					{
 						var p = emitter.emit(gem.x + gem.width / 2, gem.y + gem.height / 2);
 
-						var effect = CsEmitter.burstEmit(GemType.RED.color, 300, {
+						var effect = CsEmitter.burstEmit(GemType.RED.colour, 300, {
 							scaleExtended: () -> [
 								{
 									t: 0,
@@ -125,7 +126,7 @@ class GlobalState extends FlxBasic
 		ai.maxMana.set(ManaType.LIGHT, 25);
 		ai.maxMana.set(ManaType.DARK, 15);
 		ai.mana = new Map();
-		ai.mana.set(ManaType.FIRE, new FloatObservable(0));
+		ai.mana.set(ManaType.FIRE, new FloatObservable(5));
 		ai.mana.set(ManaType.WATER, new FloatObservable(0));
 		ai.mana.set(ManaType.EARTH, new FloatObservable(0));
 		ai.mana.set(ManaType.AIR, new FloatObservable(0));
@@ -133,28 +134,7 @@ class GlobalState extends FlxBasic
 		ai.mana.set(ManaType.DARK, new FloatObservable(0));
 
 		ai.spells = new Array();
-		ai.spells.push(new Spell("Throw Rock", "It's a little pointy. Deals 2 damage.", [ManaType.FIRE => 2, ManaType.DARK => 2], (e, s, b) ->
-		{
-			e.health -= 2;
-			return {
-				delay: 0,
-				nextState: Play_State.Idle
-			};
-		}));
-		ai.spells.push(new Spell("Warcry", "The noise isn't scary, but it's breath is. Removes 2 from all mana.",
-			[ManaType.FIRE => 2, ManaType.LIGHT => 2, ManaType.WATER => 2], (e, s, b) ->
-			{
-				for (m in e.mana.keys())
-				{
-					if (e.mana.get(m).get() > 2)
-						e.mana.get(m).sub(2);
-					else
-						e.mana.get(m).set(0);
-				}
-				return {
-					delay: 0,
-					nextState: Play_State.Idle
-				};
-			}));
+		ai.spells.push(Loader.loadSpell("ThrowRock"));
+		ai.spells.push(Loader.loadSpell("Warcry"));
 	}
 }
