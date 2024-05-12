@@ -3736,7 +3736,7 @@ ManifestResources.init = function(config) {
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$nokiafc22_$ttf);
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$monsterrat_$ttf);
 	var bundle;
-	var data = "{\"name\":null,\"assets\":\"aoy4:pathy36:assets%2Fsounds%2Fsounds-go-here.txty4:sizezy4:typey4:TEXTy2:idR1y7:preloadtgoR0y41:assets%2Fdata%2Fenemies%2FTestGoblin.jsonR2i210R3R4R5R7R6tgoR0y35:assets%2Fdata%2Fspells%2FHeal5.jsonR2i144R3R4R5R8R6tgoR0y39:assets%2Fdata%2Fspells%2FThrowRock.jsonR2i216R3R4R5R9R6tgoR0y36:assets%2Fdata%2Fspells%2FWarcry.jsonR2i318R3R4R5R10R6tgoR0y38:assets%2Fdata%2Fspells%2FFireball.jsonR2i181R3R4R5R11R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R4R5R12R6tgoR0y45:assets%2Fdata%2Feffects%2FHealCaster.hxscriptR2i2509R3R4R5R13R6tgoR0y50:assets%2Fdata%2Feffects%2FRemoveEnemyMana.hxscriptR2i904R3R4R5R14R6tgoR0y46:assets%2Fdata%2Feffects%2FDamageEnemy.hxscriptR2i3320R3R4R5R15R6tgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R4R5R16R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R4R5R17R6tgoR0y26:assets%2Fimages%2Fcsty.pngR2i271R3y5:IMAGER5R18R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3R4R5R20R6tgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R19R5R21R6tgoR0y33:assets%2Fimages%2FBackTile_16.pngR2i1238R3R19R5R22R6tgoR0y33:assets%2Fimages%2FBackTile_05.pngR2i556R3R19R5R23R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR25y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R24R5y26:flixel%2Fsounds%2Fbeep.mp3R26aR28y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R29R26aR28R29hgoR2i33629R3R30R5R27R26aR25R27hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R31R32y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i277R3R19R5R37R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R19R5R38R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R19R5R39R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R19R5R40R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R19R5R41R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R19R5R42R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:pathy36:assets%2Fsounds%2Fsounds-go-here.txty4:sizezy4:typey4:TEXTy2:idR1y7:preloadtgoR0y41:assets%2Fdata%2Fenemies%2FTestGoblin.jsonR2i210R3R4R5R7R6tgoR0y35:assets%2Fdata%2Fspells%2FHeal5.jsonR2i144R3R4R5R8R6tgoR0y39:assets%2Fdata%2Fspells%2FThrowRock.jsonR2i216R3R4R5R9R6tgoR0y36:assets%2Fdata%2Fspells%2FWarcry.jsonR2i318R3R4R5R10R6tgoR0y38:assets%2Fdata%2Fspells%2FFireball.jsonR2i246R3R4R5R11R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R4R5R12R6tgoR0y45:assets%2Fdata%2Feffects%2FHealCaster.hxscriptR2i2518R3R4R5R13R6tgoR0y50:assets%2Fdata%2Feffects%2FRemoveEnemyMana.hxscriptR2i904R3R4R5R14R6tgoR0y46:assets%2Fdata%2Feffects%2FDamageEnemy.hxscriptR2i2894R3R4R5R15R6tgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R4R5R16R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R4R5R17R6tgoR0y26:assets%2Fimages%2Fcsty.pngR2i271R3y5:IMAGER5R18R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3R4R5R20R6tgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R19R5R21R6tgoR0y33:assets%2Fimages%2FBackTile_16.pngR2i1238R3R19R5R22R6tgoR0y33:assets%2Fimages%2FBackTile_05.pngR2i556R3R19R5R23R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR25y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R24R5y26:flixel%2Fsounds%2Fbeep.mp3R26aR28y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R29R26aR28R29hgoR2i33629R3R30R5R27R26aR25R27hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R31R32y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i277R3R19R5R37R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R19R5R38R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R19R5R39R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R19R5R40R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R19R5R41R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R19R5R42R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -10378,7 +10378,7 @@ entities_Sidebar.prototype = $extend(utils_UiFlxGroup.prototype,{
 				}
 				var point1 = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
 				point1._inPool = false;
-				return { origin : point, target : point1, ease : flixel_tweens_FlxEase.cubeIn};
+				return { origin : point, target : point1, easeName : "cubeIn"};
 			}, scaleExtended : function() {
 				var tmp = { t : 0, value : partScale};
 				var p = null;
@@ -11218,13 +11218,16 @@ entities_effects_CsParticle.prototype = $extend(flixel_effects_particles_FlxPart
 			this.velocity = utils_ExtendedLerp.fPlerp(this.velocityExtended,this.percent);
 		}
 		if(this.target != null) {
-			var ease = this.target.ease != null ? this.target.ease : flixel_tweens_FlxEase.linear;
+			haxe_Log.trace(this.target,{ fileName : "source/entities/effects/CsEmitter.hx", lineNumber : 236, className : "entities.effects.CsParticle", methodName : "update"});
+			var easeName = "linear";
+			if(this.target.easeName != null) {
+				easeName = this.target.easeName;
+			}
+			var easeed = this.getEase(easeName,this.percent);
 			var a = this.target.origin.x;
-			var b = this.target.target.x;
-			this.set_x(a + ease(this.percent) * (b - a));
+			this.set_x(a + easeed * (this.target.target.x - a));
 			var a = this.target.origin.y;
-			var b = this.target.target.y;
-			this.set_y(a + ease(this.percent) * (b - a));
+			this.set_y(a + easeed * (this.target.target.y - a));
 		}
 		if(this.customUpdate != null) {
 			this.customUpdate(this);
@@ -11279,6 +11282,118 @@ entities_effects_CsParticle.prototype = $extend(flixel_effects_particles_FlxPart
 		this.scaleExtended = null;
 		this.angularVelocityExtended = null;
 		this.target = null;
+	}
+	,getEase: function(ease,t) {
+		switch(ease) {
+		case "backIn":
+			return t * t * (2.70158 * t - 1.70158);
+		case "backInOut":
+			return flixel_tweens_FlxEase.backInOut(t);
+		case "backOut":
+			var t1 = t;
+			return 1 - --t1 * t1 * (-2.70158 * t1 - 1.70158);
+		case "bounceIn":
+			return flixel_tweens_FlxEase.bounceIn(t);
+		case "bounceInOut":
+			return flixel_tweens_FlxEase.bounceInOut(t);
+		case "bounceOut":
+			return flixel_tweens_FlxEase.bounceOut(t);
+		case "circIn":
+			return -(Math.sqrt(1 - t * t) - 1);
+		case "circInOut":
+			return flixel_tweens_FlxEase.circInOut(t);
+		case "circOut":
+			return Math.sqrt(1 - (t - 1) * (t - 1));
+		case "cubeIn":
+			return t * t * t;
+		case "cubeInOut":
+			var t1 = t;
+			if(t1 <= .5) {
+				return t1 * t1 * t1 * 4;
+			} else {
+				return 1 + --t1 * t1 * t1 * 4;
+			}
+			break;
+		case "cubeOut":
+			var t1 = t;
+			return 1 + --t1 * t1 * t1;
+		case "elasticIn":
+			var t1 = t;
+			return -(flixel_tweens_FlxEase.ELASTIC_AMPLITUDE * Math.pow(2,10 * --t1) * Math.sin((t1 - flixel_tweens_FlxEase.ELASTIC_PERIOD / (2 * Math.PI) * Math.asin(1 / flixel_tweens_FlxEase.ELASTIC_AMPLITUDE)) * (2 * Math.PI) / flixel_tweens_FlxEase.ELASTIC_PERIOD));
+		case "elasticInOut":
+			return flixel_tweens_FlxEase.elasticInOut(t);
+		case "elasticOut":
+			return flixel_tweens_FlxEase.ELASTIC_AMPLITUDE * Math.pow(2,-10 * t) * Math.sin((t - flixel_tweens_FlxEase.ELASTIC_PERIOD / (2 * Math.PI) * Math.asin(1 / flixel_tweens_FlxEase.ELASTIC_AMPLITUDE)) * (2 * Math.PI) / flixel_tweens_FlxEase.ELASTIC_PERIOD) + 1;
+		case "expoIn":
+			return Math.pow(2,10 * (t - 1));
+		case "expoInOut":
+			return flixel_tweens_FlxEase.expoInOut(t);
+		case "expoOut":
+			return -Math.pow(2,-10 * t) + 1;
+		case "quadIn":
+			return t * t;
+		case "quadInOut":
+			var t1 = t;
+			if(t1 <= .5) {
+				return t1 * t1 * 2;
+			} else {
+				return 1 - --t1 * t1 * 2;
+			}
+			break;
+		case "quadOut":
+			return -t * (t - 2);
+		case "quartIn":
+			return t * t * t * t;
+		case "quartInOut":
+			var t1 = t;
+			if(t1 <= .5) {
+				return t1 * t1 * t1 * t1 * 8;
+			} else {
+				t1 = t1 * 2 - 2;
+				return (1 - t1 * t1 * t1 * t1) / 2 + .5;
+			}
+			break;
+		case "quartOut":
+			var t1 = t;
+			return 1 - --t1 * t1 * t1 * t1;
+		case "quintIn":
+			return t * t * t * t * t;
+		case "quintInOut":
+			var t1 = t;
+			if((t1 *= 2) < 1) {
+				return t1 * t1 * t1 * t1 * t1 / 2;
+			} else {
+				return ((t1 -= 2) * t1 * t1 * t1 * t1 + 2) / 2;
+			}
+			break;
+		case "quintOut":
+			var t1 = t;
+			return --t1 * t1 * t1 * t1 * t1 + 1;
+		case "sineIn":
+			return -Math.cos(flixel_tweens_FlxEase.PI2 * t) + 1;
+		case "sineInOut":
+			return -Math.cos(Math.PI * t) / 2 + .5;
+		case "sineOut":
+			return Math.sin(flixel_tweens_FlxEase.PI2 * t);
+		case "smoothStepIn":
+			var t1 = t / 2;
+			return 2 * (t1 * t1 * (t1 * -2 + 3));
+		case "smoothStepInOut":
+			return t * t * (t * -2 + 3);
+		case "smoothStepOut":
+			var t1 = t / 2 + 0.5;
+			return 2 * (t1 * t1 * (t1 * -2 + 3)) - 1;
+		case "smootherStepIn":
+			var t1 = t / 2;
+			return 2 * (t1 * t1 * t1 * (t1 * (t1 * 6 - 15) + 10));
+		case "smootherStepInOut":
+			return t * t * t * (t * (t * 6 - 15) + 10);
+		case "smootherStepOut":
+			var t1 = t / 2 + 0.5;
+			return 2 * (t1 * t1 * t1 * (t1 * (t1 * 6 - 15) + 10)) - 1;
+		default:
+			return t;
+		}
 	}
 	,__class__: entities_effects_CsParticle
 });
@@ -79016,7 +79131,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 601688;
+	this.version = 307855;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";

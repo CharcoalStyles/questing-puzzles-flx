@@ -7,6 +7,9 @@
   },
   "effect": "DamageEnemy",
   "args": {
-    "damage": 5
+    "damage": 5,
+    "trailType": 1,
+    "explosion": true,
+    "ease": "quadIn"
   }
 }
