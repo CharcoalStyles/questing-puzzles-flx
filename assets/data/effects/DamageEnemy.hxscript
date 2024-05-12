@@ -2,33 +2,17 @@
 
 // Damages the enemy's health by the `damage` argument.
 
-//Available Libraries:
-// - Math - Haxe Math functions
-
-// Available objects:
-// - self:Character The character that cast the spell
-// - enemy:Character The character that is being damaged
-// - board:PlayBoard The board that the spell is being cast on
-// - emitter:CsEmitter The global particle emitter
-// - tools: a collection of tools:
-//   - random:FlxRandom The global random number generator
-//   - getPoint(x, y):FlxPoint Returns a FlxPoint with the given coordinates
-//   - centreRect(rect):FlxPoint Returns a FlxPoint with the centre of the given rectangle
-//   - burstEmit(colour, lifespan, options):CsEmitter.burstEmit Returns a CsEmitter.burstEmit
-//   - stringToColor(str):Int Returns a hexadecimal colour code from a string
-
-// Args callback:
-//   - effectCallback:Function(args:EffectArgs):Void
-
 // Args from the spell:
 //   Required arguments:
 //   - damage:Int The amount of damage to be dealt
 //   optional arguments:
 //   - colour:String The colour of the particles
+//   - trailType:Int The type of trail to be used
+//     - 0 = None 
+//     - 1 = Constant (emits a particle from the main emitter every frame?)
+//   - explosion:Bool Whether to add an explosion effect
+//   - easeName:String The name of the FlxEase function to use
 
-// Returns:
-//   - delay:Int The amount of time to wait before the next state
-//   - nextState:Int The state to transition to; 0 = Idle, 1 = BoardMatching
 
 var origin = tools.centreRect(self.sidebar.spellUis[0].rect);
 var target = tools.centreRect(enemy.sidebar.healthText.getScreenBounds());
@@ -40,6 +24,24 @@ if (args.colour != null)
 {
   colour = tools.stringToColor(args.colour);
 }
+var trailType = 0;
+if (args.trailType != null)
+{
+  trailType = args.trailType;
+}
+
+var explosion = false;
+if (args.explosion != null)
+{
+  explosion = args.explosion;
+}
+
+var ease = "linear";
+if (args.ease != null)
+{
+  ease = args.ease;
+}
+
 
 p.setEffectStates([
   {
@@ -47,7 +49,7 @@ p.setEffectStates([
     target: (p) -> {
       origin: tools.getPoint(origin.x, origin.y),
       target: tools.getPoint(target.x, target.y),
-      // ease: FlxEase.expoIn
+      easeName: ease
     },
     angularVelocityExtended: () -> [
       {
@@ -63,10 +65,11 @@ p.setEffectStates([
     ],
     customUpdate: (p) ->
     {
-      var t = Math.floor(p.percent * 100);
-      if (t % 3 == 0)
-      {
-        for (i in 0...10)
+      if (trailType == 0){
+        return;
+      }
+
+        for (i in 0...2)
         {
           var p2 = emitter.emit(p.x, p.y);
           p2.setEffectStates([
@@ -91,7 +94,6 @@ p.setEffectStates([
             })
           ]);
         }
-      }
     },
     onComplete: (p) ->
     {
@@ -99,28 +101,30 @@ p.setEffectStates([
         adjustEnemyHealth: 0 -args.damage
       });
 
-      for (i in 0...20)
-      {
-        var p3 = emitter.emit(p.x, p.y);
-        p3.setEffectStates([
-          tools.burstEmit(colour, 250, {
-            lifespan: () -> 0.75,
-            alphaExtended: () -> [
-              {
-                t: 0,
-                value: 1
-              },
-              {
-                t: 0.75,
-                value: 0.5
-              },
-              {
-                t: 1,
-                value: 0
-              },
-            ]
-          })
-        ]);
+      if (explosion){
+        for (i in 0...20)
+        {
+          var p3 = emitter.emit(p.x, p.y);
+          p3.setEffectStates([
+            tools.burstEmit(colour, 250, {
+              lifespan: () -> 0.75,
+              alphaExtended: () -> [
+                {
+                  t: 0,
+                  value: 1
+                },
+                {
+                  t: 0.75,
+                  value: 0.5
+                },
+                {
+                  t: 1,
+                  value: 0
+                },
+              ]
+            })
+          ]);
+        }
       }
     }
   }

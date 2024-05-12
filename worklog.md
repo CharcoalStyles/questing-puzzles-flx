@@ -1,3 +1,11 @@
+## 2024-05-12 13:49:04
+
+Added ability to add an ease function to the target effect states from within a script. This was to make the fireball spell work as it did before the transition to the new scripting system.
+
+I also added new optional args to the `DamageEnemy` effect script for the `explosion` and `trailType` arguments. Originally since this effect was only used for the fireball spell, the trail and explosion were hard coded.
+
+Finally, I adjusted the particle effect for the heal spell to spawn a bit closer to the size of the text.
+
 ## 2024-05-11 21:34:25
 
 Decided to add a working log to the repo. I'm going to use this to keep track of what I've done and other things I'm thinking about and stuff.

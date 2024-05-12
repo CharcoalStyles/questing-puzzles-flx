@@ -17,7 +17,7 @@ var textArea = self.sidebar.healthText.getScreenBounds();
 for (i in 0...100)
 {
   var effectDelay = (i / 10) * 0.085; // ~0.85 sec
-  var x = textArea.x + (textArea.width * tools.random.float());
+  var x = textArea.x + (textArea.width * tools.random.float(0.15,0.85));
   tools.delay(() ->
   {
     var p = emitter.emit(x, textArea.y + textArea.height);

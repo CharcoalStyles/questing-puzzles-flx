@@ -29,7 +29,7 @@ typedef TargetProps =
 {
 	origin:FlxPoint,
 	target:FlxPoint,
-	?ease:Float->Float
+	?easeName:String,
 }
 
 typedef ParticleSequence = Array<ParticleProps>;
@@ -233,10 +233,18 @@ class CsParticle extends FlxParticle
 
 		if (target != null)
 		{
-			var ease = target.ease != null ? target.ease : FlxEase.linear;
+			trace(target);
+			var easeName = "linear";
 
-			x = FlxMath.lerp(target.origin.x, target.target.x, ease(percent));
-			y = FlxMath.lerp(target.origin.y, target.target.y, ease(percent));
+			if (target.easeName != null)
+			{
+				easeName = target.easeName;
+			}
+
+			var easeed = getEase(easeName, percent);
+
+			x = FlxMath.lerp(target.origin.x, target.target.x, easeed);
+			y = FlxMath.lerp(target.origin.y, target.target.y, easeed);
 		}
 
 		if (customUpdate != null)
@@ -311,5 +319,86 @@ class CsParticle extends FlxParticle
 		scaleExtended = null;
 		angularVelocityExtended = null;
 		target = null;
+	}
+
+	function getEase(ease:String, t:Float):Float
+	{
+		return switch (ease)
+		{
+			case "backIn":
+				return FlxEase.backIn(t);
+			case "backInOut":
+				return FlxEase.backInOut(t);
+			case "backOut":
+				return FlxEase.backOut(t);
+			case "bounceIn":
+				return FlxEase.bounceIn(t);
+			case "bounceInOut":
+				return FlxEase.bounceInOut(t);
+			case "bounceOut":
+				return FlxEase.bounceOut(t);
+			case "circIn":
+				return FlxEase.circIn(t);
+			case "circInOut":
+				return FlxEase.circInOut(t);
+			case "circOut":
+				return FlxEase.circOut(t);
+			case "cubeIn":
+				return FlxEase.cubeIn(t);
+			case "cubeInOut":
+				return FlxEase.cubeInOut(t);
+			case "cubeOut":
+				return FlxEase.cubeOut(t);
+			case "elasticIn":
+				return FlxEase.elasticIn(t);
+			case "elasticInOut":
+				return FlxEase.elasticInOut(t);
+			case "elasticOut":
+				return FlxEase.elasticOut(t);
+			case "expoIn":
+				return FlxEase.expoIn(t);
+			case "expoInOut":
+				return FlxEase.expoInOut(t);
+			case "expoOut":
+				return FlxEase.expoOut(t);
+			case "quadIn":
+				return FlxEase.quadIn(t);
+			case "quadInOut":
+				return FlxEase.quadInOut(t);
+			case "quadOut":
+				return FlxEase.quadOut(t);
+			case "quartIn":
+				return FlxEase.quartIn(t);
+			case "quartInOut":
+				return FlxEase.quartInOut(t);
+			case "quartOut":
+				return FlxEase.quartOut(t);
+			case "quintIn":
+				return FlxEase.quintIn(t);
+			case "quintInOut":
+				return FlxEase.quintInOut(t);
+			case "quintOut":
+				return FlxEase.quintOut(t);
+			case "sineIn":
+				return FlxEase.sineIn(t);
+			case "sineInOut":
+				return FlxEase.sineInOut(t);
+			case "sineOut":
+				return FlxEase.sineOut(t);
+			case "smoothStepIn":
+				return FlxEase.smoothStepIn(t);
+			case "smoothStepInOut":
+				return FlxEase.smoothStepInOut(t);
+			case "smoothStepOut":
+				return FlxEase.smoothStepOut(t);
+			case "smootherStepIn":
+				return FlxEase.smootherStepIn(t);
+			case "smootherStepInOut":
+				return FlxEase.smootherStepInOut(t);
+			case "smootherStepOut":
+				return FlxEase.smootherStepOut(t);
+			default:
+				return FlxEase.linear(t);
+		}
 	}
 }

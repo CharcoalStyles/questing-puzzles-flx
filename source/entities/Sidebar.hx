@@ -238,7 +238,7 @@ class Sidebar extends UiFlxGroup
 					target: (particle) -> {
 						origin: FlxPoint.get(particle.x, particle.y),
 						target: FlxPoint.get(bar.x, bar.y),
-						ease: FlxEase.cubeIn
+						easeName: "cubeIn"
 					},
 					scaleExtended: () -> [
 						{t: 0, value: partScale},
