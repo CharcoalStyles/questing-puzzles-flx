@@ -10281,7 +10281,7 @@ entities_Sidebar.prototype = $extend(utils_UiFlxGroup.prototype,{
 	,set_isActive: function(val) {
 		this.isActive = val;
 		if(this.isActive) {
-			this.title.animate();
+			this.title.animateWave();
 		} else {
 			this.title.stopAnimation();
 		}
@@ -79141,7 +79141,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 356086;
+	this.version = 308561;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -128012,12 +128012,10 @@ $hxClasses["states.MainMenuState"] = states_MainMenuState;
 states_MainMenuState.__name__ = "states.MainMenuState";
 states_MainMenuState.__super__ = flixel_FlxState;
 states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
-	startText: null
-	,rgb: null
+	rgb: null
 	,currentColour: null
 	,globalState: null
 	,create: function() {
-		var _gthis = this;
 		flixel_FlxState.prototype.create.call(this);
 		this.globalState = new utils_GlobalState();
 		flixel_FlxG.plugins.addPlugin(this.globalState);
@@ -128026,21 +128024,7 @@ states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
 		text.set_size(64);
 		text.set_alignment("center");
 		this.add(text);
-		this.startText = new utils_SplitText(0,flixel_FlxG.height - 96,"START");
-		this.startText.set_color(-16777216);
-		this.startText.set_borderColor(-1);
-		this.startText.set_borderQuality(4);
-		this.startText.set_borderSize(4);
-		this.startText.set_borderStyle(flixel_text_FlxTextBorderStyle.OUTLINE);
-		this.startText.onMouseIn = function() {
-			_gthis.startText.animate();
-			_gthis.startText.set_color(-1);
-		};
-		this.startText.onMouseOut = function() {
-			_gthis.startText.stopAnimation();
-			_gthis.startText.set_color(-16777216);
-		};
-		this.startText.onClick = function() {
+		var startText = this.generateText("START",-16744448,function(t) {
 			var nextState = flixel_util_typeLimit_NextState.fromState(new states_PlayState());
 			var stateOnCall = flixel_FlxG.game._state;
 			if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
@@ -128052,11 +128036,37 @@ states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
 					}
 				});
 			}
-		};
-		this.startText.set_x((flixel_FlxG.width - this.startText.width) / 2);
-		this.add(this.startText);
+		});
+		startText.set_x((flixel_FlxG.width - startText.width) / 2);
+		startText.set_y(flixel_FlxG.height / 2 + 96);
+		this.add(startText);
+		var fullScreen = this.generateText("Toggle Fullscreen",-23296,function(text) {
+			flixel_FlxG.set_fullscreen(!flixel_FlxG.get_fullscreen());
+		});
+		fullScreen.set_x((flixel_FlxG.width - fullScreen.width) / 2);
+		fullScreen.set_y(flixel_FlxG.height / 2 + 172);
+		this.add(fullScreen);
 		this.globalState.createEmitter();
 		this.add(this.globalState.emitter.activeMembers);
+	}
+	,generateText: function(text,targetColour,onClick) {
+		var text1 = new utils_SplitText(0,0,text);
+		text1.set_color(-16777216);
+		text1.set_borderColor(-1);
+		text1.set_borderQuality(4);
+		text1.set_borderSize(4);
+		text1.set_borderStyle(flixel_text_FlxTextBorderStyle.OUTLINE);
+		text1.onMouseIn = function() {
+			text1.animateWave(36,0.075,0.6,true);
+			text1.animateColour(targetColour,0.075,0.6);
+		};
+		text1.onMouseOut = function() {
+			text1.stopAnimation();
+		};
+		text1.onClick = function() {
+			onClick(text1);
+		};
+		return text1;
 	}
 	,update: function(elapsed) {
 		flixel_FlxState.prototype.update.call(this,elapsed);
@@ -129036,6 +129046,17 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		}
 		return value;
 	}
+	,alpha: null
+	,set_alpha: function(value) {
+		this.alpha = value;
+		var _g = 0;
+		var _g1 = this.members.length;
+		while(_g < _g1) {
+			var i = _g++;
+			this.members[i].set_alpha(value);
+		}
+		return value;
+	}
 	,borderColor: null
 	,borderSize: null
 	,borderQuality: null
@@ -129095,7 +129116,7 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			}
 			var mouseOver = result;
 			if(mouseOver) {
-				if(flixel_FlxG.mouse._leftButton.current == 2) {
+				if(this.active && flixel_FlxG.mouse._leftButton.current == 2) {
 					if(this.onClick != null) {
 						this.onClick();
 					}
@@ -129109,17 +129130,57 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		}
 	}
 	,tweens: null
-	,animate: function() {
+	,animateWave: function(totalDistance,charDelay,speed,oneShot) {
+		if(oneShot == null) {
+			oneShot = false;
+		}
+		if(speed == null) {
+			speed = 1;
+		}
+		if(charDelay == null) {
+			charDelay = 0.15;
+		}
+		if(totalDistance == null) {
+			totalDistance = 12;
+		}
 		var _gthis = this;
 		var _g = 0;
 		var _g1 = this.members.length;
 		while(_g < _g1) {
 			var i = _g++;
 			var char = [this.members[i]];
-			var t = flixel_tweens_FlxTween.tween(char[0],{ y : this.y - 6},0.5,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepOut, startDelay : i * 0.15, onComplete : (function(char) {
+			var t = flixel_tweens_FlxTween.tween(char[0],{ y : this.y - totalDistance / 2},speed / 2,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepOut, startDelay : i * charDelay, onComplete : (function(char) {
 				return function(t) {
 					HxOverrides.remove(_gthis.tweens,t);
-					var tx = flixel_tweens_FlxTween.tween(char[0],{ y : _gthis.y + 12},1,{ type : 4, ease : flixel_tweens_FlxEase.smoothStepInOut});
+					if(oneShot) {
+						var tx = flixel_tweens_FlxTween.tween(char[0],{ y : _gthis.y},speed / 2,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepInOut});
+						_gthis.tweens.push(tx);
+						return;
+					}
+					var tx = flixel_tweens_FlxTween.tween(char[0],{ y : _gthis.y + totalDistance},speed,{ type : 4, ease : flixel_tweens_FlxEase.smoothStepInOut});
+					_gthis.tweens.push(tx);
+				};
+			})(char)});
+			this.tweens.push(t);
+		}
+	}
+	,animateColour: function(toColor,charDelay,speed) {
+		if(speed == null) {
+			speed = 1;
+		}
+		if(charDelay == null) {
+			charDelay = 0.15;
+		}
+		var _gthis = this;
+		var _g = 0;
+		var _g1 = this.members.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var char = [this.members[i]];
+			var t = flixel_tweens_FlxTween.color(char[0],speed / 2,this.color,toColor,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepOut, startDelay : i * charDelay, onComplete : (function(char) {
+				return function(t) {
+					HxOverrides.remove(_gthis.tweens,t);
+					var tx = flixel_tweens_FlxTween.color(char[0],speed / 2,toColor,_gthis.color,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepInOut});
 					_gthis.tweens.push(tx);
 				};
 			})(char)});
@@ -129134,10 +129195,11 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			++_g;
 			t.cancel();
 			this.set_y(this.y);
+			this.set_color(this.color);
 		}
 	}
 	,__class__: utils_SplitText
-	,__properties__: $extend(flixel_group_FlxTypedGroup.prototype.__properties__,{set_borderStyle:"set_borderStyle",set_borderQuality:"set_borderQuality",set_borderSize:"set_borderSize",set_borderColor:"set_borderColor",set_color:"set_color",get_rect:"get_rect",set_y:"set_y",set_x:"set_x"})
+	,__properties__: $extend(flixel_group_FlxTypedGroup.prototype.__properties__,{set_borderStyle:"set_borderStyle",set_borderQuality:"set_borderQuality",set_borderSize:"set_borderSize",set_borderColor:"set_borderColor",set_alpha:"set_alpha",set_color:"set_color",get_rect:"get_rect",set_y:"set_y",set_x:"set_x"})
 });
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
