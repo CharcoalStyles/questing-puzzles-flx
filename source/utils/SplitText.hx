@@ -73,6 +73,18 @@ class SplitText extends FlxTypedGroup<FlxText>
 		return value;
 	}
 
+	public var alpha(default, set):Float;
+
+	function set_alpha(value:Float):Float
+	{
+		alpha = value;
+		for (i in 0...members.length)
+		{
+			members[i].alpha = value;
+		}
+		return value;
+	};
+
 	public var borderColor(default, set):FlxColor;
 	public var borderSize(default, set):Int;
 	public var borderQuality(default, set):Int;
@@ -158,7 +170,7 @@ class SplitText extends FlxTypedGroup<FlxText>
 
 			if (mouseOver)
 			{
-				if (FlxG.mouse.justPressed)
+				if (active && FlxG.mouse.justPressed)
 				{
 					if (onClick != null)
 					{
@@ -184,20 +196,47 @@ class SplitText extends FlxTypedGroup<FlxText>
 
 	private var tweens:Array<FlxTween> = [];
 
-	public function animate()
+	public function animateWave(?totalDistance:Float = 12, ?charDelay:Float = 0.15, ?speed:Float = 1, ?oneShot:Bool = false)
 	{
 		for (i in 0...members.length)
 		{
 			var char = members[i];
-			var t = FlxTween.tween(char, {y: y - 6}, 0.5, {
+			var t = FlxTween.tween(char, {y: y - totalDistance / 2}, speed / 2, {
 				type: ONESHOT,
 				ease: FlxEase.smoothStepOut,
-				startDelay: i * 0.15,
+				startDelay: i * charDelay,
 				onComplete: (t) ->
 				{
 					tweens.remove(t);
-					var tx = FlxTween.tween(char, {y: y + 12}, 1, {type: PINGPONG, ease: FlxEase.smoothStepInOut});
+					if (oneShot)
+					{
+						var tx = FlxTween.tween(char, {y: y}, speed / 2, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+						tweens.push(tx);
+						return;
+					}
+					var tx = FlxTween.tween(char, {y: y + totalDistance}, speed, {type: PINGPONG, ease: FlxEase.smoothStepInOut});
 					tweens.push(tx);
+				}
+			});
+			tweens.push(t);
+		}
+	}
+
+	public function animateColour(toColor:FlxColor, charDelay:Float = 0.15, ?speed:Float = 1)
+	{
+		for (i in 0...members.length)
+		{
+			var char = members[i];
+			var t = FlxTween.color(char, speed / 2, color, toColor, {
+				type: ONESHOT,
+				ease: FlxEase.smoothStepOut,
+				startDelay: i * charDelay,
+				onComplete: (t) ->
+				{
+					tweens.remove(t);
+					var tx = FlxTween.color(char, speed / 2, toColor, color, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+					tweens.push(tx);
+					return;
 				}
 			});
 			tweens.push(t);
@@ -210,6 +249,7 @@ class SplitText extends FlxTypedGroup<FlxText>
 		{
 			t.cancel();
 			y = y;
+			color = color;
 		}
 	}
 

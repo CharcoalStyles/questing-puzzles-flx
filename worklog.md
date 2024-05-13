@@ -1,3 +1,9 @@
+## 2024-05-13 22:11:03
+
+Added a nice little effect to the options on the main menu.
+
+Also added a Fullscreen toggle to the main menu.
+
 ## 2024-05-13 15:09:56
 
 Added a `Light it up!` spell to the player's spells array. This spell is a simple spell that swaps 5 randoms gems on the board with a random gem of the fire type.

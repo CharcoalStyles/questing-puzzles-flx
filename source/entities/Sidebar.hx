@@ -43,7 +43,7 @@ class Sidebar extends UiFlxGroup
 		isActive = val;
 		if (isActive)
 		{
-			title.animate();
+			title.animateWave();
 		}
 		else
 		{

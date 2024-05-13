@@ -67,7 +67,7 @@ Also there will be notes, they will be silly as I usually commit changes when it
   - [ ] Add a "Quit" button to pause menu
   - [ ] Add a "Options" button to pause menu
 - [ ] Add an Options menu
-  - [ ] Add a Full Screen option
+  - [ ] Add a Full Screen option (Put the stupid basic version on the main menu)
   - [ ] Add a "Quit"/"Back" button to options menu
 - [ ] Particle system Extensions
   - [ ] See if there's some refinements for the particle system generation
