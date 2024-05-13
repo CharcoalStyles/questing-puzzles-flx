@@ -1,0 +1,99 @@
+// ConvertRandomGems.hxscript
+
+// Given a object. with keys of Mana Names and values of the number of gems to convert,
+// it converts random gems on board to the corresponding mana type
+// It doesn't "convert" gems with the same mana type and it keeps track of the gems that have been converted
+// so that it doesn't convert the same gem twice.
+
+// Optional arguments: (but you really should have at least one)
+// - Fire: int
+// - Water: int
+// - Earth: int
+// - Air: int
+// - Light: int
+// - Dark: int
+
+var newManaTypes = [];
+if (args.Fire != null){
+  for (i in 0...args.Fire){
+    newManaTypes.push(tools.stringToManaType("Fire"));
+  }
+}
+if (args.Water != null){
+  for (i in 0...args.Water){
+    newManaTypes.push(tools.stringToManaType("Water"));
+  }
+}
+if (args.Earth != null){
+  for (i in 0...args.Earth){
+    newManaTypes.push(tools.stringToManaType("Earth"));
+  }
+}
+if (args.Air != null){
+  for (i in 0...args.Air){
+    newManaTypes.push(tools.stringToManaType("Air"));
+  }
+}
+if (args.Light != null){
+  for (i in 0...args.Light){
+    newManaTypes.push(tools.stringToManaType("Light"));
+  }
+}
+if (args.Dark != null){ 
+  for (i in 0...args.Dark){
+    newManaTypes.push(tools.stringToManaType("Dark"));
+  }
+}
+
+tools.shuffle(newManaTypes);
+
+var changedGems = [];
+for (i in 0...newManaTypes.length){
+  var manaType = newManaTypes[i];
+
+  var gem = null;
+  do {
+    gem = board.getRandomGem([manaType]);
+    if (changedGems.filter((g) -> g.id == gem.id).length > 0){
+      gem = null;
+      continue;
+    } 
+      changedGems.push(gem);
+  } while (gem == null);
+  
+};
+
+for (i in 0...changedGems.length){
+  tools.delay(() -> {
+    var gemType= GemType.fromManaType(newManaTypes[i]);
+    var gem = changedGems[i];
+    gem.setType(gemType);
+    for (j in 0...50)
+    {
+      var p = emitter.emit(gem.x + gem.width / 2, gem.y + gem.height / 2);
+
+      var effect = tools.burstEmit(gemType.colour, 300, {
+        scaleExtended: () -> [
+          {
+            t: 0,
+            value: tools.getPoint(1.2, 1.2),
+          },
+          {
+            t: 1,
+            value: tools.getPoint(0.5, 0.5),
+          }
+        ]
+      });
+
+      p.setEffectStates([effect]);
+    }
+  }, 0.2 * i);
+}
+
+
+var ret = {
+  delay: changedGems.length * 0.2 + 0.5,
+  nextState: 1
+}
+
+ret;

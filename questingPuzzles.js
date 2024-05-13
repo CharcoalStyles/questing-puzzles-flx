@@ -3736,7 +3736,7 @@ ManifestResources.init = function(config) {
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$nokiafc22_$ttf);
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$monsterrat_$ttf);
 	var bundle;
-	var data = "{\"name\":null,\"assets\":\"aoy4:pathy36:assets%2Fsounds%2Fsounds-go-here.txty4:sizezy4:typey4:TEXTy2:idR1y7:preloadtgoR0y41:assets%2Fdata%2Fenemies%2FTestGoblin.jsonR2i210R3R4R5R7R6tgoR0y35:assets%2Fdata%2Fspells%2FHeal5.jsonR2i144R3R4R5R8R6tgoR0y39:assets%2Fdata%2Fspells%2FThrowRock.jsonR2i216R3R4R5R9R6tgoR0y36:assets%2Fdata%2Fspells%2FWarcry.jsonR2i324R3R4R5R10R6tgoR0y38:assets%2Fdata%2Fspells%2FFireball.jsonR2i246R3R4R5R11R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R4R5R12R6tgoR0y45:assets%2Fdata%2Feffects%2FHealCaster.hxscriptR2i2518R3R4R5R13R6tgoR0y46:assets%2Fdata%2Feffects%2FDamageEnemy.hxscriptR2i2894R3R4R5R14R6tgoR0y50:assets%2Fdata%2Feffects%2FAdjustEnemyMana.hxscriptR2i3723R3R4R5R15R6tgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R4R5R16R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R4R5R17R6tgoR0y26:assets%2Fimages%2Fcsty.pngR2i271R3y5:IMAGER5R18R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3R4R5R20R6tgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R19R5R21R6tgoR0y33:assets%2Fimages%2FBackTile_16.pngR2i1238R3R19R5R22R6tgoR0y33:assets%2Fimages%2FBackTile_05.pngR2i556R3R19R5R23R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR25y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R24R5y26:flixel%2Fsounds%2Fbeep.mp3R26aR28y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R29R26aR28R29hgoR2i33629R3R30R5R27R26aR25R27hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R31R32y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i277R3R19R5R37R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R19R5R38R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R19R5R39R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R19R5R40R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R19R5R41R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R19R5R42R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:pathy36:assets%2Fsounds%2Fsounds-go-here.txty4:sizezy4:typey4:TEXTy2:idR1y7:preloadtgoR0y41:assets%2Fdata%2Fenemies%2FTestGoblin.jsonR2i210R3R4R5R7R6tgoR0y35:assets%2Fdata%2Fspells%2FHeal5.jsonR2i144R3R4R5R8R6tgoR0y39:assets%2Fdata%2Fspells%2FThrowRock.jsonR2i216R3R4R5R9R6tgoR0y39:assets%2Fdata%2Fspells%2FLightEmUp.jsonR2i250R3R4R5R10R6tgoR0y36:assets%2Fdata%2Fspells%2FWarcry.jsonR2i324R3R4R5R11R6tgoR0y38:assets%2Fdata%2Fspells%2FFireball.jsonR2i246R3R4R5R12R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R4R5R13R6tgoR0y45:assets%2Fdata%2Feffects%2FHealCaster.hxscriptR2i2518R3R4R5R14R6tgoR0y52:assets%2Fdata%2Feffects%2FConvertRandomGems.hxscriptR2i2261R3R4R5R15R6tgoR0y46:assets%2Fdata%2Feffects%2FDamageEnemy.hxscriptR2i2894R3R4R5R16R6tgoR0y50:assets%2Fdata%2Feffects%2FAdjustEnemyMana.hxscriptR2i5470R3R4R5R17R6tgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R4R5R18R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R4R5R19R6tgoR0y26:assets%2Fimages%2Fcsty.pngR2i271R3y5:IMAGER5R20R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3R4R5R22R6tgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R21R5R23R6tgoR0y33:assets%2Fimages%2FBackTile_16.pngR2i1238R3R21R5R24R6tgoR0y33:assets%2Fimages%2FBackTile_05.pngR2i556R3R21R5R25R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR27y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R26R5y26:flixel%2Fsounds%2Fbeep.mp3R28aR30y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R31R28aR30R31hgoR2i33629R3R32R5R29R28aR27R29hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R33R34y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i277R3R21R5R39R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R21R5R40R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R21R5R41R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R21R5R42R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R21R5R43R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R21R5R44R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -79141,7 +79141,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 920701;
+	this.version = 356086;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -128233,7 +128233,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 					var spell = this.playerSidebar.handleClick(mousePos);
 					if(spell != null) {
 						var nextState = spell.run(this.globalState.ai,this.globalState.player,this.board);
-						var time = nextState.delay / 1000;
+						var time = nextState.delay;
 						var onComplete = function() {
 							if(nextState.nextState == states_Play_$State.BoardMatching) {
 								_gthis.board.setState(entities_BoardState.Matching);
@@ -128486,7 +128486,6 @@ utils_GlobalState.prototype = $extend(flixel_FlxBasic.prototype,{
 		this.emitter = new entities_effects_CsEmitter();
 	}
 	,makePlayer: function() {
-		var _gthis = this;
 		this.player = new entities_Character();
 		this.player.name = "Player";
 		this.player.portrait = "";
@@ -128506,90 +128505,12 @@ utils_GlobalState.prototype = $extend(flixel_FlxBasic.prototype,{
 		this.player.mana.set(entities_ManaType.WATER,new utils_FloatObservableActual(0));
 		this.player.mana.set(entities_ManaType.EARTH,new utils_FloatObservableActual(0));
 		this.player.mana.set(entities_ManaType.AIR,new utils_FloatObservableActual(0));
-		this.player.mana.set(entities_ManaType.LIGHT,new utils_FloatObservableActual(0));
-		this.player.mana.set(entities_ManaType.DARK,new utils_FloatObservableActual(0));
+		this.player.mana.set(entities_ManaType.LIGHT,new utils_FloatObservableActual(5));
+		this.player.mana.set(entities_ManaType.DARK,new utils_FloatObservableActual(5));
 		this.player.spells = [];
 		this.player.spells.push(utils_Loader.loadSpell("Fireball"));
 		this.player.spells.push(utils_Loader.loadSpell("Heal5"));
-		this.player.spells.push(utils_Loader.loadSpell("Warcry"));
-		var tmp = this.player.spells;
-		var _g = new haxe_ds_ObjectMap();
-		_g.set(entities_ManaType.LIGHT,5);
-		_g.set(entities_ManaType.DARK,5);
-		tmp.push(new entities_Spell("Light 'em up!","Randomly sets 7 gems to Fire",_g,function(e,s,b) {
-			var _g = [];
-			_g.push(b.getRandomGem([entities_ManaType.FIRE]));
-			_g.push(b.getRandomGem([entities_ManaType.FIRE]));
-			_g.push(b.getRandomGem([entities_ManaType.FIRE]));
-			_g.push(b.getRandomGem([entities_ManaType.FIRE]));
-			_g.push(b.getRandomGem([entities_ManaType.FIRE]));
-			_g.push(b.getRandomGem([entities_ManaType.FIRE]));
-			_g.push(b.getRandomGem([entities_ManaType.FIRE]));
-			var gems = _g;
-			var _g = 0;
-			var _g1 = gems.length;
-			while(_g < _g1) {
-				var i = [_g++];
-				haxe_Timer.delay((function(i) {
-					return function() {
-						var gem = gems[i[0]];
-						gem.setType(entities_GemType.RED);
-						var _g = 0;
-						while(_g < 50) {
-							var i1 = _g++;
-							var p = _gthis.emitter.emit(gem.x + gem.get_width() / 2,gem.y + gem.get_height() / 2);
-							var effect = entities_effects_CsEmitter.burstEmit(entities_GemType.RED.colour,300,{ scaleExtended : (function() {
-								return function() {
-									var x = 1.2;
-									var y = 1.2;
-									if(y == null) {
-										y = 0;
-									}
-									if(x == null) {
-										x = 0;
-									}
-									var x1 = x;
-									var y1 = y;
-									if(y1 == null) {
-										y1 = 0;
-									}
-									if(x1 == null) {
-										x1 = 0;
-									}
-									var point = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
-									point._inPool = false;
-									var x = 0.5;
-									var y = 0.5;
-									if(y == null) {
-										y = 0;
-									}
-									if(x == null) {
-										x = 0;
-									}
-									var x1 = x;
-									var y1 = y;
-									if(y1 == null) {
-										y1 = 0;
-									}
-									if(x1 == null) {
-										x1 = 0;
-									}
-									var point1 = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
-									point1._inPool = false;
-									return [{ t : 0, value : point},{ t : 1, value : point1}];
-								};
-							})(), angularVelocityExtended : (function() {
-								return function() {
-									return [{ t : 0, value : flixel_FlxG.random.float(45,90)},{ t : 1, value : flixel_FlxG.random.float(4.5,9)}];
-								};
-							})()});
-							p.setEffectStates([effect]);
-						}
-					};
-				})(i),i[0] * 250);
-			}
-			return { delay : (gems.length + 1) * 250, nextState : states_Play_$State.BoardMatching};
-		}));
+		this.player.spells.push(utils_Loader.loadSpell("LightEmUp"));
 	}
 	,makeAi: function() {
 		this.ai = new entities_Character();
@@ -128751,16 +128672,40 @@ utils_Loader.loadEffect = function(name,args) {
 		interp.variables.h["enemy"] = enemy;
 		interp.variables.h["board"] = board;
 		interp.variables.h["emitter"] = globalState.emitter;
-		var value = { getPoint : flixel_math_FlxPoint.get, centreRect : utils_CsMath.centreRect, random : flixel_FlxG.random, burstEmit : entities_effects_CsEmitter.burstEmit, stringToColor : flixel_util_FlxColor.fromString, stringToManaType : entities_ManaType.fromString, delay : function(func,delay) {
+		var this1 = interp.variables;
+		var value = { getPoint : flixel_math_FlxPoint.get, centreRect : utils_CsMath.centreRect, random : new flixel_math_FlxRandom(), shuffle : function(array) {
+			var maxValidIndex = array.length - 1;
+			var _g = 0;
+			var _g1 = maxValidIndex;
+			while(_g < _g1) {
+				var i = _g++;
+				var j = flixel_FlxG.random.int(i,maxValidIndex);
+				var tmp = array[i];
+				array[i] = array[j];
+				array[j] = tmp;
+			}
+		}, burstEmit : entities_effects_CsEmitter.burstEmit, stringToColor : flixel_util_FlxColor.fromString, stringToManaType : entities_ManaType.fromString, delay : function(func,delay) {
 			return haxe_Timer.delay(func,Math.floor(delay * 1000));
 		}};
-		interp.variables.h["tools"] = value;
+		this1.h["tools"] = value;
 		var effectCallback = function(effectArgs) {
 			if(effectArgs.adjustEnemyHealth != null) {
-				utils_IntObservable.addA(enemy.health,effectArgs.adjustEnemyHealth);
+				if(utils_IntObservable.add(enemy.health,effectArgs.adjustEnemyHealth) >= enemy.maxHealth) {
+					utils_IntObservable.set(enemy.health,enemy.maxHealth);
+				} else if(utils_IntObservable.add(enemy.health,effectArgs.adjustEnemyHealth) <= 0) {
+					utils_IntObservable.set(enemy.health,0);
+				} else {
+					utils_IntObservable.addA(enemy.health,effectArgs.adjustEnemyHealth);
+				}
 			}
 			if(effectArgs.adjustPlayerHealth != null) {
-				utils_IntObservable.addA(self.health,effectArgs.adjustPlayerHealth);
+				if(utils_IntObservable.add(self.health,effectArgs.adjustPlayerHealth) >= self.maxHealth) {
+					utils_IntObservable.set(self.health,self.maxHealth);
+				} else if(utils_IntObservable.add(self.health,effectArgs.adjustPlayerHealth) <= 0) {
+					utils_IntObservable.set(self.health,0);
+				} else {
+					utils_IntObservable.addA(self.health,effectArgs.adjustPlayerHealth);
+				}
 			}
 			if(effectArgs.adjustEnemyMana != null) {
 				var _g = 0;
@@ -128770,7 +128715,14 @@ utils_Loader.loadEffect = function(name,args) {
 					++_g;
 					var manaType = entities_ManaType.fromString(mt);
 					var manaValue = effectArgs.adjustEnemyMana[mt];
-					utils_FloatObservable.set(enemy.mana.h[manaType.__id__],enemy.mana.h[manaType.__id__].value + manaValue);
+					var currentMana = enemy.mana.h[manaType.__id__].value;
+					if(currentMana + manaValue >= enemy.maxMana.h[manaType.__id__]) {
+						utils_FloatObservable.set(enemy.mana.h[manaType.__id__],enemy.maxMana.h[manaType.__id__]);
+					} else if(currentMana + manaValue <= 0) {
+						utils_FloatObservable.set(enemy.mana.h[manaType.__id__],0);
+					} else {
+						utils_FloatObservable.set(enemy.mana.h[manaType.__id__],currentMana + manaValue);
+					}
 				}
 			}
 			if(effectArgs.adjustPlayerMana != null) {
@@ -128781,7 +128733,14 @@ utils_Loader.loadEffect = function(name,args) {
 					++_g;
 					var manaType = entities_ManaType.fromString(mt);
 					var manaValue = effectArgs.adjustPlayerMana[mt];
-					utils_FloatObservable.set(self.mana.h[manaType.__id__],self.mana.h[manaType.__id__].value + manaValue);
+					var currentMana = self.mana.h[manaType.__id__].value;
+					if(currentMana + manaValue >= self.maxMana.h[manaType.__id__]) {
+						utils_FloatObservable.set(self.mana.h[manaType.__id__],self.maxMana.h[manaType.__id__]);
+					} else if(currentMana + manaValue <= 0) {
+						utils_FloatObservable.set(self.mana.h[manaType.__id__],0);
+					} else {
+						utils_FloatObservable.set(self.mana.h[manaType.__id__],currentMana + manaValue);
+					}
 				}
 			}
 		};
