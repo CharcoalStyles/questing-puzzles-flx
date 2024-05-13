@@ -1,5 +1,10 @@
 // AdjustEnemyMana.hxscript
 
+// This effect is used to adjust the mana of an enemy.
+// It can be used to increase or decrease the mana of an enemy.
+// To decrease the mana, set the amount to a negative number.
+// (note: adding mana is not supported, just look a the commented code below!)
+
 // Optional arguments: (but you really should have at least one)
 // - Fire: int
 // - Water: int
@@ -8,14 +13,15 @@
 // - Light: int
 // - Dark: int
 
-trace("AdjustEnemyMana.hxscript");
-
 function removeManaParticleEffect(manaType, amount, colour) {
   var mult = 3;
   for (i in 0...amount * mult){
+
+
     tools.delay(() -> {
-      var yy = tools.stringToManaType(manaType);
-      var store = enemy.sidebar.allStores.get(yy);
+      var mt = tools.stringToManaType(manaType);
+
+      var store = enemy.sidebar.allStores.get(mt);
       var mBar = store.bar;
       var barY = mBar.y + mBar.height / 2;
       var barX = mBar.x + (mBar.percent / 100) * mBar.width;
@@ -89,27 +95,87 @@ function removeManaParticleEffect(manaType, amount, colour) {
   }
 }
 
-// function addManaParticleEffect(manaType, amount, colour)
-// {
+// function addManaParticleEffect(manaType, amount, colour) {
 //   var mult = 3;
 //   for (i in 0...amount * mult){
+
+//     var mt = tools.stringToManaType(manaType);
+//     var store = enemy.sidebar.allStores.get(mt);
+//     var mBar = store.bar;
+//     var barY = mBar.y + mBar.height / 2;
+//     var barFilledX = mBar.x + (mBar.percent / 100) * mBar.width;
+//     var barEndX = mBar.x + mBar.width;
+
 //     tools.delay(() -> {
-//       var p = emitter.emit(origin.x, origin.y);
-//       p.setEffectStates([
+//       var vx = tools.random.float(250, 350);
+//       var vy = tools.random.float(-30, 30);
+
+//       var s1 = tools.random.float(0.05,0.15);
+
+//       var p = emitter.emit(barX, barY);
+//       p.setEffectStates([{
+//         lifespan: () -> tools.random.float(0.5, 1.0),
+//         velocityExtended: () -> [
+//           {
+//             t: 0,
+//             value: tools.getPoint(vx, vy)
+//           },
+//           {
+//             t: 1,
+//             value: tools.getPoint(0, 0)
+//           }
+//         ],
+//         scaleExtended: () -> [
+//           {
+//             t: 0,
+//             value: tools.getPoint(s1, s1),
+//           },
+//           {
+//             t: 1,
+//             value: tools.getPoint(0.75, 0.75)
+//           }
+//         ],
+//         angularVelocityExtended: () -> [
+//           {
+//             t: 0,
+//             value: 720
+//           }
+//         ],
+//         colourExtended: () -> [
+//           {
+//             t: 0,
+//             value: colour
+//           }
+//         ],
+//         alphaExtended: () -> [
+//           {
+//             t: 0,
+//             value: 1
+//           },
+//           {
+//             t: 0.8,
+//             value: 0.7
+//           },
+//           {
+//             t: 1,
+//             value: 0
+//           }
+//         ],
 //         onComplete: (particle) ->
 //         {
-//           if(i % mult == 0){
+//           if(i % mult == 0) {
 //             var adjustEnemyMana = {};
-//             adjustEnemyMana[manaType] = 1;
-//             eCallback({
+//             adjustEnemyMana[manaType] = -1;
+//             effectCallback({
 //               adjustEnemyMana: adjustEnemyMana
 //             });
 //           }
 //         }
-//       ]);
+//      }]);
 //     }, i * 0.1);
 //   }
 // }
+
 
 function doManaParticleEffect(manaType, amount, colour)
 {

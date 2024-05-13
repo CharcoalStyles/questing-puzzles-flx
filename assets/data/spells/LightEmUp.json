@@ -1,0 +1,16 @@
+{
+  "name": "Light 'em up!",
+  "description": "Randomly sets 7 gems to Fire",
+  "mana": {
+    "Fire": 0,
+    "Water": 0,
+    "Earth": 0,
+    "Air": 0,
+    "Light": 4,
+    "Dark": 4
+  },
+  "effect": "ConvertRandomGems",
+  "args": {
+    "Fire": 5
+  }
+}

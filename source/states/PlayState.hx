@@ -143,7 +143,7 @@ class PlayState extends FlxState
 					{
 						var nextState = spell.run(globalState.ai, globalState.player, board);
 
-						FlxTimer.wait(nextState.delay / 1000, () ->
+						FlxTimer.wait(nextState.delay, () ->
 						{
 							if (nextState.nextState == Play_State.BoardMatching)
 							{

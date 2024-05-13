@@ -1,3 +1,13 @@
+## 2024-05-13 15:09:56
+
+Added a `Light it up!` spell to the player's spells array. This spell is a simple spell that swaps 5 randoms gems on the board with a random gem of the fire type.
+
+Removed the `Warcry` spell from the player's spells array, I've done my testing.
+
+I've fleshed out the `TODO.md` a bit more, It's great to have a backlog that induces some level of dread.
+
+Also added some more info to the `Modding.md` file, because of things I've added to the modding abilities of the game.
+
 ## 2024-05-12 22:23:28
 
 Made the `Warcry `spell and it's associated `AdjustEnemyMana` effect work!

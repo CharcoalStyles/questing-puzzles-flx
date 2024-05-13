@@ -1,13 +1,10 @@
 package utils;
 
 import entities.Character;
-import entities.Gem.GemType;
 import entities.Gem.ManaType;
+import entities.PlayBoard;
 import entities.effects.CsEmitter;
 import flixel.FlxBasic;
-import flixel.FlxG;
-import flixel.math.FlxPoint;
-import haxe.Timer;
 import states.PlayState.Play_State;
 import utils.Observer.FloatObservable;
 import utils.Observer.IntObservable;
@@ -55,59 +52,59 @@ class GlobalState extends FlxBasic
 		player.mana.set(ManaType.WATER, new FloatObservable(0));
 		player.mana.set(ManaType.EARTH, new FloatObservable(0));
 		player.mana.set(ManaType.AIR, new FloatObservable(0));
-		player.mana.set(ManaType.LIGHT, new FloatObservable(0));
-		player.mana.set(ManaType.DARK, new FloatObservable(0));
+		player.mana.set(ManaType.LIGHT, new FloatObservable(5));
+		player.mana.set(ManaType.DARK, new FloatObservable(5));
 
 		player.spells = new Array();
 		player.spells.push(Loader.loadSpell("Fireball"));
 		player.spells.push(Loader.loadSpell("Heal5"));
-		player.spells.push(Loader.loadSpell("Warcry"));
+		player.spells.push(Loader.loadSpell("LightEmUp"));
 
-		player.spells.push(new Spell("Light 'em up!", "Randomly sets 7 gems to Fire", [ManaType.LIGHT => 5, ManaType.DARK => 5], (e, s, b) ->
-		{
-			var gems = [for (i in 0...7) b.getRandomGem([ManaType.FIRE])];
-			for (i in 0...gems.length)
-			{
-				Timer.delay(() ->
-				{
-					var gem = gems[i];
-					gem.setType(GemType.RED);
-					for (i in 0...50)
-					{
-						var p = emitter.emit(gem.x + gem.width / 2, gem.y + gem.height / 2);
+		// player.spells.push(new Spell("Light 'em up!", "Randomly sets 7 gems to Fire", [ManaType.LIGHT => 5, ManaType.DARK => 5], (e, s, b) ->
+		// {
+		// 	var gems = [for (i in 0...7) b.getRandomGem([ManaType.FIRE])];
+		// 	for (i in 0...gems.length)
+		// 	{
+		// 		Timer.delay(() ->
+		// 		{
+		// 			var gem = gems[i];
+		// 			gem.setType(GemType.RED);
+		// 			for (i in 0...50)
+		// 			{
+		// 				var p = emitter.emit(gem.x + gem.width / 2, gem.y + gem.height / 2);
 
-						var effect = CsEmitter.burstEmit(GemType.RED.colour, 300, {
-							scaleExtended: () -> [
-								{
-									t: 0,
-									value: FlxPoint.get(1.2, 1.2),
-								},
-								{
-									t: 1,
-									value: FlxPoint.get(0.5, 0.5),
-								}
-							],
-							angularVelocityExtended: () -> [
-								{
-									t: 0,
-									value: FlxG.random.float(45, 90),
-								},
-								{
-									t: 1,
-									value: FlxG.random.float(4.5, 9),
-								}
-							]
-						});
+		// 				var effect = CsEmitter.burstEmit(GemType.RED.colour, 300, {
+		// 					scaleExtended: () -> [
+		// 						{
+		// 							t: 0,
+		// 							value: FlxPoint.get(1.2, 1.2),
+		// 						},
+		// 						{
+		// 							t: 1,
+		// 							value: FlxPoint.get(0.5, 0.5),
+		// 						}
+		// 					],
+		// 					angularVelocityExtended: () -> [
+		// 						{
+		// 							t: 0,
+		// 							value: FlxG.random.float(45, 90),
+		// 						},
+		// 						{
+		// 							t: 1,
+		// 							value: FlxG.random.float(4.5, 9),
+		// 						}
+		// 					]
+		// 				});
 
-						p.setEffectStates([effect]);
-					}
-				}, i * 250);
-			}
-			return {
-				delay: (gems.length + 1) * 250,
-				nextState: Play_State.BoardMatching
-			};
-		}));
+		// 				p.setEffectStates([effect]);
+		// 			}
+		// 		}, i * 250);
+		// 	}
+		// 	return {
+		// 		delay: (gems.length + 1) * 250,
+		// 		nextState: Play_State.BoardMatching
+		// 	};
+		// }));
 	}
 
 	function makeAi()

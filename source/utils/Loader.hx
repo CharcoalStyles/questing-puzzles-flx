@@ -7,6 +7,7 @@ import entities.Gem.ManaType;
 import entities.effects.CsEmitter;
 import flixel.FlxG;
 import flixel.math.FlxPoint;
+import flixel.math.FlxRandom;
 import flixel.util.FlxColor;
 import haxe.DynamicAccess;
 import haxe.Timer;
@@ -93,10 +94,8 @@ class Loader
 			var parser = new hscript.Parser();
 			var program = parser.parseString(script);
 			var interp = new hscript.Interp();
-
 			interp.variables.set("Math", Math);
 			interp.variables.set("GemType", GemType);
-
 			interp.variables.set("self", self);
 			interp.variables.set("enemy", enemy);
 			interp.variables.set("board", board);
@@ -104,7 +103,18 @@ class Loader
 			interp.variables.set("tools", {
 				getPoint: FlxPoint.get,
 				centreRect: centreRect,
-				random: FlxG.random,
+				random: new FlxRandom(),
+				shuffle: (array:Array<Dynamic>) ->
+				{
+					var maxValidIndex = array.length - 1;
+					for (i in 0...maxValidIndex)
+					{
+						var j = FlxG.random.int(i, maxValidIndex);
+						var tmp = array[i];
+						array[i] = array[j];
+						array[j] = tmp;
+					}
+				},
 				burstEmit: CsEmitter.burstEmit,
 				stringToColor: FlxColor.fromString,
 				stringToManaType: ManaType.fromString,
@@ -114,12 +124,34 @@ class Loader
 			{
 				if (effectArgs.adjustEnemyHealth != null)
 				{
-					enemy.health += effectArgs.adjustEnemyHealth;
+					if (enemy.health + effectArgs.adjustEnemyHealth >= enemy.maxHealth)
+					{
+						enemy.health.set(enemy.maxHealth);
+					}
+					else if (enemy.health + effectArgs.adjustEnemyHealth <= 0)
+					{
+						enemy.health.set(0);
+					}
+					else
+					{
+						enemy.health += effectArgs.adjustEnemyHealth;
+					}
 				}
 
 				if (effectArgs.adjustPlayerHealth != null)
 				{
-					self.health += effectArgs.adjustPlayerHealth;
+					if (self.health + effectArgs.adjustPlayerHealth >= self.maxHealth)
+					{
+						self.health.set(self.maxHealth);
+					}
+					else if (self.health + effectArgs.adjustPlayerHealth <= 0)
+					{
+						self.health.set(0);
+					}
+					else
+					{
+						self.health += effectArgs.adjustPlayerHealth;
+					}
 				}
 
 				if (effectArgs.adjustEnemyMana != null)
@@ -128,7 +160,21 @@ class Loader
 					{
 						var manaType = ManaType.fromString(mt);
 						var manaValue = effectArgs.adjustEnemyMana.get(mt);
-						enemy.mana.get(manaType).set(enemy.mana.get(manaType).get() + manaValue);
+
+						var currentMana = enemy.mana.get(manaType).get();
+
+						if (currentMana + manaValue >= enemy.maxMana.get(manaType))
+						{
+							enemy.mana.get(manaType).set(enemy.maxMana.get(manaType));
+						}
+						else if (currentMana + manaValue <= 0)
+						{
+							enemy.mana.get(manaType).set(0);
+						}
+						else
+						{
+							enemy.mana.get(manaType).set(currentMana + manaValue);
+						}
 					}
 				}
 
@@ -138,12 +184,28 @@ class Loader
 					{
 						var manaType = ManaType.fromString(mt);
 						var manaValue = effectArgs.adjustPlayerMana.get(mt);
-						self.mana.get(manaType).set(self.mana.get(manaType).get() + manaValue);
+
+						var currentMana = self.mana.get(manaType).get();
+
+						if (currentMana + manaValue >= self.maxMana.get(manaType))
+						{
+							self.mana.get(manaType).set(self.maxMana.get(manaType));
+						}
+						else if (currentMana + manaValue <= 0)
+						{
+							self.mana.get(manaType).set(0);
+						}
+						else
+						{
+							self.mana.get(manaType).set(currentMana + manaValue);
+						}
 					}
 				}
 			};
 			interp.variables.set("effectCallback", effectCallback);
 			interp.variables.set("args", args);
+
+			var x = [];
 
 			var ret:
 				{
@@ -157,5 +219,4 @@ class Loader
 			};
 		}
 	}
-  
 }

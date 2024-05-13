@@ -27,20 +27,48 @@ Also there will be notes, they will be silly as I usually commit changes when it
     - [ ] Working (in game) characters
   - [x] Spells
     - [x] Spells definition in `Modding.md`
-    - [x] Working (in game) spells (x2, Fireball, Heal5, Warcry)
+    - [x] Working (in game) spells (All spells that are currently in game!)
   - [x] Effects
     - [x] Effects definition in `Modding.md`
     - [x] Working (in game) effects
     - This will be ongoing, there's **a lot** of work to do here. But the first full spell is in (Fireball, for the player).
+- [ ] Tooltips for spells
+  - [ ] Tooltips for spells in game on mouse hover
 - [ ] x-match system
   - [ ] New turn on 4+ match
   - [ ] UI and/or text effect for new turn
   - [ ] Do something on 5+ match
   - [ ] Do something on 6+ match?
+- [ ] Battle win/lose system
+  - [ ] Add a "win" and "lose" effect to the game
 - [ ] Change Air to damage
   - [ ] Remove from character mana system
   - [ ] deal damage to other character on match
   - [ ] Find appropriate developer art for new gem
+- [ ] Next version of enemy "AI"
+  - [ ] Add support for using spells
+  - [ ] Rank required mana higher in potential matches pool
+- [ ] Setup CI/CD for win/mac/linux/android versions
+  - [ ] Setup GitHub runners on Server and/or MacMini
+  - [ ] Setup GitHub actions
+    - [ ] Build for Windows
+    - [ ] Build for Mac (This might have to be an x86 version as of the current Lime + OpenFL sate)
+    - [ ] Build for Linux
+    - [ ] Build for Android
+- [ ] Add Controller support
+- [ ] Add a real main menu
+  - [ ] Add a "New Battle" button to main menu
+    - [ ] add a list of current enemies to choose from
+    - [ ] overhaul the loading system to load on play state init
+  - [ ] Add a "Options" button to menu
+  - [ ] Add a "Quit" button to main menu
+- [ ] Add a Pause menu
+  - [ ] Add a "Resume" button to pause menu
+  - [ ] Add a "Quit" button to pause menu
+  - [ ] Add a "Options" button to pause menu
+- [ ] Add an Options menu
+  - [ ] Add a Full Screen option
+  - [ ] Add a "Quit"/"Back" button to options menu
 - [ ] Particle system Extensions
   - [ ] See if there's some refinements for the particle system generation
     - It's a bit too much to write right now. But also not too bad, I guess.

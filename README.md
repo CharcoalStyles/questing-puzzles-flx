@@ -8,7 +8,7 @@ Questing Puzzles is a game that combines the best of both worlds: the fun of mat
   - Basic Match 3 mechanics
   - Special tiles (TODO)
   - Combos (TODO)
-  - "Spells" (In Progress)
+  - "Spells" (First pass done!)
   - "Mana" (Mostly done?)
   - "Health" (Mostly done? but for single hero style game)
   - Win/Lose conditions (TODO)
