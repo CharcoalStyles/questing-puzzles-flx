@@ -10515,7 +10515,7 @@ var entities_SpellUi = function(X,Y,width,spell) {
 		var gt = entities_GemType.fromManaType(type1);
 		var cost = spell.manaCosts.h[type1.__id__];
 		var amount = cost.value;
-		if(amount == null || amount == 0) {
+		if(amount == 0) {
 			continue;
 		}
 		var mc = new flixel_text_FlxText(workingX + 5,workingY + 20);
@@ -10602,12 +10602,10 @@ entities_SpellUi.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	,onManaUpdate: function(totalNumber,manaType) {
 		var cost = this.spell.manaCosts.h[manaType.__id__].value;
 		var check = this.manaChecks.h[manaType.__id__];
-		if(cost != null) {
-			if(totalNumber >= cost && !check) {
-				this.manaChecks.set(manaType,true);
-			} else if(totalNumber < cost && check) {
-				this.manaChecks.set(manaType,false);
-			}
+		if(totalNumber >= cost && !check) {
+			this.manaChecks.set(manaType,true);
+		} else if(totalNumber < cost && check) {
+			this.manaChecks.set(manaType,false);
 		}
 		var allTrue = true;
 		var check = this.manaChecks.keys();
@@ -79141,7 +79139,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 308561;
+	this.version = 666752;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
