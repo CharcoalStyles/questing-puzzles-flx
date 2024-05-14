@@ -330,7 +330,7 @@ class SpellUi extends FlxGroup
 			var gt = GemType.fromManaType(type);
 			var cost = spell.manaCosts.get(type);
 			var amount:Float = cost.get();
-			if (amount == null || amount == 0)
+			if (amount == 0)
 				continue;
 			var mc:FlxText = new FlxText(workingX + 5, workingY + 20);
 			mc.text = gt.name + " (" + amount + ")";
@@ -372,16 +372,13 @@ class SpellUi extends FlxGroup
 		var cost = spell.manaCosts.get(manaType).get();
 		var check = manaChecks.get(manaType);
 
-		if (cost != null)
+		if (totalNumber >= cost && !check)
 		{
-			if (totalNumber >= cost && !check)
-			{
-				manaChecks.set(manaType, true);
-			}
-			else if (totalNumber < cost && check)
-			{
-				manaChecks.set(manaType, false);
-			}
+			manaChecks.set(manaType, true);
+		}
+		else if (totalNumber < cost && check)
+		{
+			manaChecks.set(manaType, false);
 		}
 
 		var allTrue = true;
