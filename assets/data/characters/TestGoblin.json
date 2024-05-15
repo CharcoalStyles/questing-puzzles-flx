@@ -10,5 +10,5 @@
     "Light": 25,
     "Dark": 15
   },
-  "spell:": [ "ThrowRock", "Warcry" ]
+  "spells": [ "ThrowRock", "Warcry" ]
 }

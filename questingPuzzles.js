@@ -3736,7 +3736,7 @@ ManifestResources.init = function(config) {
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$nokiafc22_$ttf);
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$monsterrat_$ttf);
 	var bundle;
-	var data = "{\"name\":null,\"assets\":\"aoy4:pathy36:assets%2Fsounds%2Fsounds-go-here.txty4:sizezy4:typey4:TEXTy2:idR1y7:preloadtgoR0y41:assets%2Fdata%2Fenemies%2FTestGoblin.jsonR2i210R3R4R5R7R6tgoR0y35:assets%2Fdata%2Fspells%2FHeal5.jsonR2i144R3R4R5R8R6tgoR0y39:assets%2Fdata%2Fspells%2FThrowRock.jsonR2i216R3R4R5R9R6tgoR0y39:assets%2Fdata%2Fspells%2FLightEmUp.jsonR2i250R3R4R5R10R6tgoR0y36:assets%2Fdata%2Fspells%2FWarcry.jsonR2i324R3R4R5R11R6tgoR0y38:assets%2Fdata%2Fspells%2FFireball.jsonR2i246R3R4R5R12R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R4R5R13R6tgoR0y45:assets%2Fdata%2Feffects%2FHealCaster.hxscriptR2i2518R3R4R5R14R6tgoR0y52:assets%2Fdata%2Feffects%2FConvertRandomGems.hxscriptR2i2261R3R4R5R15R6tgoR0y46:assets%2Fdata%2Feffects%2FDamageEnemy.hxscriptR2i2894R3R4R5R16R6tgoR0y50:assets%2Fdata%2Feffects%2FAdjustEnemyMana.hxscriptR2i5470R3R4R5R17R6tgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R4R5R18R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R4R5R19R6tgoR0y26:assets%2Fimages%2Fcsty.pngR2i271R3y5:IMAGER5R20R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3R4R5R22R6tgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R21R5R23R6tgoR0y33:assets%2Fimages%2FBackTile_16.pngR2i1238R3R21R5R24R6tgoR0y33:assets%2Fimages%2FBackTile_05.pngR2i556R3R21R5R25R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR27y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R26R5y26:flixel%2Fsounds%2Fbeep.mp3R28aR30y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R31R28aR30R31hgoR2i33629R3R32R5R29R28aR27R29hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R33R34y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i277R3R21R5R39R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R21R5R40R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R21R5R41R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R21R5R42R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R21R5R43R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R21R5R44R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:pathy36:assets%2Fsounds%2Fsounds-go-here.txty4:sizezy4:typey4:TEXTy2:idR1y7:preloadtgoR0y35:assets%2Fdata%2Fspells%2FHeal5.jsonR2i144R3R4R5R7R6tgoR0y39:assets%2Fdata%2Fspells%2FThrowRock.jsonR2i216R3R4R5R8R6tgoR0y39:assets%2Fdata%2Fspells%2FLightEmUp.jsonR2i250R3R4R5R9R6tgoR0y36:assets%2Fdata%2Fspells%2FWarcry.jsonR2i324R3R4R5R10R6tgoR0y38:assets%2Fdata%2Fspells%2FFireball.jsonR2i246R3R4R5R11R6tgoR0y44:assets%2Fdata%2Fcharacters%2FTestGoblin.jsonR2i210R3R4R5R12R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R4R5R13R6tgoR0y45:assets%2Fdata%2Feffects%2FHealCaster.hxscriptR2i2518R3R4R5R14R6tgoR0y52:assets%2Fdata%2Feffects%2FConvertRandomGems.hxscriptR2i2261R3R4R5R15R6tgoR0y46:assets%2Fdata%2Feffects%2FDamageEnemy.hxscriptR2i2894R3R4R5R16R6tgoR0y50:assets%2Fdata%2Feffects%2FAdjustEnemyMana.hxscriptR2i5470R3R4R5R17R6tgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R4R5R18R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R4R5R19R6tgoR0y26:assets%2Fimages%2Fcsty.pngR2i271R3y5:IMAGER5R20R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3R4R5R22R6tgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R21R5R23R6tgoR0y33:assets%2Fimages%2FBackTile_16.pngR2i1238R3R21R5R24R6tgoR0y33:assets%2Fimages%2FBackTile_05.pngR2i556R3R21R5R25R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR27y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R26R5y26:flixel%2Fsounds%2Fbeep.mp3R28aR30y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R31R28aR30R31hgoR2i33629R3R32R5R29R28aR27R29hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R33R34y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i277R3R21R5R39R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R21R5R40R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R21R5R41R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R21R5R42R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R21R5R43R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R21R5R44R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -8490,11 +8490,12 @@ var entities_BoardState = $hxEnums["entities.BoardState"] = { __ename__:"entitie
 	,Swapping: {_hx_name:"Swapping",_hx_index:1,__enum__:"entities.BoardState",toString:$estr}
 	,SwappingRevert: {_hx_name:"SwappingRevert",_hx_index:2,__enum__:"entities.BoardState",toString:$estr}
 	,Matching: {_hx_name:"Matching",_hx_index:3,__enum__:"entities.BoardState",toString:$estr}
-	,PostMatch: {_hx_name:"PostMatch",_hx_index:4,__enum__:"entities.BoardState",toString:$estr}
-	,EndTurn: {_hx_name:"EndTurn",_hx_index:5,__enum__:"entities.BoardState",toString:$estr}
-	,Shuffle: {_hx_name:"Shuffle",_hx_index:6,__enum__:"entities.BoardState",toString:$estr}
+	,Matching_Spell: {_hx_name:"Matching_Spell",_hx_index:4,__enum__:"entities.BoardState",toString:$estr}
+	,PostMatch: {_hx_name:"PostMatch",_hx_index:5,__enum__:"entities.BoardState",toString:$estr}
+	,EndTurn: {_hx_name:"EndTurn",_hx_index:6,__enum__:"entities.BoardState",toString:$estr}
+	,Shuffle: {_hx_name:"Shuffle",_hx_index:7,__enum__:"entities.BoardState",toString:$estr}
 };
-entities_BoardState.__constructs__ = [entities_BoardState.Idle,entities_BoardState.Swapping,entities_BoardState.SwappingRevert,entities_BoardState.Matching,entities_BoardState.PostMatch,entities_BoardState.EndTurn,entities_BoardState.Shuffle];
+entities_BoardState.__constructs__ = [entities_BoardState.Idle,entities_BoardState.Swapping,entities_BoardState.SwappingRevert,entities_BoardState.Matching,entities_BoardState.Matching_Spell,entities_BoardState.PostMatch,entities_BoardState.EndTurn,entities_BoardState.Shuffle];
 var entities_MoveDirection = $hxEnums["entities.MoveDirection"] = { __ename__:"entities.MoveDirection",__constructs__:null
 	,Up: {_hx_name:"Up",_hx_index:0,__enum__:"entities.MoveDirection",toString:$estr}
 	,Down: {_hx_name:"Down",_hx_index:1,__enum__:"entities.MoveDirection",toString:$estr}
@@ -9282,8 +9283,8 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 			deb += "],";
 		}
 		deb += "]";
-		haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 197, className : "entities.PlayBoard", methodName : "traceBoard"});
-		haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 198, className : "entities.PlayBoard", methodName : "traceBoard"});
+		haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 198, className : "entities.PlayBoard", methodName : "traceBoard"});
+		haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 199, className : "entities.PlayBoard", methodName : "traceBoard"});
 	}
 	,selected: null
 	,userSwap: null
@@ -9306,9 +9307,12 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 			});
 			break;
 		case 3:
-			this.updateMatching();
+			this.updateMatching(true);
 			break;
 		case 4:
+			this.updateMatching(false);
+			break;
+		case 5:
 			this.onGemMovedFinished(function() {
 				var matches = _gthis.findAllMatches(_gthis.grid);
 				if(matches.length > 0) {
@@ -9318,10 +9322,10 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 				}
 			});
 			break;
-		case 5:
+		case 6:
 			this.resetToIdle();
 			break;
-		case 6:
+		case 7:
 			this.onGemMovedFinished($bind(this,this.resetToIdle));
 			break;
 		}
@@ -9399,7 +9403,7 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 			});
 		}
 	}
-	,updateMatching: function() {
+	,updateMatching: function(spellSwap) {
 		var _gthis = this;
 		var matches = this.findAllMatches(this.grid);
 		if(matches.length > 0) {
@@ -9700,6 +9704,8 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 				}
 			}
 			this.state = entities_BoardState.PostMatch;
+		} else if(spellSwap) {
+			this.state = entities_BoardState.EndTurn;
 		} else {
 			this.swapCells(this.userSwap[0],this.userSwap[1]);
 			this.userSwap = null;
@@ -79139,7 +79145,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 666752;
+	this.version = 325551;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -128002,18 +128008,15 @@ states_FlxCstyLogo.prototype = $extend(flixel_FlxState.prototype,{
 	,__class__: states_FlxCstyLogo
 });
 var states_MainMenuState = function() {
-	this.currentColour = 0;
-	this.rgb = [-3129280,-12529600,-12566320];
 	flixel_FlxState.call(this);
 };
 $hxClasses["states.MainMenuState"] = states_MainMenuState;
 states_MainMenuState.__name__ = "states.MainMenuState";
 states_MainMenuState.__super__ = flixel_FlxState;
 states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
-	rgb: null
-	,currentColour: null
-	,globalState: null
+	globalState: null
 	,create: function() {
+		var _gthis = this;
 		flixel_FlxState.prototype.create.call(this);
 		this.globalState = new utils_GlobalState();
 		flixel_FlxG.plugins.addPlugin(this.globalState);
@@ -128022,18 +128025,8 @@ states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
 		text.set_size(64);
 		text.set_alignment("center");
 		this.add(text);
-		var startText = this.generateText("START",-16744448,function(t) {
-			var nextState = flixel_util_typeLimit_NextState.fromState(new states_PlayState());
-			var stateOnCall = flixel_FlxG.game._state;
-			if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
-				flixel_FlxG.game._state.startOutro(function() {
-					if(flixel_FlxG.game._state == stateOnCall) {
-						flixel_FlxG.game._nextState = nextState;
-					} else {
-						flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
-					}
-				});
-			}
+		var startText = this.generateText("New Battle",-16744448,function(t) {
+			_gthis.setPickEnemySubState();
 		});
 		startText.set_x((flixel_FlxG.width - startText.width) / 2);
 		startText.set_y(flixel_FlxG.height / 2 + 96);
@@ -128066,53 +128059,18 @@ states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
 		};
 		return text1;
 	}
+	,setPickEnemySubState: function() {
+		var _gthis = this;
+		this.subState = new states_subStates_SelectEnemy();
+		this.subState.create();
+		this.subState.closeCallback = function() {
+			_gthis.subState = null;
+		};
+	}
 	,update: function(elapsed) {
 		flixel_FlxState.prototype.update.call(this,elapsed);
 		if(flixel_FlxG.keys.checkKeyArrayState([32],2)) {
-			var nextState = flixel_util_typeLimit_NextState.fromState(new states_PlayState());
-			var stateOnCall = flixel_FlxG.game._state;
-			if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
-				flixel_FlxG.game._state.startOutro(function() {
-					if(flixel_FlxG.game._state == stateOnCall) {
-						flixel_FlxG.game._nextState = nextState;
-					} else {
-						flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
-					}
-				});
-			}
-		}
-		if(flixel_FlxG.mouse._leftButton.current == 2) {
-			var color = flixel_FlxG.random.color(10526880,14737632);
-			var x = 0.5;
-			var y = 0.5;
-			if(y == null) {
-				y = 0;
-			}
-			if(x == null) {
-				x = 0;
-			}
-			var x1 = x;
-			var y1 = y;
-			if(y1 == null) {
-				y1 = 0;
-			}
-			if(x1 == null) {
-				x1 = 0;
-			}
-			var point = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
-			point._inPool = false;
-			var partScale = point;
-			var _g = 0;
-			while(_g < 50) {
-				var i = _g++;
-				var p = this.globalState.emitter.emit(flixel_FlxG.mouse.x,flixel_FlxG.mouse.y);
-				var em = entities_effects_CsEmitter.burstEmit(color,null,{ lifespan : function() {
-					return 0.5;
-				}, scaleExtended : function() {
-					return [{ t : 0, value : partScale}];
-				}});
-				p.setEffectStates([em]);
-			}
+			this.setPickEnemySubState();
 		}
 	}
 	,__class__: states_MainMenuState
@@ -128178,8 +128136,11 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			case 2:
 				_gthis.isPlayerTurnNext = true;
 				break;
-			case 4:
+			case 5:
 				_gthis.postMatchUpdateOnce();
+				break;
+			case 6:
+				state = entities_BoardState.Idle;
 				break;
 			default:
 			}
@@ -128282,6 +128243,96 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		}
 	}
 	,__class__: states_PlayState
+});
+var states_subStates_SelectEnemy = function() {
+	flixel_FlxSubState.call(this,-2147483648);
+};
+$hxClasses["states.subStates.SelectEnemy"] = states_subStates_SelectEnemy;
+states_subStates_SelectEnemy.__name__ = "states.subStates.SelectEnemy";
+states_subStates_SelectEnemy.__super__ = flixel_FlxSubState;
+states_subStates_SelectEnemy.prototype = $extend(flixel_FlxSubState.prototype,{
+	create: function() {
+		var _gthis = this;
+		flixel_FlxSubState.prototype.create.call(this);
+		var globalState = flixel_FlxG.plugins.get(utils_GlobalState);
+		var characters = utils_Loader.loadCharacters();
+		var result = new Array(characters.length);
+		var _g = 0;
+		var _g1 = characters.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var char = [characters[i]];
+			result[i] = _gthis.generateText(char[0].name,-8355712,(function(char) {
+				return function(text) {
+					var c = utils_Loader.loadCharacter(char[0]);
+					globalState.ai = c;
+					var nextState = flixel_util_typeLimit_NextState.fromState(new states_PlayState());
+					var stateOnCall = flixel_FlxG.game._state;
+					if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
+						flixel_FlxG.game._state.startOutro((function() {
+							return function() {
+								if(flixel_FlxG.game._state == stateOnCall) {
+									flixel_FlxG.game._nextState = nextState;
+								} else {
+									flixel_FlxG.log.advanced("`onOutroComplete` was called after the state was switched. This will be ignored",flixel_system_debug_log_LogStyle.WARNING,true);
+								}
+							};
+						})());
+					}
+				};
+			})(char));
+		}
+		var nameText = result;
+		var x = this.generateText("Select Enemy",-1,null,false);
+		nameText.splice(0,0,x);
+		nameText.push(this.generateText("BACK",-1,$bind(this,this.closeSub)));
+		var padding = 48;
+		var optionsHeight = nameText.length * (nameText[0].height + padding) + padding;
+		var winWidth = flixel_FlxG.width * 0.66 | 0;
+		var winHeight = optionsHeight | 0;
+		this.add(new flixel_FlxSprite((flixel_FlxG.width - winWidth) / 2 | 0,(flixel_FlxG.height - winHeight) / 2 | 0).makeGraphic(winWidth,winHeight,-1));
+		var innerWindow = new flixel_FlxSprite(((flixel_FlxG.width - winWidth) / 2 | 0) + 1,((flixel_FlxG.height - winHeight) / 2 | 0) + 1).makeGraphic(winWidth - 2,winHeight - 2,-16777216);
+		this.add(innerWindow);
+		var _g = 0;
+		var _g1 = nameText.length;
+		while(_g < _g1) {
+			var i = _g++;
+			this.add(nameText[i]);
+			var tmp = innerWindow.x + (innerWindow.get_width() - nameText[i].width) / 2;
+			nameText[i].set_x(tmp);
+			nameText[i].set_y(innerWindow.y + padding + i * (nameText[i].height + padding));
+		}
+	}
+	,closeSub: function(x) {
+		this.closeCallback();
+	}
+	,generateText: function(text,targetColour,onClick,hasBorder) {
+		if(hasBorder == null) {
+			hasBorder = true;
+		}
+		var text1 = new utils_SplitText(0,0,text,{ size : 32, perCharBuffer : 3});
+		text1.set_color(hasBorder ? -16777216 : targetColour);
+		if(hasBorder) {
+			text1.set_borderColor(-1);
+			text1.set_borderQuality(4);
+			text1.set_borderSize(4);
+			text1.set_borderStyle(flixel_text_FlxTextBorderStyle.OUTLINE);
+		}
+		if(onClick != null) {
+			text1.onMouseIn = function() {
+				text1.animateWave(28,0.06,0.45,true);
+				text1.animateColour(targetColour,0.06,0.45);
+			};
+			text1.onMouseOut = function() {
+				text1.stopAnimation();
+			};
+			text1.onClick = function() {
+				onClick(text1);
+			};
+		}
+		return text1;
+	}
+	,__class__: states_subStates_SelectEnemy
 });
 var utils_CsMath = function() { };
 $hxClasses["utils.CsMath"] = utils_CsMath;
@@ -128479,7 +128530,6 @@ var utils_GlobalState = function() {
 	flixel_FlxBasic.call(this);
 	this.emitter = new entities_effects_CsEmitter();
 	this.makePlayer();
-	this.makeAi();
 };
 $hxClasses["utils.GlobalState"] = utils_GlobalState;
 utils_GlobalState.__name__ = "utils.GlobalState";
@@ -128519,32 +128569,6 @@ utils_GlobalState.prototype = $extend(flixel_FlxBasic.prototype,{
 		this.player.spells.push(utils_Loader.loadSpell("Fireball"));
 		this.player.spells.push(utils_Loader.loadSpell("Heal5"));
 		this.player.spells.push(utils_Loader.loadSpell("LightEmUp"));
-	}
-	,makeAi: function() {
-		this.ai = new entities_Character();
-		this.ai.name = "Goblin";
-		this.ai.portrait = "";
-		this.ai.level = 1;
-		this.ai.maxHealth = 20;
-		var this1 = new utils_IntObservableActual(20);
-		this.ai.health = this1;
-		this.ai.maxMana = new haxe_ds_ObjectMap();
-		this.ai.maxMana.set(entities_ManaType.FIRE,30);
-		this.ai.maxMana.set(entities_ManaType.WATER,25);
-		this.ai.maxMana.set(entities_ManaType.EARTH,20);
-		this.ai.maxMana.set(entities_ManaType.AIR,15);
-		this.ai.maxMana.set(entities_ManaType.LIGHT,25);
-		this.ai.maxMana.set(entities_ManaType.DARK,15);
-		this.ai.mana = new haxe_ds_ObjectMap();
-		this.ai.mana.set(entities_ManaType.FIRE,new utils_FloatObservableActual(5));
-		this.ai.mana.set(entities_ManaType.WATER,new utils_FloatObservableActual(0));
-		this.ai.mana.set(entities_ManaType.EARTH,new utils_FloatObservableActual(0));
-		this.ai.mana.set(entities_ManaType.AIR,new utils_FloatObservableActual(0));
-		this.ai.mana.set(entities_ManaType.LIGHT,new utils_FloatObservableActual(0));
-		this.ai.mana.set(entities_ManaType.DARK,new utils_FloatObservableActual(0));
-		this.ai.spells = [];
-		this.ai.spells.push(utils_Loader.loadSpell("ThrowRock"));
-		this.ai.spells.push(utils_Loader.loadSpell("Warcry"));
 	}
 	,__class__: utils_GlobalState
 });
@@ -128645,6 +128669,62 @@ utils_KennyAtlasLoader.fromTexturePackerXml = function(source,xml) {
 var utils_Loader = function() { };
 $hxClasses["utils.Loader"] = utils_Loader;
 utils_Loader.__name__ = "utils.Loader";
+utils_Loader.loadCharacters = function() {
+	var characterFileName = openfl_utils_Assets.list("TEXT");
+	var _g = [];
+	var _g1 = 0;
+	var _g2 = characterFileName;
+	while(_g1 < _g2.length) {
+		var v = _g2[_g1];
+		++_g1;
+		if(v.indexOf("/characters/") != -1) {
+			_g.push(v);
+		}
+	}
+	var characterFileName = _g;
+	var characters = [];
+	var _g = 0;
+	while(_g < characterFileName.length) {
+		var f = characterFileName[_g];
+		++_g;
+		var characterJson = openfl_utils_Assets.getText(f);
+		var characterData = JSON.parse(characterJson);
+		characters.push(characterData);
+	}
+	return characters;
+};
+utils_Loader.loadCharacter = function(characterData) {
+	var char = new entities_Character();
+	haxe_Log.trace(characterData.name,{ fileName : "source/utils/Loader.hx", lineNumber : 69, className : "utils.Loader", methodName : "loadCharacter"});
+	char.name = characterData.name;
+	char.level = characterData.level;
+	char.maxHealth = characterData.health;
+	char.health = new utils_IntObservableActual(characterData.health);
+	char.maxMana = new haxe_ds_ObjectMap();
+	char.mana = new haxe_ds_ObjectMap();
+	var _g = 0;
+	var _g1 = Reflect.fields(characterData.mana);
+	while(_g < _g1.length) {
+		var mt = _g1[_g];
+		++_g;
+		var manaType = entities_ManaType.fromString(mt);
+		if(manaType == null) {
+			throw haxe_Exception.thrown("Invalid mana type: " + mt);
+		}
+		char.maxMana.set(manaType,characterData.mana[mt]);
+		char.mana.set(manaType,new utils_FloatObservableActual(characterData.mana[mt]));
+	}
+	var _this = characterData.spells;
+	var result = new Array(_this.length);
+	var _g = 0;
+	var _g1 = _this.length;
+	while(_g < _g1) {
+		var i = _g++;
+		result[i] = utils_Loader.loadSpell(_this[i]);
+	}
+	char.spells = result;
+	return char;
+};
 utils_Loader.loadSpell = function(name) {
 	var spellJson = openfl_utils_Assets.getText("assets/data/spells/" + name + ".json");
 	var spellData = JSON.parse(spellJson);
