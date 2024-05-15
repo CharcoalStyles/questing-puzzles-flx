@@ -4,7 +4,7 @@ To aid in development of the game's content, I have taken a data + script approa
 
 As development progresses, the structures of the data and scripts will be refined and new features will be added. As it stands, enemies and spells are defined in json files and effect scripts are defined in hxscript files, which are just Haxe scripts to be run by the hscript library in game.
 
-- Enemies are defined in json files in `assets/data/enemies/`.
+- Enemies are defined in json files in `assets/data/characters/`.
   - Each enemy has a name, level, health, and mana.
   - The mana is a dictionary of the mana types and their maximum values.
   - The spells are an array of spell objects.
@@ -18,22 +18,22 @@ As development progresses, the structures of the data and scripts will be refine
 - The player will also use the spells and effects defined in the data.
   - How this is done is not yet defined and current spells are hardcoded.
 
-## Enemies
+## Characters
 
-Enemies are defined in json files. The json files are located in `assets/data/enemies/` and should have the name of the enemy and a `.json` extension.
+Characters are defined in json files. The json files are located in `assets/data/characters/` and should have the name of the character and a `.json` extension.
 
 ### How to add a new enemy
 
-Create a new json file in `assets/data/enemies/` with the name of the enemy.
+Create a new json file in `assets/data/characters/` with the name of the enemy.
 
 Here is an example of an enemy:
 
 ```json
 {
-  "name": "Test Goblin", // The name of the enemy
-  "level": 1, // The level of the enemy
-  "health": 20, // The  max/starting health of the enemy
-  "mana": { // The max/starting mana of the enemy
+  "name": "Test Goblin", // The name of the character
+  "level": 1, // The level of the character, not that it's used yet
+  "health": 20, // The  max/starting health of the character
+  "mana": { // The max/starting mana of the character
     "Fire": 30, 
     "Water": 25,
     "Earth": 20,
@@ -41,11 +41,11 @@ Here is an example of an enemy:
     "Light": 25,
     "Dark": 15
   },
-  "spell:": [ "ThrowRock", "Warcry" ] // The spells that the enemy can cast
+  "spell:": [ "ThrowRock", "Warcry" ] // The spells that the character can cast
 }
 ```
 
-Each spell is a string that is the name of the spell file in `assets/data/spells/`. Usually this will be the same as the spell, without spaces or file extension, but it can be anything.
+Each spell is a string that is the name of the spell file in `assets/data/spells/`. Usually this will be the same as the spell, without spaces or file extension, but it **can** be anything.
 
 ## Spells
 

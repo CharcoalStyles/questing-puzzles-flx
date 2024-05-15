@@ -1,3 +1,9 @@
+# 2024-05-15 10:50:07
+
+Main menu now has a "New Battle" button, which loads a list of characters to battle. Though currently there is only one: the Test Goblin.
+
+Fixed a bug with the "Light it up!" spell, it would when not producing a match go through the swap reversal. This totally messed up the board. A bit of fiddling with states (and adding a new one) fixed it.
+
 ## 2024-05-13 22:11:03
 
 Added a nice little effect to the options on the main menu.

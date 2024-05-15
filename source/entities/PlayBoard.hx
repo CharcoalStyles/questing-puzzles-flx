@@ -60,6 +60,7 @@ enum BoardState
 	Swapping;
 	SwappingRevert;
 	Matching;
+	Matching_Spell;
 	PostMatch;
 	EndTurn;
 	Shuffle;
@@ -224,7 +225,9 @@ class PlayBoard extends UiFlxGroup
 				});
 			default:
 			case BoardState.Matching:
-				updateMatching();
+				updateMatching(true);
+			case Matching_Spell:
+				updateMatching(false);
 			case BoardState.PostMatch:
 				onGemMovedFinished(() ->
 				{
@@ -351,7 +354,7 @@ class PlayBoard extends UiFlxGroup
 		}
 	}
 
-	function updateMatching()
+	function updateMatching(spellSwap:Bool)
 	{
 		var matches = findAllMatches(this.grid);
 
@@ -510,9 +513,16 @@ class PlayBoard extends UiFlxGroup
 		}
 		else
 		{
-			swapCells(userSwap[0], userSwap[1]);
-			userSwap = null;
-			state = BoardState.SwappingRevert;
+			if (spellSwap)
+			{
+				state = BoardState.EndTurn;
+			}
+			else
+			{
+				swapCells(userSwap[0], userSwap[1]);
+				userSwap = null;
+				state = BoardState.SwappingRevert;
+			}
 		}
 	}
 

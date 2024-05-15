@@ -6,13 +6,12 @@ import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import states.subStates.SelectEnemy;
 import utils.GlobalState;
 import utils.SplitText;
 
 class MainMenuState extends FlxState
 {
-	var rgb:Array<FlxColor> = [0xffd04040, 0xff40d040, 0xff4040d0];
-	var currentColour:Int = 0;
 	var globalState:GlobalState;
 
 	override public function create()
@@ -27,7 +26,10 @@ class MainMenuState extends FlxState
 		text.size = 64;
 		text.alignment = "center";
 		add(text);
-		var startText = generateText("START", FlxColor.GREEN, (t) -> FlxG.switchState(new PlayState()));
+		var startText = generateText("New Battle", FlxColor.GREEN, (t) ->
+		{
+			setPickEnemySubState();
+		});
 
 		startText.x = (FlxG.width - startText.width) / 2;
 		startText.y = FlxG.height / 2 + 96;
@@ -73,33 +75,23 @@ class MainMenuState extends FlxState
 		return text;
 	}
 
+	function setPickEnemySubState()
+	{
+		this.subState = new SelectEnemy();
+		this.subState.create();
+		this.subState.closeCallback = () ->
+		{
+			this.subState = null;
+		}
+	}
+
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
 		if (FlxG.keys.anyJustPressed([SPACE]))
 		{
-			FlxG.switchState(new PlayState());
-		}
-
-		if (FlxG.mouse.justPressed)
-		{
-			var color = FlxG.random.color(0xa0a0a0, 0xe0e0e0);
-			var partScale = FlxPoint.get(0.5, 0.5);
-			for (i in 0...50)
-			{
-				var p = globalState.emitter.emit(FlxG.mouse.x, FlxG.mouse.y);
-				var em = CsEmitter.burstEmit(color, null, {
-					lifespan: () -> 0.5,
-					scaleExtended: () -> [
-						{
-							t: 0,
-							value: partScale
-						},
-					]
-				});
-				p.setEffectStates([em]);
-			}
+			setPickEnemySubState();
 		}
 	}
 }

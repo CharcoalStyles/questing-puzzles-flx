@@ -2,6 +2,7 @@ package utils;
 
 import entities.Character.Spell;
 import entities.Character.SpellEffect;
+import entities.Character;
 import entities.Gem.GemType;
 import entities.Gem.ManaType;
 import entities.effects.CsEmitter;
@@ -14,6 +15,18 @@ import haxe.Timer;
 import openfl.Assets;
 import states.PlayState.Play_State;
 import utils.CsMath.centreRect;
+import utils.Observer.FloatObservable;
+import utils.Observer.IntObservable;
+
+typedef CharacterStruct =
+{
+	name:String,
+	level:Int,
+	health:Int,
+	mana:ManaNumber,
+	spells:Array<String>,
+	effects:Array<String>
+}
 
 typedef ManaNumber = DynamicAccess<Int>;
 
@@ -36,26 +49,49 @@ typedef EffectArgs =
 
 class Loader
 {
-	// public static function stringToManaType(str:String):ManaType
-	// {
-	// 	return switch (str)
-	// 	{
-	// 		case "Fire":
-	// 			ManaType.FIRE;
-	// 		case "Earth":
-	// 			ManaType.EARTH;
-	// 		case "Water":
-	// 			ManaType.WATER;
-	// 		case "Air":
-	// 			ManaType.AIR;
-	// 		case "Light":
-	// 			ManaType.LIGHT;
-	// 		case "Dark":
-	// 			ManaType.DARK;
-	// 		default:
-	// 			null;
-	// 	}
-	// }
+	public static function loadCharacters():Array<CharacterStruct>
+	{
+		var characterFileName = Assets.list(TEXT);
+		var characterFileName = characterFileName.filter(function(f) return f.indexOf("/characters/") != -1);
+		var characters = [];
+		for (f in characterFileName)
+		{
+			var characterJson = Assets.getText(f);
+			var characterData:CharacterStruct = haxe.Json.parse(characterJson);
+			characters.push(characterData);
+		}
+		return characters;
+	}
+
+	public static function loadCharacter(characterData:CharacterStruct):Character
+	{
+		var char = new Character();
+		trace(characterData.name);
+
+		char.name = characterData.name;
+		// char.portrait = characterData.portrait;
+		char.level = characterData.level;
+		char.maxHealth = characterData.health;
+		char.health = new IntObservable(characterData.health);
+		char.maxMana = new Map();
+		char.mana = new Map();
+		for (mt in characterData.mana.keys())
+		{
+			var manaType = ManaType.fromString(mt);
+			if (manaType == null)
+			{
+				throw "Invalid mana type: " + mt;
+			}
+
+			char.maxMana.set(manaType, characterData.mana.get(mt));
+			char.mana.set(manaType, new FloatObservable(characterData.mana.get(mt)));
+		}
+
+		char.spells = characterData.spells.map((name) -> Loader.loadSpell(name));
+
+		return char;
+	}
+
 	public static function loadSpell(name:String):Spell
 	{
 		var spellJson = Assets.getText("assets/data/spells/" + name + ".json");

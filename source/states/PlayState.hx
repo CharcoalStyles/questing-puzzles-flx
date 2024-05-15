@@ -78,6 +78,8 @@ class PlayState extends FlxState
 					isPlayerTurnNext = true;
 				case BoardState.PostMatch:
 					postMatchUpdateOnce();
+				case BoardState.EndTurn:
+					state = Idle;
 				default:
 			}
 			timer = 0;
@@ -138,6 +140,7 @@ class PlayState extends FlxState
 				else if (playerSidebar.isPointInside(FlxG.mouse.getPosition()))
 				{
 					currentState = Play_State.SpellEffect;
+
 					var spell = playerSidebar.handleClick(mousePos);
 					if (spell != null)
 					{

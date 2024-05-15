@@ -20,11 +20,11 @@ Also there will be notes, they will be silly as I usually commit changes when it
     - First pass done and works on main menu on click and the "Light it up!" spell in game
   - [ ] Add easings to each stop
     - I think just adding an easing option to a stop and using the esing form the "lowest" stop is the best way to go.
-- [ ] Data driven everything
+- [x] Data driven everything that is in the game now
   - Yes! Rather than adding more actual fun game stuff, I spent time doing silly technical things. 😀
-  - [ ] Characters
-    - [ ] Characters definition in `Modding.md` (In Progress)
-    - [ ] Working (in game) characters
+  - [x] Characters
+    - [x] Characters definition in `Modding.md`
+    - [x] Working (in game) character
   - [x] Spells
     - [x] Spells definition in `Modding.md`
     - [x] Working (in game) spells (All spells that are currently in game!)
@@ -57,10 +57,12 @@ Also there will be notes, they will be silly as I usually commit changes when it
     - [ ] Build for Android
 - [ ] Add Controller support
 - [ ] Add a real main menu
-  - [ ] Add a "New Battle" button to main menu
-    - [ ] add a list of current enemies to choose from
+  - [x] Add a "New Battle" button to main menu 
+    - [x] add a list of current enemies to choose from
     - [ ] overhaul the loading system to load on play state init
+      - It does, but only for the enemy. the player still has the single global state.
   - [ ] Add a "Options" button to menu
+      - I added a toggle for full screen, it's a step.
   - [ ] Add a "Quit" button to main menu
 - [ ] Add a Pause menu
   - [ ] Add a "Resume" button to pause menu
