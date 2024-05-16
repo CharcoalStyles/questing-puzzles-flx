@@ -1,3 +1,7 @@
+# 2024-05-16 16:31:02
+
+Enemies now don't load with full mana. Lucky they couldn't actually use it anyway.
+
 # 2024-05-15 10:50:07
 
 Main menu now has a "New Battle" button, which loads a list of characters to battle. Though currently there is only one: the Test Goblin.

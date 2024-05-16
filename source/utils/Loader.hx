@@ -84,7 +84,7 @@ class Loader
 			}
 
 			char.maxMana.set(manaType, characterData.mana.get(mt));
-			char.mana.set(manaType, new FloatObservable(characterData.mana.get(mt)));
+			char.mana.set(manaType, new FloatObservable(0));
 		}
 
 		char.spells = characterData.spells.map((name) -> Loader.loadSpell(name));
