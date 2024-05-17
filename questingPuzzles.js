@@ -9273,8 +9273,8 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 			var _g3 = board[0].length;
 			while(_g2 < _g3) {
 				var y = _g2++;
-				var g = board[x][y];
-				if(board[x][y] != null) {
+				var g = board[y][x];
+				if(g != null) {
 					deb += (isId ? g.id == null ? "null" : "" + g.id : g.manaType.name) + ", ";
 				} else {
 					deb += "-, ";
@@ -9283,8 +9283,8 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 			deb += "],";
 		}
 		deb += "]";
-		haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 198, className : "entities.PlayBoard", methodName : "traceBoard"});
-		haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 199, className : "entities.PlayBoard", methodName : "traceBoard"});
+		haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 205, className : "entities.PlayBoard", methodName : "traceBoard"});
+		haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 206, className : "entities.PlayBoard", methodName : "traceBoard"});
 	}
 	,selected: null
 	,userSwap: null
@@ -9410,6 +9410,7 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 			this.gemMoves = [];
 			var flatMatches = [];
 			var byColMatches = [];
+			this.activeMatches = [];
 			var _g = 0;
 			var _g1 = this.boardWidth;
 			while(_g < _g1) {
@@ -9420,45 +9421,47 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 			while(_g < matches.length) {
 				var m = matches[_g];
 				++_g;
+				var tmp = this.activeMatches;
+				var tmp1 = this.grid[m[0].x][m[0].y].manaType;
+				var result = new Array(m.length);
 				var _g1 = 0;
-				while(_g1 < m.length) {
-					var c = m[_g1];
-					++_g1;
-					flatMatches.push({ x : c.x, y : c.y, gem : this.grid[c.x][c.y]});
-					byColMatches[c.x].push({ x : c.x, y : c.y, gem : this.grid[c.x][c.y]});
+				var _g2 = m.length;
+				while(_g1 < _g2) {
+					var i = _g1++;
+					var c = m[i];
+					var gem = _gthis.grid[c.x][c.y];
+					var x = gem.x;
+					var y = gem.y;
+					if(y == null) {
+						y = 0;
+					}
+					if(x == null) {
+						x = 0;
+					}
+					var x1 = x;
+					var y1 = y;
+					if(y1 == null) {
+						y1 = 0;
+					}
+					if(x1 == null) {
+						x1 = 0;
+					}
+					var point = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
+					point._inPool = false;
+					result[i] = point;
+				}
+				tmp.push({ manaType : tmp1, pos : result, count : m.length});
+				var _g3 = 0;
+				while(_g3 < m.length) {
+					var c1 = m[_g3];
+					++_g3;
+					flatMatches.push({ x : c1.x, y : c1.y, gem : this.grid[c1.x][c1.y]});
+					byColMatches[c1.x].push({ x : c1.x, y : c1.y, gem : this.grid[c1.x][c1.y]});
 				}
 			}
 			flatMatches.sort(function(a,b) {
 				return a.y - b.y;
 			});
-			var result = new Array(flatMatches.length);
-			var _g = 0;
-			var _g1 = flatMatches.length;
-			while(_g < _g1) {
-				var i = _g++;
-				var m = flatMatches[i];
-				var m1 = m.gem.manaType;
-				var x = m.gem.x;
-				var y = m.gem.y;
-				if(y == null) {
-					y = 0;
-				}
-				if(x == null) {
-					x = 0;
-				}
-				var x1 = x;
-				var y1 = y;
-				if(y1 == null) {
-					y1 = 0;
-				}
-				if(x1 == null) {
-					x1 = 0;
-				}
-				var point = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
-				point._inPool = false;
-				result[i] = { manaType : m1, pos : point};
-			}
-			this.activeMatches = result;
 			var _g = [];
 			var _g1 = 0;
 			var _g2 = byColMatches;
@@ -10285,13 +10288,24 @@ entities_Sidebar.prototype = $extend(utils_UiFlxGroup.prototype,{
 	,globalState: null
 	,isActive: null
 	,set_isActive: function(val) {
+		if(this.isActive == val) {
+			this.isActive = val;
+			return val;
+		}
 		this.isActive = val;
 		if(this.isActive) {
-			this.title.animateWave();
+			this.animateOneShot();
 		} else {
 			this.title.stopAnimation();
 		}
 		return this.isActive;
+	}
+	,animateOneShot: function() {
+		if(this.isActive) {
+			this.title.animateWave(10,0.1,0.75,true);
+			this.title.animateColour(-13732171,0.1,0.75);
+			haxe_Timer.delay($bind(this,this.animateOneShot),2000);
+		}
 	}
 	,addMana: function(mt,amount,origin) {
 		var _gthis = this;
@@ -79145,7 +79159,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 749696;
+	this.version = 536746;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -128108,6 +128122,8 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 	,player: null
 	,ai: null
 	,globalState: null
+	,extraTurnText: null
+	,extraManaText: null
 	,create: function() {
 		var _gthis = this;
 		flixel_FlxState.prototype.create.call(this);
@@ -128155,6 +128171,16 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		this.globalState.ai.sidebar = this.aiSidebar;
 		this.globalState.createEmitter();
 		this.add(this.globalState.emitter.activeMembers);
+		this.extraTurnText = new utils_SplitText(0,0,"Extra Turn!");
+		this.extraTurnText.set_x((flixel_FlxG.width - this.extraTurnText.width) / 2);
+		this.extraTurnText.set_y(flixel_FlxG.height / 2 + 128);
+		this.extraTurnText.set_alpha(0);
+		this.add(this.extraTurnText);
+		this.extraManaText = new utils_SplitText(0,0,"Extra Mana!");
+		this.extraManaText.set_x((flixel_FlxG.width - this.extraManaText.width) / 2);
+		this.extraManaText.set_y(flixel_FlxG.height / 2 - 128);
+		this.extraManaText.set_alpha(0);
+		this.add(this.extraManaText);
 	}
 	,update: function(elapsed) {
 		flixel_FlxState.prototype.update.call(this,elapsed);
@@ -128234,12 +128260,32 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 	}
 	,postMatchUpdateOnce: function() {
 		var sb = this.isPlayerTurn ? this.playerSidebar : this.aiSidebar;
-		var am = this.board.activeMatches;
+		var maxLength = 0;
 		var _g = 0;
-		while(_g < am.length) {
-			var g = am[_g];
+		var _g1 = this.board.activeMatches;
+		while(_g < _g1.length) {
+			var match = _g1[_g];
 			++_g;
-			sb.addMana(g.manaType,1,g.pos);
+			maxLength = Math.max(maxLength,match.count) | 0;
+			var manaBonus = Math.max(0,match.count - 4) | 0;
+			var _g2 = 0;
+			var _g3 = match.pos;
+			while(_g2 < _g3.length) {
+				var gemPos = _g3[_g2];
+				++_g2;
+				sb.addMana(match.manaType,1 + manaBonus,gemPos);
+			}
+		}
+		if(maxLength >= 4) {
+			var timeLength = 1.75;
+			var perLetter = 0.08;
+			this.isPlayerTurnNext = this.isPlayerTurn;
+			this.extraTurnText.animateWave(64,perLetter,timeLength,true);
+			this.extraTurnText.animateColour(-1,perLetter,timeLength,16777215);
+			if(maxLength >= 5) {
+				this.extraManaText.animateWave(64,perLetter,timeLength,true);
+				this.extraManaText.animateColour(-1,perLetter,timeLength,16777215);
+			}
 		}
 	}
 	,__class__: states_PlayState
@@ -129242,7 +129288,7 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			this.tweens.push(t);
 		}
 	}
-	,animateColour: function(toColor,charDelay,speed) {
+	,animateColour: function(toColor,charDelay,speed,fromColor) {
 		if(speed == null) {
 			speed = 1;
 		}
@@ -129250,15 +129296,16 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			charDelay = 0.15;
 		}
 		var _gthis = this;
+		var fColour = fromColor != null ? fromColor : this.color;
 		var _g = 0;
 		var _g1 = this.members.length;
 		while(_g < _g1) {
 			var i = _g++;
 			var char = [this.members[i]];
-			var t = flixel_tweens_FlxTween.color(char[0],speed / 2,this.color,toColor,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepOut, startDelay : i * charDelay, onComplete : (function(char) {
+			var t = flixel_tweens_FlxTween.color(char[0],speed / 2,fColour,toColor,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepOut, startDelay : i * charDelay, onComplete : (function(char) {
 				return function(t) {
 					HxOverrides.remove(_gthis.tweens,t);
-					var tx = flixel_tweens_FlxTween.color(char[0],speed / 2,toColor,_gthis.color,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepInOut});
+					var tx = flixel_tweens_FlxTween.color(char[0],speed / 2,toColor,fColour,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepInOut});
 					_gthis.tweens.push(tx);
 				};
 			})(char)});
