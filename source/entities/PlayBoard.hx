@@ -76,6 +76,13 @@ enum MoveDirection
 
 typedef MatchGroup = Array<CellIndex>;
 
+typedef CurrentMatchesStats =
+{
+	manaType:ManaType,
+	pos:Array<FlxPoint>,
+	count:Int
+}
+
 class PlayBoard extends UiFlxGroup
 {
 	var gemFrames:FlxAtlasFrames;
@@ -108,7 +115,7 @@ class PlayBoard extends UiFlxGroup
 	var bkgrndTiles:FlxGroup;
 	var gems:FlxGroup;
 
-	public var activeMatches:Array<MatchTypePosition> = null;
+	public var activeMatches:Array<CurrentMatchesStats> = null;
 	public var potentialMoves:Array<ScoredMatch> = null;
 	public var onStateChange:BoardState->Void;
 
@@ -186,8 +193,8 @@ class PlayBoard extends UiFlxGroup
 			deb += "[";
 			for (y in 0...board[0].length)
 			{
-				var g = board[x][y];
-				if (board[x][y] != null)
+				var g = board[y][x];
+				if (g != null)
 					deb += (isId ? Std.string(g.id) : g.manaType.name) + ", ";
 				else
 					deb += "-, ";
@@ -363,6 +370,7 @@ class PlayBoard extends UiFlxGroup
 			gemMoves = [];
 			var flatMatches = new Array<GemGrid>();
 			var byColMatches = new Array<Array<GemGrid>>();
+			activeMatches = [];
 
 			for (y in 0...boardWidth)
 			{
@@ -371,6 +379,15 @@ class PlayBoard extends UiFlxGroup
 
 			for (m in matches)
 			{
+				activeMatches.push({
+					manaType: grid[m[0].x][m[0].y].manaType,
+					pos: m.map((c) ->
+					{
+						var gem = grid[c.x][c.y];
+						return FlxPoint.get(gem.x, gem.y);
+					}),
+					count: m.length
+				});
 				for (c in m)
 				{
 					flatMatches.push({x: c.x, y: c.y, gem: grid[c.x][c.y]});
@@ -378,13 +395,6 @@ class PlayBoard extends UiFlxGroup
 				}
 			}
 			flatMatches.sort((a, b) -> a.y - b.y);
-			activeMatches = flatMatches.map((m) ->
-			{
-				return {
-					manaType: m.gem.manaType,
-					pos: FlxPoint.get(m.gem.x, m.gem.y)
-				};
-			});
 
 			byColMatches = byColMatches.filter((c) -> c.length > 0);
 			byColMatches = byColMatches.map((c) ->

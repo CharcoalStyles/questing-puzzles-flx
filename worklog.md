@@ -1,3 +1,11 @@
+# 2024-05-17 21:26:56
+
+This took a little longer than expected, but I've got the x-match system working. I had to re-arrange how some data comes through to the play state and while doing that, I messed up how part of it looked up the gem type.
+
+Now on a 4 length match, the player gets a new turn. 5+ length matches give an extra mana per extra gem matched. if you match 4 gems, you get 4 mana. If you get 5 gems, you get 10 mana. 6 gems gets 18 mana. This is broken.But none of the game is balanced, so it doesn't matter!
+
+Also, both of these get a text effect on the board. I think it's pretty sweet.
+
 # 2024-05-16 16:31:02
 
 Enemies now don't load with full mana. Lucky they couldn't actually use it anyway.

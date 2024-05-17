@@ -20,6 +20,7 @@ Also there will be notes, they will be silly as I usually commit changes when it
     - First pass done and works on main menu on click and the "Light it up!" spell in game
   - [ ] Add easings to each stop
     - I think just adding an easing option to a stop and using the esing form the "lowest" stop is the best way to go.
+  - [ ] Add property to change the particle sprite
 - [x] Data driven everything that is in the game now
   - Yes! Rather than adding more actual fun game stuff, I spent time doing silly technical things. 😀
   - [x] Characters
@@ -35,9 +36,9 @@ Also there will be notes, they will be silly as I usually commit changes when it
 - [ ] Tooltips for spells
   - [ ] Tooltips for spells in game on mouse hover
 - [ ] x-match system
-  - [ ] New turn on 4+ match
-  - [ ] UI and/or text effect for new turn
-  - [ ] Do something on 5+ match
+  - [x] New turn on 4+ match
+  - [x] UI and/or text effect for new turn
+  - [x] Do something on 5+ match (This is done, but needs balancing)
   - [ ] Do something on 6+ match?
 - [ ] Battle win/lose system
   - [ ] Add a "win" and "lose" effect to the game

@@ -15,6 +15,7 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxPool;
+import haxe.Timer;
 import utils.ExtendedLerp;
 import utils.GlobalState;
 import utils.Observer;
@@ -40,16 +41,32 @@ class Sidebar extends UiFlxGroup
 
 	function set_isActive(val)
 	{
+		if (isActive == val)
+		{
+			isActive = val;
+			return val;
+		}
 		isActive = val;
+
 		if (isActive)
 		{
-			title.animateWave();
+			animateOneShot();
 		}
 		else
 		{
 			title.stopAnimation();
 		}
 		return isActive;
+	}
+
+	function animateOneShot()
+	{
+		if (isActive)
+		{
+			title.animateWave(10, 0.1, 0.75, true);
+			title.animateColour(0xff2e76b5, 0.1, 0.75);
+			Timer.delay(animateOneShot, 2000);
+		}
 	}
 
 	public function new(char:Character, isLeft:Bool)

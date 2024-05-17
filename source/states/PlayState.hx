@@ -8,6 +8,7 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.util.FlxTimer;
 import utils.GlobalState;
+import utils.SplitText;
 
 enum Play_State
 {
@@ -36,6 +37,9 @@ class PlayState extends FlxState
 	var player:Character;
 	var ai:Character;
 	var globalState:GlobalState;
+
+	var extraTurnText:SplitText;
+	var extraManaText:SplitText;
 
 	override public function create()
 	{
@@ -96,6 +100,17 @@ class PlayState extends FlxState
 
 		globalState.createEmitter();
 		add(globalState.emitter.activeMembers);
+
+		extraTurnText = new SplitText(0, 0, "Extra Turn!");
+		extraTurnText.x = (FlxG.width - extraTurnText.width) / 2;
+		extraTurnText.y = FlxG.height / 2 + 128;
+		extraTurnText.alpha = 0;
+		add(extraTurnText);
+		extraManaText = new SplitText(0, 0, "Extra Mana!");
+		extraManaText.x = (FlxG.width - extraManaText.width) / 2;
+		extraManaText.y = FlxG.height / 2 - 128;
+		extraManaText.alpha = 0;
+		add(extraManaText);
 	}
 
 	override public function update(elapsed:Float)
@@ -185,10 +200,34 @@ class PlayState extends FlxState
 	function postMatchUpdateOnce()
 	{
 		var sb = isPlayerTurn ? playerSidebar : aiSidebar;
-		var am = board.activeMatches;
-		for (g in am)
+
+		var maxLength = 0;
+		for (match in board.activeMatches)
 		{
-			sb.addMana(g.manaType, 1, g.pos);
+			maxLength = Std.int(Math.max(maxLength, match.count));
+
+			var manaBonus = Std.int(Math.max(0, match.count - 4)); // adds an extra mana per gem when a match is longer than 4
+
+			for (gemPos in match.pos)
+			{
+				sb.addMana(match.manaType, 1 + manaBonus, gemPos);
+			}
+		}
+
+		if (maxLength >= 4)
+		{
+			var timeLength = 1.75;
+			var perLetter = 0.08;
+
+			isPlayerTurnNext = isPlayerTurn;
+			extraTurnText.animateWave(64, perLetter, timeLength, true);
+			extraTurnText.animateColour(0xFFFFFFFF, perLetter, timeLength, 0x00ffffff);
+
+			if (maxLength >= 5)
+			{
+				extraManaText.animateWave(64, perLetter, timeLength, true);
+				extraManaText.animateColour(0xFFFFFFFF, perLetter, timeLength, 0x00ffffff);
+			}
 		}
 	}
 }

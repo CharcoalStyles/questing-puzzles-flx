@@ -222,19 +222,20 @@ class SplitText extends FlxTypedGroup<FlxText>
 		}
 	}
 
-	public function animateColour(toColor:FlxColor, charDelay:Float = 0.15, ?speed:Float = 1)
+	public function animateColour(toColor:FlxColor, charDelay:Float = 0.15, ?speed:Float = 1, ?fromColor:FlxColor = null)
 	{
+		var fColour = fromColor != null ? fromColor : color;
 		for (i in 0...members.length)
 		{
 			var char = members[i];
-			var t = FlxTween.color(char, speed / 2, color, toColor, {
+			var t = FlxTween.color(char, speed / 2, fColour, toColor, {
 				type: ONESHOT,
 				ease: FlxEase.smoothStepOut,
 				startDelay: i * charDelay,
 				onComplete: (t) ->
 				{
 					tweens.remove(t);
-					var tx = FlxTween.color(char, speed / 2, toColor, color, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+					var tx = FlxTween.color(char, speed / 2, toColor, fColour, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
 					tweens.push(tx);
 					return;
 				}
