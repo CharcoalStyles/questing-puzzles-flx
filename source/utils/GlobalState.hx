@@ -51,8 +51,8 @@ class GlobalState extends FlxBasic
 		player.mana.set(ManaType.WATER, new FloatObservable(0));
 		player.mana.set(ManaType.EARTH, new FloatObservable(0));
 		player.mana.set(ManaType.AIR, new FloatObservable(0));
-		player.mana.set(ManaType.LIGHT, new FloatObservable(5));
-		player.mana.set(ManaType.DARK, new FloatObservable(5));
+		player.mana.set(ManaType.LIGHT, new FloatObservable(0));
+		player.mana.set(ManaType.DARK, new FloatObservable(0));
 
 		player.spells = new Array();
 		player.spells.push(Loader.loadSpell("Fireball"));

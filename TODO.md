@@ -41,13 +41,14 @@ Also there will be notes, they will be silly as I usually commit changes when it
   - [x] Do something on 5+ match (This is done, but needs balancing)
   - [ ] Do something on 6+ match?
 - [ ] Battle win/lose system
-  - [ ] Add a "win" and "lose" effect to the game
+  - [x] Add a "win" and "lose" effect to the game
+  - [ ] Add a way to easily get back to the main menu 🤣
 - [ ] Change Air to damage
   - [ ] Remove from character mana system
   - [ ] deal damage to other character on match
   - [ ] Find appropriate developer art for new gem
 - [ ] Next version of enemy "AI"
-  - [ ] Add support for using spells
+  - [x] Add support for using spells
   - [ ] Rank required mana higher in potential matches pool
 - [ ] Setup CI/CD for win/mac/linux/android versions
   - [ ] Setup GitHub runners on Server and/or MacMini

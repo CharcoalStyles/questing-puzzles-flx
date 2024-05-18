@@ -309,8 +309,10 @@ class SpellUi extends FlxGroup
 	var border:FlxSprite;
 	var manaText:Map<ManaType, FlxText>;
 	var manaChecks:Map<ManaType, Bool>;
-	var spell:Spell;
-	var isActivated:Bool = false;
+
+	public var spell:Spell;
+	public var isActivated:Bool = false;
+
 	var borderTween:FlxTween;
 	var animTime = 0.8;
 	var timer = 0.0;

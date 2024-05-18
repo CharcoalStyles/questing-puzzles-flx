@@ -222,7 +222,7 @@ class SplitText extends FlxTypedGroup<FlxText>
 		}
 	}
 
-	public function animateColour(toColor:FlxColor, charDelay:Float = 0.15, ?speed:Float = 1, ?fromColor:FlxColor = null)
+	public function animateColour(toColor:FlxColor, charDelay:Float = 0.15, ?speed:Float = 1, ?fromColor:FlxColor = null, ?oneShot:Bool = false)
 	{
 		var fColour = fromColor != null ? fromColor : color;
 		for (i in 0...members.length)
@@ -234,10 +234,13 @@ class SplitText extends FlxTypedGroup<FlxText>
 				startDelay: i * charDelay,
 				onComplete: (t) ->
 				{
-					tweens.remove(t);
-					var tx = FlxTween.color(char, speed / 2, toColor, fColour, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
-					tweens.push(tx);
-					return;
+					if (!oneShot)
+					{
+						tweens.remove(t);
+						var tx = FlxTween.color(char, speed / 2, toColor, fColour, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+						tweens.push(tx);
+						return;
+					}
 				}
 			});
 			tweens.push(t);

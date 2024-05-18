@@ -1,3 +1,9 @@
+# 2024-05-18 22:44:15
+
+Added both the "win" and "lose"  states to the game and show a text effect for them.
+
+Also added the ability for the AI to use spells. basically there's a level+1 chance in 10 that when the AI has a turn, it will use a spell. It 100% needs tweaking, but it's a start.
+
 # 2024-05-17 21:26:56
 
 This took a little longer than expected, but I've got the x-match system working. I had to re-arrange how some data comes through to the play state and while doing that, I messed up how part of it looked up the gem type.

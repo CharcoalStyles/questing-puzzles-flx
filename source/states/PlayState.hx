@@ -15,6 +15,7 @@ enum Play_State
 	Idle;
 	BoardMatching;
 	SpellEffect;
+	GameOver;
 }
 
 class PlayState extends FlxState
@@ -41,6 +42,9 @@ class PlayState extends FlxState
 	var extraTurnText:SplitText;
 	var extraManaText:SplitText;
 
+	var winText:SplitText;
+	var loseText:SplitText;
+
 	override public function create()
 	{
 		super.create();
@@ -60,8 +64,7 @@ class PlayState extends FlxState
 				case BoardState.Idle:
 					if (currentState == SpellEffect)
 					{
-						// reset the game state after the board has finished matching
-						currentState = Idle;
+						setState(Idle);
 					}
 					else
 					{
@@ -111,6 +114,18 @@ class PlayState extends FlxState
 		extraManaText.y = FlxG.height / 2 - 128;
 		extraManaText.alpha = 0;
 		add(extraManaText);
+
+		winText = new SplitText(0, 0, "You Win!", SplitText.naiieveScaleDefaultOptions(2.2));
+		winText.x = (FlxG.width - winText.width) / 2;
+		winText.y = FlxG.height / 2;
+		winText.alpha = 0;
+		add(winText);
+
+		loseText = new SplitText(0, 0, "You Lose!", SplitText.naiieveScaleDefaultOptions(2.2));
+		loseText.x = (FlxG.width - loseText.width) / 2;
+		loseText.y = FlxG.height / 2;
+		loseText.alpha = 0;
+		add(loseText);
 	}
 
 	override public function update(elapsed:Float)
@@ -139,6 +154,32 @@ class PlayState extends FlxState
 		}
 	}
 
+	function setState(state:Play_State)
+	{
+		var realState = state;
+		switch (state)
+		{
+			case Play_State.Idle:
+				if (globalState.ai.health <= 0)
+				{
+					winText.animateWave(64, 0.3, 2.0, false);
+					winText.animateColour(0xff40e090, 0.3, 2.0, 0x00FFFFFF, true);
+					realState = Play_State.GameOver;
+				}
+				if (globalState.player.health <= 0)
+				{
+					loseText.animateWave(64, 0.3, 2.0, false);
+					loseText.animateColour(0xffff6060, 0.3, 2.0, 0x00FFFFFF, true);
+					realState = Play_State.GameOver;
+				}
+			case Play_State.BoardMatching:
+			case Play_State.SpellEffect:
+			case Play_State.GameOver:
+		}
+
+		currentState = realState;
+	}
+
 	function idleUpdate(elapsed:Float)
 	{
 		if (isPlayerTurn)
@@ -154,7 +195,7 @@ class PlayState extends FlxState
 				}
 				else if (playerSidebar.isPointInside(FlxG.mouse.getPosition()))
 				{
-					currentState = Play_State.SpellEffect;
+					setState(Play_State.SpellEffect);
 
 					var spell = playerSidebar.handleClick(mousePos);
 					if (spell != null)
@@ -169,13 +210,13 @@ class PlayState extends FlxState
 							}
 							else
 							{
-								currentState = nextState.nextState;
+								setState(nextState.nextState);
 							}
 						});
 					}
 					else
 					{
-						currentState = Play_State.Idle;
+						setState(Play_State.Idle);
 					}
 				}
 				else if (aiSidebar.isPointInside(FlxG.mouse.getPosition())) {}
@@ -186,6 +227,35 @@ class PlayState extends FlxState
 			timer += elapsed;
 			if (timer >= triggerTime)
 			{
+				var availableSpells = [];
+				for (spellUi in globalState.ai.sidebar.spellUis)
+				{
+					if (spellUi.isActivated)
+					{
+						availableSpells.push(spellUi.spell);
+					}
+				}
+
+				if (availableSpells.length > 0 && FlxG.random.int(0, 9) <= globalState.ai.level + 1)
+				{
+					setState(Play_State.SpellEffect);
+					var spell = availableSpells[FlxG.random.int(0, availableSpells.length - 1)];
+					var nextState = spell.run(globalState.player, globalState.ai, board);
+
+					FlxTimer.wait(nextState.delay, () ->
+					{
+						if (nextState.nextState == Play_State.BoardMatching)
+						{
+							board.setState(BoardState.Matching);
+						}
+						else
+						{
+							setState(nextState.nextState);
+						}
+					});
+					return;
+				}
+
 				var match = board.potentialMoves[0];
 				if (match != null)
 				{
