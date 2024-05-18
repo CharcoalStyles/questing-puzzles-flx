@@ -79159,7 +79159,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 536746;
+	this.version = 720127;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -128093,8 +128093,9 @@ var states_Play_$State = $hxEnums["states.Play_State"] = { __ename__:"states.Pla
 	,Idle: {_hx_name:"Idle",_hx_index:0,__enum__:"states.Play_State",toString:$estr}
 	,BoardMatching: {_hx_name:"BoardMatching",_hx_index:1,__enum__:"states.Play_State",toString:$estr}
 	,SpellEffect: {_hx_name:"SpellEffect",_hx_index:2,__enum__:"states.Play_State",toString:$estr}
+	,GameOver: {_hx_name:"GameOver",_hx_index:3,__enum__:"states.Play_State",toString:$estr}
 };
-states_Play_$State.__constructs__ = [states_Play_$State.Idle,states_Play_$State.BoardMatching,states_Play_$State.SpellEffect];
+states_Play_$State.__constructs__ = [states_Play_$State.Idle,states_Play_$State.BoardMatching,states_Play_$State.SpellEffect,states_Play_$State.GameOver];
 var states_PlayState = function() {
 	this.currentBoardState = entities_BoardState.Idle;
 	this.currentState = states_Play_$State.Idle;
@@ -128124,6 +128125,8 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 	,globalState: null
 	,extraTurnText: null
 	,extraManaText: null
+	,winText: null
+	,loseText: null
 	,create: function() {
 		var _gthis = this;
 		flixel_FlxState.prototype.create.call(this);
@@ -128137,7 +128140,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			switch(state._hx_index) {
 			case 0:
 				if(_gthis.currentState == states_Play_$State.SpellEffect) {
-					_gthis.currentState = states_Play_$State.Idle;
+					_gthis.setState(states_Play_$State.Idle);
 				} else {
 					_gthis.isPlayerTurn = _gthis.isPlayerTurnNext;
 				}
@@ -128181,6 +128184,16 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		this.extraManaText.set_y(flixel_FlxG.height / 2 - 128);
 		this.extraManaText.set_alpha(0);
 		this.add(this.extraManaText);
+		this.winText = new utils_SplitText(0,0,"You Win!",utils_SplitText.naiieveScaleDefaultOptions(2.2));
+		this.winText.set_x((flixel_FlxG.width - this.winText.width) / 2);
+		this.winText.set_y(flixel_FlxG.height / 2);
+		this.winText.set_alpha(0);
+		this.add(this.winText);
+		this.loseText = new utils_SplitText(0,0,"You Lose!",utils_SplitText.naiieveScaleDefaultOptions(2.2));
+		this.loseText.set_x((flixel_FlxG.width - this.loseText.width) / 2);
+		this.loseText.set_y(flixel_FlxG.height / 2);
+		this.loseText.set_alpha(0);
+		this.add(this.loseText);
 	}
 	,update: function(elapsed) {
 		flixel_FlxState.prototype.update.call(this,elapsed);
@@ -128214,6 +128227,30 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			this.idleUpdate(elapsed);
 		}
 	}
+	,setState: function(state) {
+		var realState = state;
+		switch(state._hx_index) {
+		case 0:
+			if(utils_IntObservable.lessEq(this.globalState.ai.health,0)) {
+				this.winText.animateWave(64,0.3,2.0,false);
+				this.winText.animateColour(-12525424,0.3,2.0,16777215,true);
+				realState = states_Play_$State.GameOver;
+			}
+			if(utils_IntObservable.lessEq(this.globalState.player.health,0)) {
+				this.loseText.animateWave(64,0.3,2.0,false);
+				this.loseText.animateColour(-40864,0.3,2.0,16777215,true);
+				realState = states_Play_$State.GameOver;
+			}
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		}
+		this.currentState = realState;
+	}
 	,idleUpdate: function(elapsed) {
 		var _gthis = this;
 		if(this.isPlayerTurn) {
@@ -128224,7 +128261,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 					this.isPlayerTurnNext = false;
 					this.timer = 0;
 				} else if(this.playerSidebar.isPointInside(flixel_FlxG.mouse.getPosition())) {
-					this.currentState = states_Play_$State.SpellEffect;
+					this.setState(states_Play_$State.SpellEffect);
 					var spell = this.playerSidebar.handleClick(mousePos);
 					if(spell != null) {
 						var nextState = spell.run(this.globalState.ai,this.globalState.player,this.board);
@@ -128233,14 +128270,14 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 							if(nextState.nextState == states_Play_$State.BoardMatching) {
 								_gthis.board.setState(entities_BoardState.Matching);
 							} else {
-								_gthis.currentState = nextState.nextState;
+								_gthis.setState(nextState.nextState);
 							}
 						};
 						new flixel_util_FlxTimer().start(time,function(_) {
 							onComplete();
 						});
 					} else {
-						this.currentState = states_Play_$State.Idle;
+						this.setState(states_Play_$State.Idle);
 					}
 				} else {
 					var tmp = this.aiSidebar.isPointInside(flixel_FlxG.mouse.getPosition());
@@ -128249,6 +128286,33 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		} else {
 			this.timer += elapsed;
 			if(this.timer >= this.triggerTime) {
+				var availableSpells = [];
+				var _g = 0;
+				var _g1 = this.globalState.ai.sidebar.spellUis;
+				while(_g < _g1.length) {
+					var spellUi = _g1[_g];
+					++_g;
+					if(spellUi.isActivated) {
+						availableSpells.push(spellUi.spell);
+					}
+				}
+				if(availableSpells.length > 0 && flixel_FlxG.random.int(0,9) <= this.globalState.ai.level + 1) {
+					this.setState(states_Play_$State.SpellEffect);
+					var spell = availableSpells[flixel_FlxG.random.int(0,availableSpells.length - 1)];
+					var nextState1 = spell.run(this.globalState.player,this.globalState.ai,this.board);
+					var time = nextState1.delay;
+					var onComplete1 = function() {
+						if(nextState1.nextState == states_Play_$State.BoardMatching) {
+							_gthis.board.setState(entities_BoardState.Matching);
+						} else {
+							_gthis.setState(nextState1.nextState);
+						}
+					};
+					new flixel_util_FlxTimer().start(time,function(_) {
+						onComplete1();
+					});
+					return;
+				}
 				var match = this.board.potentialMoves[0];
 				if(match != null) {
 					this.board.doMove(match);
@@ -128609,8 +128673,8 @@ utils_GlobalState.prototype = $extend(flixel_FlxBasic.prototype,{
 		this.player.mana.set(entities_ManaType.WATER,new utils_FloatObservableActual(0));
 		this.player.mana.set(entities_ManaType.EARTH,new utils_FloatObservableActual(0));
 		this.player.mana.set(entities_ManaType.AIR,new utils_FloatObservableActual(0));
-		this.player.mana.set(entities_ManaType.LIGHT,new utils_FloatObservableActual(5));
-		this.player.mana.set(entities_ManaType.DARK,new utils_FloatObservableActual(5));
+		this.player.mana.set(entities_ManaType.LIGHT,new utils_FloatObservableActual(0));
+		this.player.mana.set(entities_ManaType.DARK,new utils_FloatObservableActual(0));
 		this.player.spells = [];
 		this.player.spells.push(utils_Loader.loadSpell("Fireball"));
 		this.player.spells.push(utils_Loader.loadSpell("Heal5"));
@@ -129288,7 +129352,10 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			this.tweens.push(t);
 		}
 	}
-	,animateColour: function(toColor,charDelay,speed,fromColor) {
+	,animateColour: function(toColor,charDelay,speed,fromColor,oneShot) {
+		if(oneShot == null) {
+			oneShot = false;
+		}
 		if(speed == null) {
 			speed = 1;
 		}
@@ -129304,9 +129371,12 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			var char = [this.members[i]];
 			var t = flixel_tweens_FlxTween.color(char[0],speed / 2,fColour,toColor,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepOut, startDelay : i * charDelay, onComplete : (function(char) {
 				return function(t) {
-					HxOverrides.remove(_gthis.tweens,t);
-					var tx = flixel_tweens_FlxTween.color(char[0],speed / 2,toColor,fColour,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepInOut});
-					_gthis.tweens.push(tx);
+					if(!oneShot) {
+						HxOverrides.remove(_gthis.tweens,t);
+						var tx = flixel_tweens_FlxTween.color(char[0],speed / 2,toColor,fColour,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepInOut});
+						_gthis.tweens.push(tx);
+						return;
+					}
 				};
 			})(char)});
 			this.tweens.push(t);
