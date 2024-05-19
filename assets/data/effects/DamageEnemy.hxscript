@@ -6,6 +6,7 @@
 //   Required arguments:
 //   - damage:Int The amount of damage to be dealt
 //   optional arguments:
+//   - lifespan:{min:Float, max:Float} The lifespan of the particles
 //   - colour:String The colour of the particles
 //   - trailType:Int The type of trail to be used
 //     - 0 = None 
@@ -18,6 +19,12 @@ var origin = tools.centreRect(self.sidebar.spellUis[0].rect);
 var target = tools.centreRect(enemy.sidebar.healthText.getScreenBounds());
 
 var p = emitter.emit(self.x, self.y);
+
+var lifespan = 2.5;
+if (args.lifespan != null)
+{
+  lifespan = tools.random.float(args.lifespan.min, args.lifespan.max);
+}
 
 var colour = 0xffff0000;
 if (args.colour != null)
@@ -45,7 +52,7 @@ if (args.ease != null)
 
 p.setEffectStates([
   {
-    lifespan: () -> 2.5,
+    lifespan: () -> lifespan,
     target: (p) -> {
       origin: tools.getPoint(origin.x, origin.y),
       target: tools.getPoint(target.x, target.y),
@@ -131,7 +138,7 @@ p.setEffectStates([
 ]);
 
 var ret = {
-  delay: 3,
+  delay: lifespan * 1.2,
   nextState: 0
 }
 
