@@ -1,3 +1,7 @@
+# 2024-05-20 05:47:37
+
+Added ability to set the speed of the main particle effect in the `DamageEnemy` effect script.
+
 # 2024-05-18 22:44:15
 
 Added both the "win" and "lose"  states to the game and show a text effect for them.

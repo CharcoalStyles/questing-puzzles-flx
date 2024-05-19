@@ -7,6 +7,10 @@
   },
   "effect": "DamageEnemy",
   "args": {
+    "lifespan": {
+      "min": 0.75,
+      "max": 1.25
+    },
     "damage": 2,
     "colour": "0x909090"
   }
