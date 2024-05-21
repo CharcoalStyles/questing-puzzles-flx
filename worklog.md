@@ -1,3 +1,13 @@
+# 2024-05-21 22:40:41
+
+More procrastination!
+
+I thought it might be nice to have a menu system that is a little nicer to make. I came across another livbrary, but wasted a few hours to not get it working.
+
+So I've started my own! It currently is accessible though keyboard and mouse (and possibly touch). It has defauilt animations for selection and deselection, as well as unselectable items; commonly known as labels.
+
+Eventually there will be more options; I'm thinking different anims, joystick support (duh), and other menu options, like number scrolling and selectable options from a list/array. You know, usual game menu stuff.
+
 # 2024-05-20 05:47:37
 
 Added ability to set the speed of the main particle effect in the `DamageEnemy` effect script.

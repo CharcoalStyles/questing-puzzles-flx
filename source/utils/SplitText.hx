@@ -38,16 +38,14 @@ class SplitText extends FlxTypedGroup<FlxText>
 	{
 		x = value;
 		var acculumX:Float = value;
-		var lastWidth:Float = 0;
 		for (i in 0...members.length)
 		{
 			var char = members[i];
 			char.x = acculumX - options.perCharBuffer;
 			acculumX += char.width - options.perCharBuffer;
-			lastWidth = char.width - options.perCharBuffer;
 		}
 
-		width = acculumX - value + lastWidth;
+		width = acculumX - value;
 		return value;
 	}
 
@@ -201,7 +199,7 @@ class SplitText extends FlxTypedGroup<FlxText>
 		for (i in 0...members.length)
 		{
 			var char = members[i];
-			var t = FlxTween.tween(char, {y: y - totalDistance / 2}, speed / 2, {
+			var t = FlxTween.tween(char, {y: y - totalDistance}, speed / 2, {
 				type: ONESHOT,
 				ease: FlxEase.smoothStepOut,
 				startDelay: i * charDelay,
@@ -237,7 +235,7 @@ class SplitText extends FlxTypedGroup<FlxText>
 					if (!oneShot)
 					{
 						tweens.remove(t);
-						var tx = FlxTween.color(char, speed / 2, toColor, fColour, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+						var tx = FlxTween.color(char, speed * 2, toColor, fColour, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
 						tweens.push(tx);
 						return;
 					}
@@ -245,6 +243,44 @@ class SplitText extends FlxTypedGroup<FlxText>
 			});
 			tweens.push(t);
 		}
+	}
+
+	public function animateColourByArray(toColor:Array<FlxColor>, charDelay:Float = 0.15, ?speed:Float = 1, ?fromColor:FlxColor = null, ?startIndex:Int = 0)
+	{
+		var fColour = fromColor != null ? fromColor : color;
+		var s = speed;
+
+		for (i in 0...members.length)
+		{
+			var char = members[i];
+			var t = FlxTween.color(char, s, fColour, toColor[startIndex], {
+				type: ONESHOT,
+				ease: FlxEase.smoothStepOut,
+				startDelay: i * charDelay,
+				onComplete: (t) ->
+				{
+					animateCharColourByArray(i, toColor, speed, toColor[startIndex], startIndex + 1);
+				}
+			});
+			tweens.push(t);
+		}
+	}
+
+	function animateCharColourByArray(charIndex:Int, toColor:Array<FlxColor>, ?speed:Float = 1, ?fromColor:FlxColor = null, ?startIndex:Int = 0)
+	{
+		var char = members[charIndex];
+		var t = FlxTween.color(char, speed, fromColor, toColor[startIndex], {
+			ease: FlxEase.smoothStepOut,
+			type: ONESHOT,
+			onComplete: (t) ->
+			{
+				if (startIndex + 1 < toColor.length)
+					animateCharColourByArray(charIndex, toColor, speed, toColor[startIndex], startIndex + 1);
+				else
+					animateCharColourByArray(charIndex, toColor, speed, toColor[startIndex], 0);
+			}
+		});
+		tweens.push(t);
 	}
 
 	public function stopAnimation()

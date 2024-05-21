@@ -58,6 +58,15 @@ Also there will be notes, they will be silly as I usually commit changes when it
     - [ ] Build for Linux
     - [ ] Build for Android
 - [ ] Add Controller support
+- [ ] New Menu system
+  - [x] Basic menu system
+  - [x] arrow keys to select and enter to activate
+  - [x] mouseover to select and click to activate
+  - [x] Basic animations
+  - [ ] joypad support
+  - [ ] Number range selection
+  - [ ] Select from array
+  - [ ] more?
 - [ ] Add a real main menu
   - [x] Add a "New Battle" button to main menu 
     - [x] add a list of current enemies to choose from
