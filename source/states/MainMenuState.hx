@@ -7,9 +7,9 @@ import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import haxe.Timer;
-import states.subStates.SelectEnemy;
 import utils.CsMenu;
 import utils.GlobalState;
+import utils.Loader;
 import utils.SplitText;
 
 class MainMenuState extends FlxState
@@ -31,11 +31,32 @@ class MainMenuState extends FlxState
 		text.y = 96;
 
 		var menu = new CsMenu(FlxG.width / 2, FlxG.height / 2, FlxTextAlign.CENTER);
-		menu.addItem("New Battle", () ->
+		var mainPage = menu.createPage("Main");
+		var newGamePage = menu.createPage("New Game");
+
+		mainPage.addItem("New Battle", () ->
 		{
-			Timer.delay(setPickEnemySubState, 10);
+			menu.openPage("New Game");
 		});
-		menu.addItem("Toggle Fullscreen", () -> FlxG.fullscreen = !FlxG.fullscreen);
+		mainPage.addItem("Toggle Fullscreen", () -> FlxG.fullscreen = !FlxG.fullscreen);
+
+		newGamePage.addLabel("Pick Enemy");
+		var characters = Loader.loadCharacters();
+
+		for (char in characters)
+		{
+			newGamePage.addItem(char.name, () ->
+			{
+				var c = Loader.loadCharacter(char);
+				globalState.ai = c;
+				FlxG.switchState(new PlayState());
+			});
+		}
+
+		newGamePage.addItem("Back", () -> menu.openPage("Main"));
+
+		mainPage.show(true);
+		newGamePage.hide(true);
 
 		add(menu);
 
@@ -80,15 +101,5 @@ class MainMenuState extends FlxState
 		text.animateColourByArray([0xffa05080, 0xff80a050, 0xff5080a0], 0.075, 0.6,);
 
 		return text;
-	}
-
-	function setPickEnemySubState()
-	{
-		this.subState = new SelectEnemy();
-		this.subState.create();
-		this.subState.closeCallback = () ->
-		{
-			this.subState = null;
-		}
 	}
 }

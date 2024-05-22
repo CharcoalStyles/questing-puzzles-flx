@@ -63,6 +63,7 @@ Also there will be notes, they will be silly as I usually commit changes when it
   - [x] arrow keys to select and enter to activate
   - [x] mouseover to select and click to activate
   - [x] Basic animations
+  - [x] Multiple pages
   - [ ] joypad support
   - [ ] Number range selection
   - [ ] Select from array
