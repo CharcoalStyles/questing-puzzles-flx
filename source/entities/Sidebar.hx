@@ -275,11 +275,12 @@ class Sidebar extends UiFlxGroup
 		}
 	}
 
+	var isMouseInside:Bool = false;
+
 	public function handleHover(point:FlxPoint)
 	{
 		if (this.screenArea.containsPoint(point))
 		{
-			FlxG.log.add("mouse over");
 			isMouseInside = true;
 			for (spellUi in spellUis)
 			{
@@ -288,10 +289,8 @@ class Sidebar extends UiFlxGroup
 		}
 		else
 		{
-			FlxG.log.add("mouse out");
 			if (isMouseInside)
 			{
-				FlxG.log.add("mouse out");
 				isMouseInside = false;
 				for (spellUi in spellUis)
 				{
