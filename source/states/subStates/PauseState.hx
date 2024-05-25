@@ -3,27 +3,37 @@ package states.subStates;
 import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.text.FlxText;
+import utils.CsMenu;
+import utils.GlobalState;
 
 class PauseState extends FlxSubState
 {
 	public function new()
 	{
-		super(0xff000000);
+		super(0xff101010);
 	}
 
 	public override function create():Void
 	{
 		super.create();
 
-		var workingY = FlxG.height / 3;
+		var menu = new CsMenu(FlxG.width / 2, FlxG.height / 4, FlxTextAlign.CENTER);
+		var mainPage = menu.createPage("Main");
+		mainPage.addLabel("PAUSED");
+		mainPage.addLabel(" ");
+		mainPage.addItem("Toggle Fullscreen", () -> FlxG.fullscreen = !FlxG.fullscreen);
+		mainPage.addItem("Quit", () ->
+		{
+			var globalState = FlxG.plugins.get(GlobalState);
+			globalState.player.clearObservers();
+			globalState.ai.clearObservers();
+			FlxG.switchState(new MainMenuState());
+		});
+		mainPage.addLabel(" ");
+		mainPage.addItem("Back", () -> this.closeCallback());
 
-		var text:FlxText = new FlxText(0, workingY, -1, "PAUSED");
-		text.setFormat(null, 64, 0xff000000, LEFT, OUTLINE, 0xffffffff);
-		text.x = (FlxG.width - text.width) / 2;
-		add(text);
+		mainPage.show(true);
 
-    workingY += text.height * 1.75;
-
-    
+		add(menu);
 	}
 }

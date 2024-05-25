@@ -6,7 +6,12 @@ import entities.PlayBoard;
 import entities.Sidebar;
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.text.FlxText;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
+import haxe.Timer;
+import states.subStates.PauseState;
+import utils.CsMenu;
 import utils.GlobalState;
 import utils.SplitText;
 
@@ -44,6 +49,7 @@ class PlayState extends FlxState
 
 	var winText:SplitText;
 	var loseText:SplitText;
+	var continueText:FlxText;
 
 	override public function create()
 	{
@@ -62,25 +68,7 @@ class PlayState extends FlxState
 			switch (state)
 			{
 				case BoardState.Idle:
-					if (currentState == SpellEffect)
-					{
-						setState(Idle);
-					}
-					else
-					{
-						isPlayerTurn = isPlayerTurnNext;
-					}
-
-					if (isPlayerTurn)
-					{
-						playerSidebar.isActive = true;
-						aiSidebar.isActive = false;
-					}
-					else
-					{
-						playerSidebar.isActive = false;
-						aiSidebar.isActive = true;
-					}
+					setState(Idle);
 				case BoardState.SwappingRevert:
 					isPlayerTurnNext = true;
 				case BoardState.PostMatch:
@@ -118,25 +106,34 @@ class PlayState extends FlxState
 		winText = new SplitText(0, 0, "You Win!", SplitText.naiieveScaleDefaultOptions(2.2));
 		winText.x = (FlxG.width - winText.width) / 2;
 		winText.y = FlxG.height / 2;
+		winText.borderColor = 0xff000000;
+		winText.borderSize = 2;
+		winText.borderStyle = FlxTextBorderStyle.OUTLINE;
 		winText.alpha = 0;
 		add(winText);
 
 		loseText = new SplitText(0, 0, "You Lose!", SplitText.naiieveScaleDefaultOptions(2.2));
 		loseText.x = (FlxG.width - loseText.width) / 2;
 		loseText.y = FlxG.height / 2;
+		loseText.borderColor = 0xff000000;
+		loseText.borderSize = 2;
+		loseText.borderStyle = FlxTextBorderStyle.OUTLINE;
 		loseText.alpha = 0;
 		add(loseText);
+
+		continueText = new FlxText(0, FlxG.height - 32, 0, "Press any key to continue", 32);
+		continueText.x = (FlxG.width - continueText.width) / 2;
+		continueText.y = FlxG.height - 128;
+		continueText.borderColor = 0xff000000;
+		continueText.borderSize = 2;
+		continueText.borderStyle = FlxTextBorderStyle.OUTLINE;
+		continueText.alpha = 0;
+		add(continueText);
 	}
 
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		if (FlxG.keys.justPressed.ESCAPE)
-		{
-			globalState.player.clearObservers();
-			globalState.ai.clearObservers();
-			FlxG.switchState(new MainMenuState());
-		}
 
 		if (FlxG.keys.justPressed.ONE)
 		{
@@ -146,11 +143,32 @@ class PlayState extends FlxState
 			}
 		}
 
+		var mousePos = FlxG.mouse.getPosition();
+		playerSidebar.handleHover(mousePos);
+		aiSidebar.handleHover(mousePos);
+
 		switch (currentState)
 		{
 			case Play_State.Idle:
 				idleUpdate(elapsed);
+			case Play_State.GameOver:
+				if (FlxG.keys.justPressed.ANY || FlxG.mouse.justPressed)
+				{
+					globalState.player.clearObservers();
+					globalState.ai.clearObservers();
+					FlxG.switchState(new MainMenuState());
+				}
 			default:
+		}
+
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			this.subState = new PauseState();
+			this.subState.create();
+			this.subState.closeCallback = () ->
+			{
+				this.subState = null;
+			}
 		}
 	}
 
@@ -160,17 +178,38 @@ class PlayState extends FlxState
 		switch (state)
 		{
 			case Play_State.Idle:
+				isPlayerTurn = isPlayerTurnNext;
+
+				if (isPlayerTurn)
+				{
+					playerSidebar.isActive = true;
+					aiSidebar.isActive = false;
+				}
+				else
+				{
+					playerSidebar.isActive = false;
+					aiSidebar.isActive = true;
+				}
+
 				if (globalState.ai.health <= 0)
 				{
 					winText.animateWave(64, 0.3, 2.0, false);
-					winText.animateColour(0xff40e090, 0.3, 2.0, 0x00FFFFFF, true);
+					winText.animateColour(0xff36cb4a, 0.3, 2.0, 0x00FFFFFF, true);
 					realState = Play_State.GameOver;
+					Timer.delay(() ->
+					{
+						FlxTween.tween(continueText, {alpha: 1}, 0.5);
+					}, 1000);
 				}
 				if (globalState.player.health <= 0)
 				{
 					loseText.animateWave(64, 0.3, 2.0, false);
-					loseText.animateColour(0xffff6060, 0.3, 2.0, 0x00FFFFFF, true);
+					loseText.animateColour(0xffe24f4f, 0.3, 2.0, 0x00FFFFFF, true);
 					realState = Play_State.GameOver;
+					Timer.delay(() ->
+					{
+						FlxTween.tween(continueText, {alpha: 1}, 0.5);
+					}, 1000);
 				}
 			case Play_State.BoardMatching:
 			case Play_State.SpellEffect:
@@ -182,14 +221,16 @@ class PlayState extends FlxState
 
 	function idleUpdate(elapsed:Float)
 	{
+		var mousePos = FlxG.mouse.getPosition();
+
 		if (isPlayerTurn)
 		{
 			if (FlxG.mouse.justPressed)
 			{
-				var mousePos = FlxG.mouse.getPosition();
 				if (board.isPointInside(mousePos))
 				{
 					board.handleclick(mousePos);
+
 					isPlayerTurnNext = false;
 					timer = 0;
 				}
@@ -204,6 +245,10 @@ class PlayState extends FlxState
 
 						FlxTimer.wait(nextState.delay, () ->
 						{
+							if (nextState.endTurn)
+							{
+								isPlayerTurnNext = false;
+							}
 							if (nextState.nextState == Play_State.BoardMatching)
 							{
 								board.setState(BoardState.Matching);
@@ -244,6 +289,10 @@ class PlayState extends FlxState
 
 					FlxTimer.wait(nextState.delay, () ->
 					{
+						if (nextState.endTurn)
+						{
+							isPlayerTurnNext = true;
+						}
 						if (nextState.nextState == Play_State.BoardMatching)
 						{
 							board.setState(BoardState.Matching);

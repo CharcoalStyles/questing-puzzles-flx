@@ -32,7 +32,8 @@ class Character
 
 typedef SpellEffect = (enemy:Character, self:Character, board:PlayBoard) -> {
 	delay: Float,
-	nextState: Play_State
+	nextState: Play_State,
+	endTurn: Bool
 };
 
 class Spell
@@ -58,7 +59,8 @@ class Spell
 	public function run(enemy:Character, self:Character, board:PlayBoard):
 		{
 			delay:Float,
-			nextState:Play_State
+			nextState:Play_State,
+			endTurn:Bool
 		}
 	{
 		var valid = true;
@@ -81,7 +83,8 @@ class Spell
 		{
 			return {
 				delay: 0,
-				nextState: Play_State.Idle
+				nextState: Play_State.Idle,
+				endTurn: false
 			};
 		}
 

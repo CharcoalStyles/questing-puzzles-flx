@@ -232,9 +232,9 @@ class PlayBoard extends UiFlxGroup
 				});
 			default:
 			case BoardState.Matching:
-				updateMatching(true);
-			case Matching_Spell:
 				updateMatching(false);
+			case Matching_Spell:
+				updateMatching(true);
 			case BoardState.PostMatch:
 				onGemMovedFinished(() ->
 				{

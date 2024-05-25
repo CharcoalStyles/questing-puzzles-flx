@@ -251,7 +251,8 @@ class Loader
 
 			return {
 				delay: ret.delay,
-				nextState: ret.nextState == 0 ? Play_State.Idle : Play_State.BoardMatching
+				nextState: ret.nextState == 0 ? Play_State.Idle : Play_State.BoardMatching,
+				endTurn: args.endTurn == null ? false : args.endTurn
 			};
 		}
 	}

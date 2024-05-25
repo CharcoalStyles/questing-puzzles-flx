@@ -1,3 +1,15 @@
+# 2024-05-25 23:56:17
+
+More polish (aka procrastination)!
+
+Tweaked Fireball to only use 5 fire mana, but also ends the turn. This is through a "global" (i.e. any spell can have it) arg.
+
+Added tooltips to the spells that show hte description.
+
+Put a menu in the pause state.
+
+Tweaked the visuals of the gameover screen and added a "press any key to continue" text. and it goes back to the main menu when nay button is pressed.
+
 # 2024-05-23 07:27:01
 
 Even more procrastination!

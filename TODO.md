@@ -21,6 +21,7 @@ Also there will be notes, they will be silly as I usually commit changes when it
   - [ ] Add easings to each stop
     - I think just adding an easing option to a stop and using the esing form the "lowest" stop is the best way to go.
   - [ ] Add property to change the particle sprite
+    - Having some trouble finding nice sprites for this.
 - [x] Data driven everything that is in the game now
   - Yes! Rather than adding more actual fun game stuff, I spent time doing silly technical things. 😀
   - [x] Characters
@@ -33,16 +34,16 @@ Also there will be notes, they will be silly as I usually commit changes when it
     - [x] Effects definition in `Modding.md`
     - [x] Working (in game) effects
     - This will be ongoing, there's **a lot** of work to do here. But the first full spell is in (Fireball, for the player).
-- [ ] Tooltips for spells
-  - [ ] Tooltips for spells in game on mouse hover
+- [x] Tooltips for spells
+  - [x] Tooltips for spells in game on mouse hover
 - [ ] x-match system
   - [x] New turn on 4+ match
   - [x] UI and/or text effect for new turn
   - [x] Do something on 5+ match (This is done, but needs balancing)
   - [ ] Do something on 6+ match?
-- [ ] Battle win/lose system
+- [x] Battle win/lose system
   - [x] Add a "win" and "lose" effect to the game
-  - [ ] Add a way to easily get back to the main menu 🤣
+  - [x] Add a way to easily get back to the main menu 🤣
 - [ ] Change Air to damage
   - [ ] Remove from character mana system
   - [ ] deal damage to other character on match
@@ -54,7 +55,8 @@ Also there will be notes, they will be silly as I usually commit changes when it
   - [ ] Setup GitHub runners on Server and/or MacMini
   - [ ] Setup GitHub actions
     - [ ] Build for Windows
-    - [ ] Build for Mac (This might have to be an x86 version as of the current Lime + OpenFL sate)
+    - [ ] Build for Mac
+      - Actually, just because I might have to use an x86 version of haxe and stuff, it doesn't matter, as building the game with xCode will make it either Arm or universal anyway. Duh.
     - [ ] Build for Linux
     - [ ] Build for Android
 - [ ] Add Controller support
@@ -77,8 +79,8 @@ Also there will be notes, they will be silly as I usually commit changes when it
       - I added a toggle for full screen, it's a step.
   - [ ] Add a "Quit" button to main menu
 - [ ] Add a Pause menu
-  - [ ] Add a "Resume" button to pause menu
-  - [ ] Add a "Quit" button to pause menu
+  - [x] Add a "Resume" button to pause menu
+  - [x] Add a "Quit" button to pause menu
   - [ ] Add a "Options" button to pause menu
 - [ ] Add an Options menu
   - [ ] Add a Full Screen option (Put the stupid basic version on the main menu)

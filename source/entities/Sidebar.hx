@@ -16,6 +16,7 @@ import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxPool;
 import haxe.Timer;
+import js.html.Console;
 import utils.ExtendedLerp;
 import utils.GlobalState;
 import utils.Observer;
@@ -180,7 +181,7 @@ class Sidebar extends UiFlxGroup
 		workingY += 10;
 		for (spell in character.spells)
 		{
-			var spellUi = new SpellUi(paddedWorkingWidth.left, workingY, paddedWorkingWidth.width, spell);
+			var spellUi = new SpellUi(paddedWorkingWidth.left, workingY, paddedWorkingWidth.width, spell, isLeft);
 			spellUis.push(spellUi);
 			add(spellUi);
 			for (mt in spell.manaCosts.keys())
@@ -274,16 +275,46 @@ class Sidebar extends UiFlxGroup
 		}
 	}
 
+	public function handleHover(point:FlxPoint)
+	{
+		if (this.screenArea.containsPoint(point))
+		{
+			FlxG.log.add("mouse over");
+			isMouseInside = true;
+			for (spellUi in spellUis)
+			{
+				spellUi.handleHover(point);
+			}
+		}
+		else
+		{
+			FlxG.log.add("mouse out");
+			if (isMouseInside)
+			{
+				FlxG.log.add("mouse out");
+				isMouseInside = false;
+				for (spellUi in spellUis)
+				{
+					spellUi.handleHover(point);
+				}
+			}
+		}
+	}
+
 	public function handleClick(point:FlxPoint)
 	{
-		var spell:Null<Spell> = null;
-		for (spellUi in spellUis)
+		if (isActive)
 		{
-			spell = spellUi.overlaps(point);
-			if (spell != null)
-				break;
+			var spell:Null<Spell> = null;
+			for (spellUi in spellUis)
+			{
+				spell = spellUi.handleClick(point);
+				if (spell != null)
+					break;
+			}
+			return spell;
 		}
-		return spell;
+		return null;
 	}
 
 	override function update(elapsed:Float)
@@ -316,10 +347,17 @@ class SpellUi extends FlxGroup
 	var borderTween:FlxTween;
 	var animTime = 0.8;
 	var timer = 0.0;
+	var isLeft:Bool;
 
-	public function new(X:Int, Y:Int, width:Int, spell:Spell)
+	var tooltipBackground:FlxSprite;
+	var tooltipText:FlxText;
+
+	var isHovering:Bool = false;
+
+	public function new(X:Int, Y:Int, width:Int, spell:Spell, isLeft:Bool)
 	{
 		super();
+		this.isLeft = isLeft;
 
 		this.spell = spell;
 
@@ -360,6 +398,22 @@ class SpellUi extends FlxGroup
 			workingX += Std.int(mc.width + 5);
 		}
 		borderTween = null;
+
+		tooltipText = new FlxText(0, 0, 0, spell.description);
+		tooltipText.setFormat(null, 16, FlxColor.WHITE);
+		tooltipText.alpha = 0;
+
+		tooltipBackground = new FlxSprite(0, 0, null);
+		tooltipBackground.makeGraphic(Std.int(tooltipText.width + 6), Std.int(tooltipText.height + 6), 0xff000000);
+		tooltipBackground.alpha = 0;
+
+		tooltipBackground.x = isLeft ? border.x + border.width + 8 : border.x - tooltipBackground.width - 8;
+		tooltipBackground.y = border.y + (border.height - tooltipBackground.height) / 2;
+		tooltipText.x = tooltipBackground.x + 3;
+		tooltipText.y = tooltipBackground.y + 3;
+
+		add(tooltipBackground);
+		add(tooltipText);
 	}
 
 	override function update(elapsed:Float)
@@ -380,9 +434,30 @@ class SpellUi extends FlxGroup
 		}
 	}
 
-	public function overlaps(point:FlxPoint):Null<Spell>
+	function overlaps(point:FlxPoint):Bool
 	{
-		return border.overlapsPoint(point) ? spell : null;
+		return border.overlapsPoint(point);
+	}
+
+	public function handleHover(point:FlxPoint)
+	{
+		if (overlaps(point) && !isHovering)
+		{
+			isHovering = true;
+			tooltipBackground.alpha = 1;
+			tooltipText.alpha = 1;
+		}
+		else if (!overlaps(point) && isHovering)
+		{
+			isHovering = false;
+			tooltipBackground.alpha = 0;
+			tooltipText.alpha = 0;
+		}
+	}
+
+	public function handleClick(point:FlxPoint)
+	{
+		return overlaps(point) ? spell : null;
 	}
 
 	public function onManaUpdate(totalNumber:Float, manaType:ManaType)
