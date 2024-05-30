@@ -1,0 +1,18 @@
+{
+  "name": "Eats Cheese",
+  "description": "Nibbles on a crumb of cheese. Heals 2 health.",
+  "mana": {
+    "Earth": 1,
+    "Light": 1
+  },
+  "effect": "HealCaster",
+  "args": {
+    "heal": 2,
+    "colours": {
+      "start": "0xe0e030",
+      "mid": "0x40ff40",
+      "end": "0x10c010"
+    },
+    "endTurn": true
+  }
+}

@@ -64,7 +64,7 @@ class CsMenuPage extends FlxTypedGroup<SplitText>
 
 	function addEntry(label:String, ?callback:Void->Void, ?options:AnimOptions)
 	{
-		var opt = options != null ? options : {unselectedColour: 0xFF303030, selectedColour: 0xFF909090, borderColour: 0xFFFFFFFF};
+		var opt = options != null ? options : {unselectedColour: 0xFF202020, selectedColour: 0xFF606060, borderColour: 0xFFFFFFFF};
 
 		if (opt.selectedColour == null)
 		{
@@ -96,6 +96,7 @@ class CsMenuPage extends FlxTypedGroup<SplitText>
 		{
 			text.color = opt.selectedColour;
 			selected = menuItems.length - 1;
+			selectedAnim(selected);
 		}
 		else
 		{
@@ -115,14 +116,25 @@ class CsMenuPage extends FlxTypedGroup<SplitText>
 	function onSelectedAnim(index:Int)
 	{
 		var selection = members[index];
+		selection.stopAnimation();
 		var item = menuItems[index];
-		selection.animateWave(12, 0.01, 0.2, true);
+		selection.animateWave(12, 0.01, 0.2, true, () ->
+		{
+			selectedAnim(index);
+		});
 		selection.animateColour(item.options.selectedColour, 0.01, 0.2, item.options.unselectedColour, true);
+	}
+
+	function selectedAnim(index:Int)
+	{
+		var selection = members[index];
+		selection.animateWave(6, 0.125, 0.8, false);
 	}
 
 	function onDeselectedAnim(index:Int)
 	{
 		var selection = members[index];
+		selection.stopAnimation();
 		var item = menuItems[index];
 		selection.animateColour(item.options.unselectedColour, 0.01, 0.2, item.options.selectedColour, true);
 	}

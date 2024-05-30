@@ -1,0 +1,16 @@
+{
+  "name": "Bite",
+  "description": "Ow! That stings. Deals 5 damage.",
+  "mana": {
+    "Dark": 6
+  },
+  "effect": "DamageEnemy",
+  "args": {
+    "lifespan": {
+      "min": 0.85,
+      "max": 1.15
+    },
+    "damage": 4,
+    "colour": "0xb0c050"
+  }
+}

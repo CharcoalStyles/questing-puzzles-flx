@@ -1,3 +1,13 @@
+# 2024-05-30 20:45:29
+
+The grey gems now do damage!, 1 damage per gem and a simple effect. Nothing too much more than that.
+
+Added a new enemy character, the Test Rat; it bites and eats cheese. I mainly just wanted another character (and set of spells) to test the loading of new characters.
+
+I also updated the menu text animations, a selected item now waves a little. I also remove the animations when items are switched.
+
+Also did a tiny bit of game balancing. It's not perfect, but it's a start.
+
 # 2024-05-25 23:56:17
 
 More polish (aka procrastination)!
@@ -8,7 +18,7 @@ Added tooltips to the spells that show hte description.
 
 Put a menu in the pause state.
 
-Tweaked the visuals of the gameover screen and added a "press any key to continue" text. and it goes back to the main menu when nay button is pressed.
+Tweaked the visuals of the game over screen and added a "press any key to continue" text. and it goes back to the main menu when nay button is pressed.
 
 # 2024-05-23 07:27:01
 
@@ -20,9 +30,9 @@ Menus have pages now.
 
 More procrastination!
 
-I thought it might be nice to have a menu system that is a little nicer to make. I came across another livbrary, but wasted a few hours to not get it working.
+I thought it might be nice to have a menu system that is a little nicer to make. I came across another library, but wasted a few hours to not get it working.
 
-So I've started my own! It currently is accessible though keyboard and mouse (and possibly touch). It has defauilt animations for selection and deselection, as well as unselectable items; commonly known as labels.
+So I've started my own! It currently is accessible though keyboard and mouse (and possibly touch). It has default animations for selection and deselection, as well as unselectable items; commonly known as labels.
 
 Eventually there will be more options; I'm thinking different anims, joystick support (duh), and other menu options, like number scrolling and selectable options from a list/array. You know, usual game menu stuff.
 

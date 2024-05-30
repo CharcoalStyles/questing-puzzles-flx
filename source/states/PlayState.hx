@@ -4,15 +4,18 @@ import entities.Character;
 import entities.Gem.GemType;
 import entities.PlayBoard;
 import entities.Sidebar;
+import entities.effects.CsEmitter;
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import haxe.Timer;
 import states.subStates.PauseState;
-import utils.CsMenu;
+import utils.CsMath;
 import utils.GlobalState;
+import utils.Loader;
 import utils.SplitText;
 
 enum Play_State
@@ -38,10 +41,10 @@ class PlayState extends FlxState
 	var currentBoardState:BoardState = BoardState.Idle;
 
 	var playerSidebar:Sidebar;
-	var aiSidebar:Sidebar;
+	var enemySidebar:Sidebar;
 
 	var player:Character;
-	var ai:Character;
+	var enemy:Character;
 	var globalState:GlobalState;
 
 	var extraTurnText:SplitText;
@@ -51,6 +54,13 @@ class PlayState extends FlxState
 	var loseText:SplitText;
 	var continueText:FlxText;
 
+	public function new(enemyfileName:String)
+	{
+		super();
+		var enemyData = Loader.loadCharacterFromFile(enemyfileName);
+		enemy = new Character(enemyData);
+	}
+
 	override public function create()
 	{
 		super.create();
@@ -58,6 +68,7 @@ class PlayState extends FlxState
 		FlxG.camera.antialiasing = true;
 
 		globalState = FlxG.plugins.get(GlobalState);
+		globalState.player.reset();
 
 		board = new PlayBoard(8, 8); // var rows = 8;
 		add(board);
@@ -85,9 +96,9 @@ class PlayState extends FlxState
 		add(playerSidebar);
 		globalState.player.sidebar = playerSidebar;
 
-		aiSidebar = new Sidebar(globalState.ai, false);
-		add(aiSidebar);
-		globalState.ai.sidebar = aiSidebar;
+		enemySidebar = new Sidebar(enemy, false);
+		add(enemySidebar);
+		enemy.sidebar = enemySidebar;
 
 		globalState.createEmitter();
 		add(globalState.emitter.activeMembers);
@@ -145,7 +156,7 @@ class PlayState extends FlxState
 
 		var mousePos = FlxG.mouse.getPosition();
 		playerSidebar.handleHover(mousePos);
-		aiSidebar.handleHover(mousePos);
+		enemySidebar.handleHover(mousePos);
 
 		switch (currentState)
 		{
@@ -155,7 +166,7 @@ class PlayState extends FlxState
 				if (FlxG.keys.justPressed.ANY || FlxG.mouse.justPressed)
 				{
 					globalState.player.clearObservers();
-					globalState.ai.clearObservers();
+					enemy.clearObservers();
 					FlxG.switchState(new MainMenuState());
 				}
 			default:
@@ -183,15 +194,15 @@ class PlayState extends FlxState
 				if (isPlayerTurn)
 				{
 					playerSidebar.isActive = true;
-					aiSidebar.isActive = false;
+					enemySidebar.isActive = false;
 				}
 				else
 				{
 					playerSidebar.isActive = false;
-					aiSidebar.isActive = true;
+					enemySidebar.isActive = true;
 				}
 
-				if (globalState.ai.health <= 0)
+				if (enemy.health <= 0)
 				{
 					winText.animateWave(64, 0.3, 2.0, false);
 					winText.animateColour(0xff36cb4a, 0.3, 2.0, 0x00FFFFFF, true);
@@ -241,7 +252,7 @@ class PlayState extends FlxState
 					var spell = playerSidebar.handleClick(mousePos);
 					if (spell != null)
 					{
-						var nextState = spell.run(globalState.ai, globalState.player, board);
+						var nextState = spell.run(enemy, globalState.player, board);
 
 						FlxTimer.wait(nextState.delay, () ->
 						{
@@ -251,7 +262,7 @@ class PlayState extends FlxState
 							}
 							if (nextState.nextState == Play_State.BoardMatching)
 							{
-								board.setState(BoardState.Matching);
+								board.setState(BoardState.Matching_Spell);
 							}
 							else
 							{
@@ -264,7 +275,7 @@ class PlayState extends FlxState
 						setState(Play_State.Idle);
 					}
 				}
-				else if (aiSidebar.isPointInside(FlxG.mouse.getPosition())) {}
+				else if (enemySidebar.isPointInside(FlxG.mouse.getPosition())) {}
 			}
 		}
 		else
@@ -273,7 +284,7 @@ class PlayState extends FlxState
 			if (timer >= triggerTime)
 			{
 				var availableSpells = [];
-				for (spellUi in globalState.ai.sidebar.spellUis)
+				for (spellUi in enemy.sidebar.spellUis)
 				{
 					if (spellUi.isActivated)
 					{
@@ -281,11 +292,11 @@ class PlayState extends FlxState
 					}
 				}
 
-				if (availableSpells.length > 0 && FlxG.random.int(0, 9) <= globalState.ai.level + 1)
+				if (availableSpells.length > 0 && FlxG.random.int(0, 9) <= enemy.level + 1)
 				{
 					setState(Play_State.SpellEffect);
 					var spell = availableSpells[FlxG.random.int(0, availableSpells.length - 1)];
-					var nextState = spell.run(globalState.player, globalState.ai, board);
+					var nextState = spell.run(globalState.player, enemy, board);
 
 					FlxTimer.wait(nextState.delay, () ->
 					{
@@ -295,7 +306,7 @@ class PlayState extends FlxState
 						}
 						if (nextState.nextState == Play_State.BoardMatching)
 						{
-							board.setState(BoardState.Matching);
+							board.setState(BoardState.Matching_Spell);
 						}
 						else
 						{
@@ -305,7 +316,8 @@ class PlayState extends FlxState
 					return;
 				}
 
-				var match = board.potentialMoves[0];
+				var matchIndex = board.potentialMoves.length == 1 ? 0 : FlxG.random.int(1, Math.floor(Math.min(board.potentialMoves.length - 1, 4)));
+				var match = board.potentialMoves[matchIndex];
 				if (match != null)
 				{
 					board.doMove(match);
@@ -318,7 +330,7 @@ class PlayState extends FlxState
 
 	function postMatchUpdateOnce()
 	{
-		var sb = isPlayerTurn ? playerSidebar : aiSidebar;
+		var sb = isPlayerTurn ? playerSidebar : enemySidebar;
 
 		var maxLength = 0;
 		for (match in board.activeMatches)
@@ -329,14 +341,47 @@ class PlayState extends FlxState
 
 			for (gemPos in match.pos)
 			{
-				sb.addMana(match.manaType, 1 + manaBonus, gemPos);
+				if (match.manaType == null)
+				{
+					var enemy = isPlayerTurn ? enemy : globalState.player;
+
+					var healthText = CsMath.centreRect(enemy.sidebar.healthText.getScreenBounds());
+					var p = globalState.emitter.emit(gemPos.x, gemPos.y);
+					var pSize = FlxPoint.get(1.75, 1.75);
+					p.setEffectStates([
+						{
+							lifespan: () -> FlxG.random.float(0.75, 0.5),
+							target: (particle) -> {
+								origin: FlxPoint.get(gemPos.x, gemPos.y),
+								target: FlxPoint.get(healthText.x, healthText.y),
+								easeName: "cubeIn"
+							},
+							scaleExtended: () -> [
+								{t: 0, value: pSize},
+								{t: 0.7, value: pSize.scaleNew(0.7)},
+								{t: 1, value: pSize.scaleNew(0.1)}
+							],
+							onComplete: (particle) ->
+							{
+								if (enemy.health > 0)
+								{
+									enemy.health.set(enemy.health - 1);
+								}
+							}
+						}
+					]);
+				}
+				else
+				{
+					sb.addMana(match.manaType, 1 + manaBonus, gemPos);
+				}
 			}
 		}
 
 		if (maxLength >= 4)
 		{
-			var timeLength = 1.75;
-			var perLetter = 0.08;
+			var timeLength = 0.7;
+			var perLetter = 0.02;
 
 			isPlayerTurnNext = isPlayerTurn;
 			extraTurnText.animateWave(64, perLetter, timeLength, true);

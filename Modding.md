@@ -37,7 +37,6 @@ Here is an example of an enemy:
     "Fire": 30, 
     "Water": 25,
     "Earth": 20,
-    "Air": 15,
     "Light": 25,
     "Dark": 15
   },

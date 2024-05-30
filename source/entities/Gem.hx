@@ -21,7 +21,7 @@ class Gem extends FlxSprite
 
 	public var selected(default, set):Bool = false;
 	public var highlighted(default, set):Bool = false;
-	public var manaType:ManaType;
+	public var manaType:Null<ManaType>;
 	public var gemType:GemType;
 
 	var angleTween:FlxTween;
@@ -184,11 +184,10 @@ class ManaType
 	public static var FIRE = new ManaType("Fire");
 	public static var EARTH = new ManaType("Earth");
 	public static var WATER = new ManaType("Water");
-	public static var AIR = new ManaType("Air");
 	public static var LIGHT = new ManaType("Light");
 	public static var DARK = new ManaType("Dark");
 
-	public static var ALL:Array<ManaType> = [FIRE, EARTH, WATER, AIR, LIGHT, DARK];
+	public static var ALL:Array<ManaType> = [FIRE, EARTH, WATER, LIGHT, DARK];
 
 	public static function fromString(str:String)
 	{
@@ -209,14 +208,14 @@ class ManaType
 
 class GemType
 {
-	public static var RED:GemType = new GemType(ManaType.FIRE, "tileGrey_40.png", 0xfffa9189, "Fire");
-	public static var GREEN:GemType = new GemType(ManaType.EARTH, "tileGrey_41.png", 0xffb3f5bc, "Earth");
-	public static var BLUE:GemType = new GemType(ManaType.WATER, "tileGrey_42.png", 0xffd6f6ff, "Water");
-	public static var YELLOW:GemType = new GemType(ManaType.LIGHT, "tileGrey_33.png", 0xfff9ffb5, "Light");
-	public static var PURPLE:GemType = new GemType(ManaType.DARK, "tileGrey_32.png", 0xffd1bdff, "Dark");
-	public static var ORANGE:GemType = new GemType(ManaType.AIR, "tileGrey_31.png", 0xffaaaaaa, "Air");
+	public static var FIRE:GemType = new GemType("tileGrey_40.png", 0xfffa9189, "Fire", ManaType.FIRE);
+	public static var EARTH:GemType = new GemType("tileGrey_41.png", 0xffb3f5bc, "Earth", ManaType.EARTH);
+	public static var WATER:GemType = new GemType("tileGrey_42.png", 0xffd6f6ff, "Water", ManaType.WATER);
+	public static var LIGHT:GemType = new GemType("tileGrey_33.png", 0xfff9ffb5, "Light", ManaType.LIGHT);
+	public static var DARK:GemType = new GemType("tileGrey_32.png", 0xffd1bdff, "Dark", ManaType.DARK);
+	public static var DAMAGE:GemType = new GemType("tileGrey_31.png", 0xffaaaaaa, "Damage");
 
-	public static var ALL:Array<GemType> = [RED, GREEN, BLUE, YELLOW, PURPLE, ORANGE];
+	public static var ALL:Array<GemType> = [FIRE, EARTH, WATER, LIGHT, DARK, DAMAGE];
 	public static var random = (?notIds:Array<ManaType>) ->
 	{
 		var filtered = ALL.filter((gt) -> (notIds == null ? [] : notIds).indexOf(gt.manaType) == -1);
@@ -229,13 +228,13 @@ class GemType
 		return idx.length > 0 ? idx[0] : null;
 	};
 
-	public var manaType:ManaType;
+	public var manaType:Null<ManaType>;
 	public var frame:String;
 	public var colour:FlxColor;
 	public var name:String;
 	public var shortName:String;
 
-	function new(mt:ManaType, uFrame:String, c:FlxColor, n:String)
+	function new(uFrame:String, c:FlxColor, n:String, ?mt:ManaType)
 	{
 		manaType = mt;
 		frame = uFrame;

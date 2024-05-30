@@ -127,46 +127,44 @@ class Sidebar extends UiFlxGroup
 		var i = 0;
 		var maxMana = 0;
 
-		for (gt in GemType.ALL)
+		for (mt in ManaType.ALL)
 		{
-			var max = char.maxMana[gt.manaType];
+			var max = char.maxMana[mt];
 			if (max > maxMana)
 				maxMana = max;
-		}
 
-		for (gt in GemType.ALL)
-		{
+			var gt = GemType.fromManaType(mt);
+
 			var mtLabel:FlxText = new FlxText(paddedWorkingWidth.lCol.left, workingY, 196, gt.name);
 			mtLabel.setFormat(null, 16, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			mtLabel.borderSize = 2;
 			add(mtLabel);
 
-			var amtLabel = new FlxText(paddedWorkingWidth.lCol.left, workingY, 196,
-				Std.string(char.mana[gt.manaType].get()) + "/" + Std.string(char.maxMana[gt.manaType]));
+			var amtLabel = new FlxText(paddedWorkingWidth.lCol.left, workingY, 196, Std.string(char.mana[mt].get()) + "/" + Std.string(char.maxMana[mt]));
 			amtLabel.setFormat(null, 16, FlxColor.WHITE, FlxTextAlign.RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			amtLabel.borderSize = 2;
 			add(amtLabel);
 
 			workingY += Std.int(amtLabel.height + 2);
 
-			// using char.maxMana[gt.manaType] and maxMana scale this so that the max mana bar is always the same size
-			var barSize = Std.int((paddedWorkingWidth.lCol.right - paddedWorkingWidth.lCol.left) / maxMana * char.maxMana[gt.manaType]);
+			// using char.maxMana[mt] and maxMana scale this so that the max mana bar is always the same size
+			var barSize = Std.int((paddedWorkingWidth.lCol.right - paddedWorkingWidth.lCol.left) / maxMana * char.maxMana[mt]);
 
 			var bar:FlxBar = new FlxBar(paddedWorkingWidth.lCol.left, workingY, FlxBarFillDirection.LEFT_TO_RIGHT, barSize, Std.int(amtLabel.height), null,
-				"", 0, char.maxMana[gt.manaType], true);
+				"", 0, char.maxMana[mt], true);
 
 			bar.createFilledBar(0xff202020, gt.colour, true, gt.colour);
 			add(bar);
 
-			allStores.set(gt.manaType, {bar: bar, label: amtLabel, colour: gt.colour});
+			allStores.set(mt, {bar: bar, label: amtLabel, colour: gt.colour});
 
-			var playerMana = character.mana[gt.manaType];
+			var playerMana = character.mana[mt];
 			if (playerMana != null)
 			{
 				playerMana.addObserver(new CallbackObserver<Float>((sender, ?data) ->
 				{
 					bar.value = data;
-					amtLabel.text = Std.string(Math.floor(bar.value)) + "/" + Std.string(char.maxMana[gt.manaType]);
+					amtLabel.text = Std.string(Math.floor(bar.value)) + "/" + Std.string(char.maxMana[mt]);
 				}));
 			}
 

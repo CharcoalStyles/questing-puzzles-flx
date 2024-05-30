@@ -40,17 +40,20 @@ Also there will be notes, they will be silly as I usually commit changes when it
   - [x] New turn on 4+ match
   - [x] UI and/or text effect for new turn
   - [x] Do something on 5+ match (This is done, but needs balancing)
-  - [ ] Do something on 6+ match?
+    - Because of jpw the the mana is added, I had to add 1 mana to each gem, so it quite OP.
+  - [x] Do something on 6+ match?
+    - nah.
 - [x] Battle win/lose system
   - [x] Add a "win" and "lose" effect to the game
   - [x] Add a way to easily get back to the main menu 🤣
 - [ ] Change Air to damage
-  - [ ] Remove from character mana system
-  - [ ] deal damage to other character on match
+  - [x] Remove from character mana system
+  - [x] deal damage to other character on match
   - [ ] Find appropriate developer art for new gem
 - [ ] Next version of enemy "AI"
   - [x] Add support for using spells
   - [ ] Rank required mana higher in potential matches pool
+  - [x] Adjust the range for which matches are available for the AI to access to match, to make it more balanced
 - [ ] Setup CI/CD for win/mac/linux/android versions
   - [ ] Setup GitHub runners on Server and/or MacMini
   - [ ] Setup GitHub actions

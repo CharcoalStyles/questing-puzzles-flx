@@ -45,11 +45,9 @@ class MainMenuState extends FlxState
 
 		for (char in characters)
 		{
-			newGamePage.addItem(char.name, () ->
+			newGamePage.addItem(char.data.name, () ->
 			{
-				var c = Loader.loadCharacter(char);
-				globalState.ai = c;
-				FlxG.switchState(new PlayState());
+				FlxG.switchState(new PlayState(char.fileName));
 			});
 		}
 

@@ -26,7 +26,6 @@ class PauseState extends FlxSubState
 		{
 			var globalState = FlxG.plugins.get(GlobalState);
 			globalState.player.clearObservers();
-			globalState.ai.clearObservers();
 			FlxG.switchState(new MainMenuState());
 		});
 		mainPage.addLabel(" ");

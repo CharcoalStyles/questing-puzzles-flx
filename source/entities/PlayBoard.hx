@@ -78,7 +78,7 @@ typedef MatchGroup = Array<CellIndex>;
 
 typedef CurrentMatchesStats =
 {
-	manaType:ManaType,
+	manaType:Null<ManaType>,
 	pos:Array<FlxPoint>,
 	count:Int
 }
@@ -104,12 +104,12 @@ class PlayBoard extends UiFlxGroup
 
 	var boardState = new Array<Array<Int>>();
 	var bsToGt = [
-		GemType.RED,
-		GemType.GREEN,
-		GemType.BLUE,
-		GemType.YELLOW,
-		GemType.PURPLE,
-		GemType.ORANGE
+		GemType.FIRE,
+		GemType.EARTH,
+		GemType.WATER,
+		GemType.LIGHT,
+		GemType.DARK,
+		GemType.DAMAGE
 	];
 
 	var bkgrndTiles:FlxGroup;
@@ -122,8 +122,6 @@ class PlayBoard extends UiFlxGroup
 	public function new(rows:Int, cols:Int)
 	{
 		super();
-		FlxG.watch.add(this, "state");
-		FlxG.watch.add(this, "gemMoves");
 
 		FlxG.mouse.visible = true;
 
@@ -195,7 +193,7 @@ class PlayBoard extends UiFlxGroup
 			{
 				var g = board[y][x];
 				if (g != null)
-					deb += (isId ? Std.string(g.id) : g.manaType.name) + ", ";
+					deb += (isId ? Std.string(g.id) : g.manaType == null ? "D" : g.manaType.name) + ", ";
 				else
 					deb += "-, ";
 			}

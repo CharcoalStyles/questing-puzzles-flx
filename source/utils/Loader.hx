@@ -49,7 +49,7 @@ typedef EffectArgs =
 
 class Loader
 {
-	public static function loadCharacters():Array<CharacterStruct>
+	public static function loadCharacters():Array<{fileName:String, data:CharacterStruct}>
 	{
 		var characterFileName = Assets.list(TEXT);
 		var characterFileName = characterFileName.filter(function(f) return f.indexOf("/characters/") != -1);
@@ -58,38 +58,16 @@ class Loader
 		{
 			var characterJson = Assets.getText(f);
 			var characterData:CharacterStruct = haxe.Json.parse(characterJson);
-			characters.push(characterData);
+			characters.push({fileName: f.split("/").pop(), data: characterData});
 		}
 		return characters;
 	}
 
-	public static function loadCharacter(characterData:CharacterStruct):Character
+	public static function loadCharacterFromFile(characterFileName:String):CharacterStruct
 	{
-		var char = new Character();
-		trace(characterData.name);
-
-		char.name = characterData.name;
-		// char.portrait = characterData.portrait;
-		char.level = characterData.level;
-		char.maxHealth = characterData.health;
-		char.health = new IntObservable(characterData.health);
-		char.maxMana = new Map();
-		char.mana = new Map();
-		for (mt in characterData.mana.keys())
-		{
-			var manaType = ManaType.fromString(mt);
-			if (manaType == null)
-			{
-				throw "Invalid mana type: " + mt;
-			}
-
-			char.maxMana.set(manaType, characterData.mana.get(mt));
-			char.mana.set(manaType, new FloatObservable(0));
-		}
-
-		char.spells = characterData.spells.map((name) -> Loader.loadSpell(name));
-
-		return char;
+		var characterJson = Assets.getText("assets/data/characters/" + characterFileName);
+		var characterData:CharacterStruct = haxe.Json.parse(characterJson);
+		return characterData;
 	}
 
 	public static function loadSpell(name:String):Spell

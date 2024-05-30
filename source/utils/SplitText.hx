@@ -194,7 +194,18 @@ class SplitText extends FlxTypedGroup<FlxText>
 
 	private var tweens:Array<FlxTween> = [];
 
-	public function animateWave(?totalDistance:Float = 12, ?charDelay:Float = 0.15, ?speed:Float = 1, ?oneShot:Bool = false)
+	public function removeTweens()
+	{
+		if (tweens.length > 0)
+		{
+			for (tween in tweens)
+			{
+				tween.cancel();
+			}
+		}
+	}
+
+	public function animateWave(?totalDistance:Float = 12, ?charDelay:Float = 0.15, ?speed:Float = 1, ?oneShot:Bool = false, ?oneShotCallback:Void->Void)
 	{
 		for (i in 0...members.length)
 		{
@@ -208,7 +219,17 @@ class SplitText extends FlxTypedGroup<FlxText>
 					tweens.remove(t);
 					if (oneShot)
 					{
-						var tx = FlxTween.tween(char, {y: y}, speed / 2, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+						var tx = FlxTween.tween(char, {y: y}, speed / 2, {
+							type: ONESHOT,
+							ease: FlxEase.smoothStepInOut,
+							onComplete: (t) ->
+							{
+								if (oneShotCallback != null)
+								{
+									oneShotCallback();
+								}
+							}
+						});
 						tweens.push(tx);
 						return;
 					}
@@ -220,7 +241,8 @@ class SplitText extends FlxTypedGroup<FlxText>
 		}
 	}
 
-	public function animateColour(toColor:FlxColor, charDelay:Float = 0.15, ?speed:Float = 1, ?fromColor:FlxColor = null, ?oneShot:Bool = false)
+	public function animateColour(toColor:FlxColor, charDelay:Float = 0.15, ?speed:Float = 1, ?fromColor:FlxColor = null, ?oneShot:Bool = false,
+			?oneShotCallback:Void->Void)
 	{
 		var fColour = fromColor != null ? fromColor : color;
 		for (i in 0...members.length)
@@ -238,6 +260,10 @@ class SplitText extends FlxTypedGroup<FlxText>
 						var tx = FlxTween.color(char, speed * 2, toColor, fColour, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
 						tweens.push(tx);
 						return;
+					}
+					if (oneShotCallback != null)
+					{
+						oneShotCallback();
 					}
 				}
 			});

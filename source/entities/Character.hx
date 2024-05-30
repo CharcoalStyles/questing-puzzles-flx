@@ -2,6 +2,8 @@ package entities;
 
 import entities.Gem.ManaType;
 import states.PlayState.Play_State;
+import utils.Loader.CharacterStruct;
+import utils.Loader;
 import utils.Observer.FloatObservable;
 import utils.Observer.IntObservable;
 
@@ -18,7 +20,43 @@ class Character
 
 	public var sidebar:Sidebar;
 
-	public function new() {}
+	public function new(?characterData:CharacterStruct)
+	{
+		if (characterData == null)
+		{
+			return;
+		}
+
+		name = characterData.name;
+		// char.portrait = characterData.portrait;
+		level = characterData.level;
+		maxHealth = characterData.health;
+		health = new IntObservable(characterData.health);
+		maxMana = new Map();
+		mana = new Map();
+		for (mt in characterData.mana.keys())
+		{
+			var manaType = ManaType.fromString(mt);
+			if (manaType == null)
+			{
+				throw "Invalid mana type: " + mt;
+			}
+
+			maxMana.set(manaType, characterData.mana.get(mt));
+			mana.set(manaType, new FloatObservable(0));
+		}
+
+		spells = characterData.spells.map((name) -> Loader.loadSpell(name));
+	}
+
+	public function reset()
+	{
+		health.set(maxHealth);
+		for (manaType in mana.keys())
+		{
+			mana[manaType].set(0);
+		}
+	}
 
 	public function clearObservers():Void
 	{
