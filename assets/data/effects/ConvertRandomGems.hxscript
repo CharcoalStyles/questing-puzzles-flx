@@ -9,7 +9,6 @@
 // - Fire: int
 // - Water: int
 // - Earth: int
-// - Air: int
 // - Light: int
 // - Dark: int
 
@@ -27,11 +26,6 @@ if (args.Water != null){
 if (args.Earth != null){
   for (i in 0...args.Earth){
     newManaTypes.push(tools.stringToManaType("Earth"));
-  }
-}
-if (args.Air != null){
-  for (i in 0...args.Air){
-    newManaTypes.push(tools.stringToManaType("Air"));
   }
 }
 if (args.Light != null){

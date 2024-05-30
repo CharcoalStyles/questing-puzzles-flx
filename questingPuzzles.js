@@ -3736,7 +3736,7 @@ ManifestResources.init = function(config) {
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$nokiafc22_$ttf);
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$monsterrat_$ttf);
 	var bundle;
-	var data = "{\"name\":null,\"assets\":\"aoy4:pathy26:assets%2Fimages%2Fcsty.pngy4:sizei271y4:typey5:IMAGEy2:idR1y7:preloadtgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R4R5R7R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3y4:TEXTR5R8R6tgoR0y33:assets%2Fimages%2FBackTile_05.pngR2i556R3R4R5R10R6tgoR0y33:assets%2Fimages%2FBackTile_16.pngR2i1238R3R4R5R11R6tgoR0y50:assets%2Fdata%2Feffects%2FAdjustEnemyMana.hxscriptR2i5470R3R9R5R12R6tgoR0y46:assets%2Fdata%2Feffects%2FDamageEnemy.hxscriptR2i3104R3R9R5R13R6tgoR0y45:assets%2Fdata%2Feffects%2FHealCaster.hxscriptR2i2518R3R9R5R14R6tgoR0y52:assets%2Fdata%2Feffects%2FConvertRandomGems.hxscriptR2i2261R3R9R5R15R6tgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R9R5R16R6tgoR0y44:assets%2Fdata%2Fcharacters%2FTestGoblin.jsonR2i210R3R9R5R17R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R9R5R18R6tgoR0y39:assets%2Fdata%2Fspells%2FThrowRock.jsonR2i278R3R9R5R19R6tgoR0y38:assets%2Fdata%2Fspells%2FFireball.jsonR2i271R3R9R5R20R6tgoR0y39:assets%2Fdata%2Fspells%2FLightEmUp.jsonR2i250R3R9R5R21R6tgoR0y36:assets%2Fdata%2Fspells%2FWarcry.jsonR2i324R3R9R5R22R6tgoR0y35:assets%2Fdata%2Fspells%2FHeal5.jsonR2i144R3R9R5R23R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R9R5R24R6tgoR0y36:assets%2Fsounds%2Fsounds-go-here.txtR2zR3R9R5R25R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR27y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R26R5y26:flixel%2Fsounds%2Fbeep.mp3R28aR30y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R31R28aR30R31hgoR2i33629R3R32R5R29R28aR27R29hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R33R34y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i277R3R4R5R39R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R4R5R40R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R4R5R41R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R4R5R42R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R4R5R43R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R4R5R44R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:pathy26:assets%2Fimages%2Fcsty.pngy4:sizei271y4:typey5:IMAGEy2:idR1y7:preloadtgoR0y43:assets%2Fimages%2Fspritesheet_tilesGrey.pngR2i84558R3R4R5R7R6tgoR0y36:assets%2Fimages%2Fimages-go-here.txtR2zR3y4:TEXTR5R8R6tgoR0y33:assets%2Fimages%2FBackTile_05.pngR2i556R3R4R5R10R6tgoR0y33:assets%2Fimages%2FBackTile_16.pngR2i1238R3R4R5R11R6tgoR0y50:assets%2Fdata%2Feffects%2FAdjustEnemyMana.hxscriptR2i5325R3R9R5R12R6tgoR0y46:assets%2Fdata%2Feffects%2FDamageEnemy.hxscriptR2i3104R3R9R5R13R6tgoR0y45:assets%2Fdata%2Feffects%2FHealCaster.hxscriptR2i2518R3R9R5R14R6tgoR0y52:assets%2Fdata%2Feffects%2FConvertRandomGems.hxscriptR2i2137R3R9R5R15R6tgoR0y34:assets%2Fdata%2Fdata-goes-here.txtR2zR3R9R5R16R6tgoR0y44:assets%2Fdata%2Fcharacters%2FTestGoblin.jsonR2i195R3R9R5R17R6tgoR0y41:assets%2Fdata%2Fcharacters%2FTestRat.jsonR2i193R3R9R5R18R6tgoR0y41:assets%2Fdata%2Fspritesheet_tilesGrey.xmlR2i5720R3R9R5R19R6tgoR0y39:assets%2Fdata%2Fspells%2FThrowRock.jsonR2i278R3R9R5R20R6tgoR0y38:assets%2Fdata%2Fspells%2FFireball.jsonR2i271R3R9R5R21R6tgoR0y39:assets%2Fdata%2Fspells%2FLightEmUp.jsonR2i189R3R9R5R22R6tgoR0y36:assets%2Fdata%2Fspells%2FWarcry.jsonR2i308R3R9R5R23R6tgoR0y35:assets%2Fdata%2Fspells%2FHeal5.jsonR2i144R3R9R5R24R6tgoR0y37:assets%2Fdata%2Fspells%2FRatBite.jsonR2i252R3R9R5R25R6tgoR0y39:assets%2Fdata%2Fspells%2FEatCheese.jsonR2i319R3R9R5R26R6tgoR0y36:assets%2Fmusic%2Fmusic-goes-here.txtR2zR3R9R5R27R6tgoR0y36:assets%2Fsounds%2Fsounds-go-here.txtR2zR3R9R5R28R6tgoR2i39706R3y5:MUSICR5y28:flixel%2Fsounds%2Fflixel.mp3y9:pathGroupaR30y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR2i8220R3R29R5y26:flixel%2Fsounds%2Fbeep.mp3R31aR33y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR2i6840R3y5:SOUNDR5R34R31aR33R34hgoR2i33629R3R35R5R32R31aR30R32hgoR2i15744R3y4:FONTy9:classNamey35:__ASSET__flixel_fonts_nokiafc22_ttfR5y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR2i29724R3R36R37y36:__ASSET__flixel_fonts_monsterrat_ttfR5y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR0y33:flixel%2Fimages%2Fui%2Fbutton.pngR2i277R3R4R5R42R6tgoR0y36:flixel%2Fimages%2Flogo%2Fdefault.pngR2i505R3R4R5R43R6tgoR0y43:flixel%2Fimages%2Ftransitions%2Fdiamond.pngR2i788R3R4R5R44R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fsquare.pngR2i383R3R4R5R45R6tgoR0y53:flixel%2Fimages%2Ftransitions%2Fdiagonal_gradient.pngR2i3812R3R4R5R46R6tgoR0y42:flixel%2Fimages%2Ftransitions%2Fcircle.pngR2i824R3R4R5R47R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -4775,8 +4775,38 @@ Xml.prototype = {
 	}
 	,__class__: Xml
 };
-var entities_Character = function() {
+var entities_Character = function(characterData) {
 	this.health = new utils_IntObservableActual(0);
+	if(characterData == null) {
+		return;
+	}
+	this.name = characterData.name;
+	this.level = characterData.level;
+	this.maxHealth = characterData.health;
+	this.health = new utils_IntObservableActual(characterData.health);
+	this.maxMana = new haxe_ds_ObjectMap();
+	this.mana = new haxe_ds_ObjectMap();
+	var _g = 0;
+	var _g1 = Reflect.fields(characterData.mana);
+	while(_g < _g1.length) {
+		var mt = _g1[_g];
+		++_g;
+		var manaType = entities_ManaType.fromString(mt);
+		if(manaType == null) {
+			throw haxe_Exception.thrown("Invalid mana type: " + mt);
+		}
+		this.maxMana.set(manaType,characterData.mana[mt]);
+		this.mana.set(manaType,new utils_FloatObservableActual(0));
+	}
+	var _this = characterData.spells;
+	var result = new Array(_this.length);
+	var _g = 0;
+	var _g1 = _this.length;
+	while(_g < _g1) {
+		var i = _g++;
+		result[i] = utils_Loader.loadSpell(_this[i]);
+	}
+	this.spells = result;
 };
 $hxClasses["entities.Character"] = entities_Character;
 entities_Character.__name__ = "entities.Character";
@@ -4790,6 +4820,14 @@ entities_Character.prototype = {
 	,mana: null
 	,spells: null
 	,sidebar: null
+	,reset: function() {
+		utils_IntObservable.set(this.health,this.maxHealth);
+		var manaType = this.mana.keys();
+		while(manaType.hasNext()) {
+			var manaType1 = manaType.next();
+			utils_FloatObservable.set(this.mana.h[manaType1.__id__],0);
+		}
+	}
 	,clearObservers: function() {
 		utils_IntObservable.clearObservers(this.health);
 		var manaType = this.mana.keys();
@@ -8436,7 +8474,7 @@ entities_ManaType.prototype = {
 	name: null
 	,__class__: entities_ManaType
 };
-var entities_GemType = function(mt,uFrame,c,n) {
+var entities_GemType = function(uFrame,c,n,mt) {
 	this.manaType = mt;
 	this.frame = uFrame;
 	this.colour = c;
@@ -9137,7 +9175,7 @@ var entities_PlayBoard = function(rows,cols) {
 	this.selected = null;
 	this.potentialMoves = null;
 	this.activeMatches = null;
-	this.bsToGt = [entities_GemType.RED,entities_GemType.GREEN,entities_GemType.BLUE,entities_GemType.YELLOW,entities_GemType.PURPLE,entities_GemType.ORANGE];
+	this.bsToGt = [entities_GemType.FIRE,entities_GemType.EARTH,entities_GemType.WATER,entities_GemType.LIGHT,entities_GemType.DARK,entities_GemType.DAMAGE];
 	this.boardState = [];
 	this.moveTimer = 0.0;
 	this.previousState = entities_BoardState.Idle;
@@ -9275,7 +9313,7 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 				var y = _g2++;
 				var g = board[y][x];
 				if(g != null) {
-					deb += (isId ? g.id == null ? "null" : "" + g.id : g.manaType.name) + ", ";
+					deb += (isId ? g.id == null ? "null" : "" + g.id : g.manaType == null ? "D" : g.manaType.name) + ", ";
 				} else {
 					deb += "-, ";
 				}
@@ -9283,8 +9321,8 @@ entities_PlayBoard.prototype = $extend(utils_UiFlxGroup.prototype,{
 			deb += "],";
 		}
 		deb += "]";
-		haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 205, className : "entities.PlayBoard", methodName : "traceBoard"});
-		haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 206, className : "entities.PlayBoard", methodName : "traceBoard"});
+		haxe_Log.trace("Board",{ fileName : "source/entities/PlayBoard.hx", lineNumber : 203, className : "entities.PlayBoard", methodName : "traceBoard"});
+		haxe_Log.trace(deb,{ fileName : "source/entities/PlayBoard.hx", lineNumber : 204, className : "entities.PlayBoard", methodName : "traceBoard"});
 	}
 	,selected: null
 	,userSwap: null
@@ -10196,42 +10234,37 @@ var entities_Sidebar = function(char,isLeft) {
 	var i = 0;
 	var maxMana = 0;
 	var _g = 0;
-	var _g1 = entities_GemType.ALL;
+	var _g1 = entities_ManaType.ALL;
 	while(_g < _g1.length) {
-		var gt = _g1[_g];
+		var mt = [_g1[_g]];
 		++_g;
-		var max = char.maxMana.h[gt.manaType.__id__];
+		var max = char.maxMana.h[mt[0].__id__];
 		if(max > maxMana) {
 			maxMana = max;
 		}
-	}
-	var _g = 0;
-	var _g1 = entities_GemType.ALL;
-	while(_g < _g1.length) {
-		var gt = [_g1[_g]];
-		++_g;
-		var mtLabel = new flixel_text_FlxText(paddedWorkingWidth_lCol_left,workingY,196,gt[0].name);
+		var gt = entities_GemType.fromManaType(mt[0]);
+		var mtLabel = new flixel_text_FlxText(paddedWorkingWidth_lCol_left,workingY,196,gt.name);
 		mtLabel.setFormat(null,16,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		mtLabel.set_borderSize(2);
 		this.add(mtLabel);
-		var amtLabel = [new flixel_text_FlxText(paddedWorkingWidth_lCol_left,workingY,196,Std.string(char.mana.h[gt[0].manaType.__id__].value) + "/" + Std.string(char.maxMana.h[gt[0].manaType.__id__]))];
+		var amtLabel = [new flixel_text_FlxText(paddedWorkingWidth_lCol_left,workingY,196,Std.string(char.mana.h[mt[0].__id__].value) + "/" + Std.string(char.maxMana.h[mt[0].__id__]))];
 		amtLabel[0].setFormat(null,16,-1,"right",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		amtLabel[0].set_borderSize(2);
 		this.add(amtLabel[0]);
 		workingY += amtLabel[0].get_height() + 2 | 0;
-		var barSize = (paddedWorkingWidth_lCol_right - paddedWorkingWidth_lCol_left) / maxMana * char.maxMana.h[gt[0].manaType.__id__] | 0;
-		var bar = [new flixel_ui_FlxBar(paddedWorkingWidth_lCol_left,workingY,flixel_ui_FlxBarFillDirection.LEFT_TO_RIGHT,barSize,amtLabel[0].get_height() | 0,null,"",0,char.maxMana.h[gt[0].manaType.__id__],true)];
-		bar[0].createFilledBar(-14671840,gt[0].colour,true,gt[0].colour);
+		var barSize = (paddedWorkingWidth_lCol_right - paddedWorkingWidth_lCol_left) / maxMana * char.maxMana.h[mt[0].__id__] | 0;
+		var bar = [new flixel_ui_FlxBar(paddedWorkingWidth_lCol_left,workingY,flixel_ui_FlxBarFillDirection.LEFT_TO_RIGHT,barSize,amtLabel[0].get_height() | 0,null,"",0,char.maxMana.h[mt[0].__id__],true)];
+		bar[0].createFilledBar(-14671840,gt.colour,true,gt.colour);
 		this.add(bar[0]);
-		this.allStores.set(gt[0].manaType,{ bar : bar[0], label : amtLabel[0], colour : gt[0].colour});
-		var playerMana = this.character.mana.h[gt[0].manaType.__id__];
+		this.allStores.set(mt[0],{ bar : bar[0], label : amtLabel[0], colour : gt.colour});
+		var playerMana = this.character.mana.h[mt[0].__id__];
 		if(playerMana != null) {
-			utils_FloatObservable.addObserver(playerMana,new utils_CallbackObserver((function(bar,amtLabel,gt) {
+			utils_FloatObservable.addObserver(playerMana,new utils_CallbackObserver((function(bar,amtLabel,mt) {
 				return function(sender,data) {
 					bar[0].set_value(data);
-					amtLabel[0].set_text(Std.string(Math.floor(bar[0].get_value())) + "/" + Std.string(char.maxMana.h[gt[0].manaType.__id__]));
+					amtLabel[0].set_text(Std.string(Math.floor(bar[0].get_value())) + "/" + Std.string(char.maxMana.h[mt[0].__id__]));
 				};
-			})(bar,amtLabel,gt)));
+			})(bar,amtLabel,mt)));
 		}
 		workingY += Math.ceil(bar[0].get_height() + 10);
 		++i;
@@ -10248,16 +10281,16 @@ var entities_Sidebar = function(char,isLeft) {
 		var spellUi = [new entities_SpellUi(paddedWorkingWidth_left,workingY,paddedWorkingWidth_width,spell,isLeft)];
 		this.spellUis.push(spellUi[0]);
 		this.add(spellUi[0]);
-		var mt = spell.manaCosts.keys();
-		while(mt.hasNext()) {
-			var mt1 = [mt.next()];
-			var playerMana = this.character.mana.h[mt1[0].__id__];
+		var mt1 = spell.manaCosts.keys();
+		while(mt1.hasNext()) {
+			var mt2 = [mt1.next()];
+			var playerMana = this.character.mana.h[mt2[0].__id__];
 			if(playerMana != null) {
 				utils_FloatObservable.addObserver(playerMana,new utils_CallbackObserver((function(mt,spellUi) {
 					return function(sender,data) {
 						spellUi[0].onManaUpdate(data,mt[0]);
 					};
-				})(mt1,spellUi)));
+				})(mt2,spellUi)));
 			}
 		}
 		workingY += 60;
@@ -79224,7 +79257,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 78435;
+	this.version = 240532;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -128097,7 +128130,6 @@ states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
 	gameName: null
 	,globalState: null
 	,create: function() {
-		var _gthis = this;
 		flixel_FlxState.prototype.create.call(this);
 		this.globalState = new utils_GlobalState();
 		flixel_FlxG.plugins.addPlugin(this.globalState);
@@ -128121,11 +128153,9 @@ states_MainMenuState.prototype = $extend(flixel_FlxState.prototype,{
 		while(_g < characters.length) {
 			var char = [characters[_g]];
 			++_g;
-			newGamePage.addItem(char[0].name,(function(char) {
+			newGamePage.addItem(char[0].data.name,(function(char) {
 				return function() {
-					var c = utils_Loader.loadCharacter(char[0]);
-					_gthis.globalState.ai = c;
-					var nextState = flixel_util_typeLimit_NextState.fromState(new states_PlayState());
+					var nextState = flixel_util_typeLimit_NextState.fromState(new states_PlayState(char[0].fileName));
 					var stateOnCall = flixel_FlxG.game._state;
 					if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
 						flixel_FlxG.game._state.startOutro((function() {
@@ -128189,7 +128219,7 @@ var states_Play_$State = $hxEnums["states.Play_State"] = { __ename__:"states.Pla
 	,GameOver: {_hx_name:"GameOver",_hx_index:3,__enum__:"states.Play_State",toString:$estr}
 };
 states_Play_$State.__constructs__ = [states_Play_$State.Idle,states_Play_$State.BoardMatching,states_Play_$State.SpellEffect,states_Play_$State.GameOver];
-var states_PlayState = function() {
+var states_PlayState = function(enemyfileName) {
 	this.currentBoardState = entities_BoardState.Idle;
 	this.currentState = states_Play_$State.Idle;
 	this.triggerTime = 1.5;
@@ -128198,6 +128228,8 @@ var states_PlayState = function() {
 	this.isPlayerTurnNext = false;
 	this.isPlayerTurn = true;
 	flixel_FlxState.call(this);
+	var enemyData = utils_Loader.loadCharacterFromFile(enemyfileName);
+	this.enemy = new entities_Character(enemyData);
 };
 $hxClasses["states.PlayState"] = states_PlayState;
 states_PlayState.__name__ = "states.PlayState";
@@ -128212,9 +128244,9 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 	,currentState: null
 	,currentBoardState: null
 	,playerSidebar: null
-	,aiSidebar: null
+	,enemySidebar: null
 	,player: null
-	,ai: null
+	,enemy: null
 	,globalState: null
 	,extraTurnText: null
 	,extraManaText: null
@@ -128227,6 +128259,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		flixel_FlxG.mouse.set_visible(true);
 		flixel_FlxG.camera.set_antialiasing(true);
 		this.globalState = flixel_FlxG.plugins.get(utils_GlobalState);
+		this.globalState.player.reset();
 		this.board = new entities_PlayBoard(8,8);
 		this.add(this.board);
 		this.board.onStateChange = function(state) {
@@ -128252,9 +128285,9 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		this.playerSidebar.set_isActive(true);
 		this.add(this.playerSidebar);
 		this.globalState.player.sidebar = this.playerSidebar;
-		this.aiSidebar = new entities_Sidebar(this.globalState.ai,false);
-		this.add(this.aiSidebar);
-		this.globalState.ai.sidebar = this.aiSidebar;
+		this.enemySidebar = new entities_Sidebar(this.enemy,false);
+		this.add(this.enemySidebar);
+		this.enemy.sidebar = this.enemySidebar;
 		this.globalState.createEmitter();
 		this.add(this.globalState.emitter.activeMembers);
 		this.extraTurnText = new utils_SplitText(0,0,"Extra Turn!");
@@ -128307,7 +128340,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		}
 		var mousePos = flixel_FlxG.mouse.getPosition();
 		this.playerSidebar.handleHover(mousePos);
-		this.aiSidebar.handleHover(mousePos);
+		this.enemySidebar.handleHover(mousePos);
 		switch(this.currentState._hx_index) {
 		case 0:
 			this.idleUpdate(elapsed);
@@ -128315,7 +128348,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		case 3:
 			if(flixel_FlxG.keys.justPressed.get_ANY() || flixel_FlxG.mouse._leftButton.current == 2) {
 				this.globalState.player.clearObservers();
-				this.globalState.ai.clearObservers();
+				this.enemy.clearObservers();
 				var nextState = flixel_util_typeLimit_NextState.fromState(new states_MainMenuState());
 				var stateOnCall = flixel_FlxG.game._state;
 				if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
@@ -128348,12 +128381,12 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			this.isPlayerTurn = this.isPlayerTurnNext;
 			if(this.isPlayerTurn) {
 				this.playerSidebar.set_isActive(true);
-				this.aiSidebar.set_isActive(false);
+				this.enemySidebar.set_isActive(false);
 			} else {
 				this.playerSidebar.set_isActive(false);
-				this.aiSidebar.set_isActive(true);
+				this.enemySidebar.set_isActive(true);
 			}
-			if(utils_IntObservable.lessEq(this.globalState.ai.health,0)) {
+			if(utils_IntObservable.lessEq(this.enemy.health,0)) {
 				this.winText.animateWave(64,0.3,2.0,false);
 				this.winText.animateColour(-13186230,0.3,2.0,16777215,true);
 				realState = states_Play_$State.GameOver;
@@ -128392,14 +128425,14 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 					this.setState(states_Play_$State.SpellEffect);
 					var spell = this.playerSidebar.handleClick(mousePos);
 					if(spell != null) {
-						var nextState = spell.run(this.globalState.ai,this.globalState.player,this.board);
+						var nextState = spell.run(this.enemy,this.globalState.player,this.board);
 						var time = nextState.delay;
 						var onComplete = function() {
 							if(nextState.endTurn) {
 								_gthis.isPlayerTurnNext = false;
 							}
 							if(nextState.nextState == states_Play_$State.BoardMatching) {
-								_gthis.board.setState(entities_BoardState.Matching);
+								_gthis.board.setState(entities_BoardState.Matching_Spell);
 							} else {
 								_gthis.setState(nextState.nextState);
 							}
@@ -128411,7 +128444,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 						this.setState(states_Play_$State.Idle);
 					}
 				} else {
-					var tmp = this.aiSidebar.isPointInside(flixel_FlxG.mouse.getPosition());
+					var tmp = this.enemySidebar.isPointInside(flixel_FlxG.mouse.getPosition());
 				}
 			}
 		} else {
@@ -128419,7 +128452,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			if(this.timer >= this.triggerTime) {
 				var availableSpells = [];
 				var _g = 0;
-				var _g1 = this.globalState.ai.sidebar.spellUis;
+				var _g1 = this.enemy.sidebar.spellUis;
 				while(_g < _g1.length) {
 					var spellUi = _g1[_g];
 					++_g;
@@ -128427,17 +128460,17 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 						availableSpells.push(spellUi.spell);
 					}
 				}
-				if(availableSpells.length > 0 && flixel_FlxG.random.int(0,9) <= this.globalState.ai.level + 1) {
+				if(availableSpells.length > 0 && flixel_FlxG.random.int(0,9) <= this.enemy.level + 1) {
 					this.setState(states_Play_$State.SpellEffect);
 					var spell = availableSpells[flixel_FlxG.random.int(0,availableSpells.length - 1)];
-					var nextState1 = spell.run(this.globalState.player,this.globalState.ai,this.board);
+					var nextState1 = spell.run(this.globalState.player,this.enemy,this.board);
 					var time = nextState1.delay;
 					var onComplete1 = function() {
 						if(nextState1.endTurn) {
 							_gthis.isPlayerTurnNext = true;
 						}
 						if(nextState1.nextState == states_Play_$State.BoardMatching) {
-							_gthis.board.setState(entities_BoardState.Matching);
+							_gthis.board.setState(entities_BoardState.Matching_Spell);
 						} else {
 							_gthis.setState(nextState1.nextState);
 						}
@@ -128447,7 +128480,8 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 					});
 					return;
 				}
-				var match = this.board.potentialMoves[0];
+				var matchIndex = this.board.potentialMoves.length == 1 ? 0 : flixel_FlxG.random.int(1,Math.floor(Math.min(this.board.potentialMoves.length - 1,4)));
+				var match = this.board.potentialMoves[matchIndex];
 				if(match != null) {
 					this.board.doMove(match);
 					this.isPlayerTurnNext = true;
@@ -128457,7 +128491,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		}
 	}
 	,postMatchUpdateOnce: function() {
-		var sb = this.isPlayerTurn ? this.playerSidebar : this.aiSidebar;
+		var sb = this.isPlayerTurn ? this.playerSidebar : this.enemySidebar;
 		var maxLength = 0;
 		var _g = 0;
 		var _g1 = this.board.activeMatches;
@@ -128469,14 +128503,157 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			var _g2 = 0;
 			var _g3 = match.pos;
 			while(_g2 < _g3.length) {
-				var gemPos = _g3[_g2];
+				var gemPos = [_g3[_g2]];
 				++_g2;
-				sb.addMana(match.manaType,1 + manaBonus,gemPos);
+				if(match.manaType == null) {
+					var enemy = [this.isPlayerTurn ? this.enemy : this.globalState.player];
+					var healthText = [utils_CsMath.centreRect(enemy[0].sidebar.healthText.getScreenBounds())];
+					var p = this.globalState.emitter.emit(gemPos[0].x,gemPos[0].y);
+					var x = 1.75;
+					var y = 1.75;
+					if(y == null) {
+						y = 0;
+					}
+					if(x == null) {
+						x = 0;
+					}
+					var x1 = x;
+					var y1 = y;
+					if(y1 == null) {
+						y1 = 0;
+					}
+					if(x1 == null) {
+						x1 = 0;
+					}
+					var point = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
+					point._inPool = false;
+					var pSize = [point];
+					p.setEffectStates([{ lifespan : (function() {
+						return function() {
+							return flixel_FlxG.random.float(0.75,0.5);
+						};
+					})(), target : (function(healthText,gemPos) {
+						return function(particle) {
+							var x = gemPos[0].x;
+							var y = gemPos[0].y;
+							if(y == null) {
+								y = 0;
+							}
+							if(x == null) {
+								x = 0;
+							}
+							var x1 = x;
+							var y1 = y;
+							if(y1 == null) {
+								y1 = 0;
+							}
+							if(x1 == null) {
+								x1 = 0;
+							}
+							var point = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
+							point._inPool = false;
+							var x = healthText[0].x;
+							var y = healthText[0].y;
+							if(y == null) {
+								y = 0;
+							}
+							if(x == null) {
+								x = 0;
+							}
+							var x1 = x;
+							var y1 = y;
+							if(y1 == null) {
+								y1 = 0;
+							}
+							if(x1 == null) {
+								x1 = 0;
+							}
+							var point1 = flixel_math_FlxBasePoint.pool.get().set(x1,y1);
+							point1._inPool = false;
+							return { origin : point, target : point1, easeName : "cubeIn"};
+						};
+					})(healthText,gemPos), scaleExtended : (function(pSize) {
+						return function() {
+							var tmp = { t : 0, value : pSize[0]};
+							var p = null;
+							if(p == null) {
+								var x = 0;
+								var y = 0;
+								if(y == null) {
+									y = 0;
+								}
+								if(x == null) {
+									x = 0;
+								}
+								var point = flixel_math_FlxBasePoint.pool.get().set(x,y);
+								point._inPool = false;
+								p = point;
+							}
+							var x = pSize[0].x;
+							var y = pSize[0].y;
+							if(y == null) {
+								y = 0;
+							}
+							if(x == null) {
+								x = 0;
+							}
+							p.set_x(x);
+							p.set_y(y);
+							var this1 = p;
+							var y = null;
+							if(y == null) {
+								y = 0.7;
+							}
+							this1.set_x(this1.x * 0.7);
+							this1.set_y(this1.y * y);
+							var p = null;
+							if(p == null) {
+								var x = 0;
+								var y = 0;
+								if(y == null) {
+									y = 0;
+								}
+								if(x == null) {
+									x = 0;
+								}
+								var point = flixel_math_FlxBasePoint.pool.get().set(x,y);
+								point._inPool = false;
+								p = point;
+							}
+							var x = pSize[0].x;
+							var y = pSize[0].y;
+							if(y == null) {
+								y = 0;
+							}
+							if(x == null) {
+								x = 0;
+							}
+							p.set_x(x);
+							p.set_y(y);
+							var this2 = p;
+							var y = null;
+							if(y == null) {
+								y = 0.1;
+							}
+							this2.set_x(this2.x * 0.1);
+							this2.set_y(this2.y * y);
+							return [tmp,{ t : 0.7, value : this1},{ t : 1, value : this2}];
+						};
+					})(pSize), onComplete : (function(enemy) {
+						return function(particle) {
+							if(utils_IntObservable.greater(enemy[0].health,0)) {
+								utils_IntObservable.set(enemy[0].health,utils_IntObservable.sub(enemy[0].health,1));
+							}
+						};
+					})(enemy)}]);
+				} else {
+					sb.addMana(match.manaType,1 + manaBonus,gemPos[0]);
+				}
 			}
 		}
 		if(maxLength >= 4) {
-			var timeLength = 1.75;
-			var perLetter = 0.08;
+			var timeLength = 0.7;
+			var perLetter = 0.02;
 			this.isPlayerTurnNext = this.isPlayerTurn;
 			this.extraTurnText.animateWave(64,perLetter,timeLength,true);
 			this.extraTurnText.animateColour(-1,perLetter,timeLength,16777215);
@@ -128508,7 +128685,6 @@ states_subStates_PauseState.prototype = $extend(flixel_FlxSubState.prototype,{
 		mainPage.addItem("Quit",function() {
 			var globalState = flixel_FlxG.plugins.get(utils_GlobalState);
 			globalState.player.clearObservers();
-			globalState.ai.clearObservers();
 			var nextState = flixel_util_typeLimit_NextState.fromState(new states_MainMenuState());
 			var stateOnCall = flixel_FlxG.game._state;
 			if(!((nextState) instanceof flixel_FlxState) || flixel_FlxG.canSwitchTo(nextState)) {
@@ -128692,7 +128868,7 @@ utils_CsMenuPage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		this.addEntry(label,callback,options);
 	}
 	,addEntry: function(label,callback,options) {
-		var opt = options != null ? options : { unselectedColour : -13619152, selectedColour : -7303024, borderColour : -1};
+		var opt = options != null ? options : { unselectedColour : -14671840, selectedColour : -10461088, borderColour : -1};
 		if(opt.selectedColour == null) {
 			opt.selectedColour = opt.unselectedColour;
 		}
@@ -128729,6 +128905,7 @@ utils_CsMenuPage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		if(i == 1) {
 			text.set_color(opt.selectedColour);
 			this.selected = this.menuItems.length - 1;
+			this.selectedAnim(this.selected);
 		} else {
 			text.set_color(opt.unselectedColour);
 		}
@@ -128740,13 +128917,22 @@ utils_CsMenuPage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		this.workingY += text.height + 16;
 	}
 	,onSelectedAnim: function(index) {
+		var _gthis = this;
 		var selection = this.members[index];
+		selection.stopAnimation();
 		var item = this.menuItems[index];
-		selection.animateWave(12,0.01,0.2,true);
+		selection.animateWave(12,0.01,0.2,true,function() {
+			_gthis.selectedAnim(index);
+		});
 		selection.animateColour(item.options.selectedColour,0.01,0.2,item.options.unselectedColour,true);
+	}
+	,selectedAnim: function(index) {
+		var selection = this.members[index];
+		selection.animateWave(6,0.125,0.8,false);
 	}
 	,onDeselectedAnim: function(index) {
 		var selection = this.members[index];
+		selection.stopAnimation();
 		var item = this.menuItems[index];
 		selection.animateColour(item.options.unselectedColour,0.01,0.2,item.options.selectedColour,true);
 	}
@@ -129104,14 +129290,12 @@ utils_GlobalState.prototype = $extend(flixel_FlxBasic.prototype,{
 		this.player.maxMana.set(entities_ManaType.FIRE,30);
 		this.player.maxMana.set(entities_ManaType.WATER,25);
 		this.player.maxMana.set(entities_ManaType.EARTH,20);
-		this.player.maxMana.set(entities_ManaType.AIR,15);
 		this.player.maxMana.set(entities_ManaType.LIGHT,25);
 		this.player.maxMana.set(entities_ManaType.DARK,15);
 		this.player.mana = new haxe_ds_ObjectMap();
 		this.player.mana.set(entities_ManaType.FIRE,new utils_FloatObservableActual(0));
 		this.player.mana.set(entities_ManaType.WATER,new utils_FloatObservableActual(0));
 		this.player.mana.set(entities_ManaType.EARTH,new utils_FloatObservableActual(0));
-		this.player.mana.set(entities_ManaType.AIR,new utils_FloatObservableActual(0));
 		this.player.mana.set(entities_ManaType.LIGHT,new utils_FloatObservableActual(0));
 		this.player.mana.set(entities_ManaType.DARK,new utils_FloatObservableActual(0));
 		this.player.spells = [];
@@ -129238,41 +129422,14 @@ utils_Loader.loadCharacters = function() {
 		++_g;
 		var characterJson = openfl_utils_Assets.getText(f);
 		var characterData = JSON.parse(characterJson);
-		characters.push(characterData);
+		characters.push({ fileName : f.split("/").pop(), data : characterData});
 	}
 	return characters;
 };
-utils_Loader.loadCharacter = function(characterData) {
-	var char = new entities_Character();
-	haxe_Log.trace(characterData.name,{ fileName : "source/utils/Loader.hx", lineNumber : 69, className : "utils.Loader", methodName : "loadCharacter"});
-	char.name = characterData.name;
-	char.level = characterData.level;
-	char.maxHealth = characterData.health;
-	char.health = new utils_IntObservableActual(characterData.health);
-	char.maxMana = new haxe_ds_ObjectMap();
-	char.mana = new haxe_ds_ObjectMap();
-	var _g = 0;
-	var _g1 = Reflect.fields(characterData.mana);
-	while(_g < _g1.length) {
-		var mt = _g1[_g];
-		++_g;
-		var manaType = entities_ManaType.fromString(mt);
-		if(manaType == null) {
-			throw haxe_Exception.thrown("Invalid mana type: " + mt);
-		}
-		char.maxMana.set(manaType,characterData.mana[mt]);
-		char.mana.set(manaType,new utils_FloatObservableActual(0));
-	}
-	var _this = characterData.spells;
-	var result = new Array(_this.length);
-	var _g = 0;
-	var _g1 = _this.length;
-	while(_g < _g1) {
-		var i = _g++;
-		result[i] = utils_Loader.loadSpell(_this[i]);
-	}
-	char.spells = result;
-	return char;
+utils_Loader.loadCharacterFromFile = function(characterFileName) {
+	var characterJson = openfl_utils_Assets.getText("assets/data/characters/" + characterFileName);
+	var characterData = JSON.parse(characterJson);
+	return characterData;
 };
 utils_Loader.loadSpell = function(name) {
 	var spellJson = openfl_utils_Assets.getText("assets/data/spells/" + name + ".json");
@@ -129755,7 +129912,18 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		}
 	}
 	,tweens: null
-	,animateWave: function(totalDistance,charDelay,speed,oneShot) {
+	,removeTweens: function() {
+		if(this.tweens.length > 0) {
+			var _g = 0;
+			var _g1 = this.tweens;
+			while(_g < _g1.length) {
+				var tween = _g1[_g];
+				++_g;
+				tween.cancel();
+			}
+		}
+	}
+	,animateWave: function(totalDistance,charDelay,speed,oneShot,oneShotCallback) {
 		if(oneShot == null) {
 			oneShot = false;
 		}
@@ -129778,7 +129946,13 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 				return function(t) {
 					HxOverrides.remove(_gthis.tweens,t);
 					if(oneShot) {
-						var tx = flixel_tweens_FlxTween.tween(char[0],{ y : _gthis.y},speed / 2,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepInOut});
+						var tx = flixel_tweens_FlxTween.tween(char[0],{ y : _gthis.y},speed / 2,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepInOut, onComplete : (function() {
+							return function(t) {
+								if(oneShotCallback != null) {
+									oneShotCallback();
+								}
+							};
+						})()});
 						_gthis.tweens.push(tx);
 						return;
 					}
@@ -129789,7 +129963,7 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 			this.tweens.push(t);
 		}
 	}
-	,animateColour: function(toColor,charDelay,speed,fromColor,oneShot) {
+	,animateColour: function(toColor,charDelay,speed,fromColor,oneShot,oneShotCallback) {
 		if(oneShot == null) {
 			oneShot = false;
 		}
@@ -129813,6 +129987,9 @@ utils_SplitText.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 						var tx = flixel_tweens_FlxTween.color(char[0],speed * 2,toColor,fColour,{ type : 8, ease : flixel_tweens_FlxEase.smoothStepInOut});
 						_gthis.tweens.push(tx);
 						return;
+					}
+					if(oneShotCallback != null) {
+						oneShotCallback();
 					}
 				};
 			})(char)});
@@ -130051,17 +130228,16 @@ entities_Gem.count = 0;
 entities_ManaType.FIRE = new entities_ManaType("Fire");
 entities_ManaType.EARTH = new entities_ManaType("Earth");
 entities_ManaType.WATER = new entities_ManaType("Water");
-entities_ManaType.AIR = new entities_ManaType("Air");
 entities_ManaType.LIGHT = new entities_ManaType("Light");
 entities_ManaType.DARK = new entities_ManaType("Dark");
-entities_ManaType.ALL = [entities_ManaType.FIRE,entities_ManaType.EARTH,entities_ManaType.WATER,entities_ManaType.AIR,entities_ManaType.LIGHT,entities_ManaType.DARK];
-entities_GemType.RED = new entities_GemType(entities_ManaType.FIRE,"tileGrey_40.png",-355959,"Fire");
-entities_GemType.GREEN = new entities_GemType(entities_ManaType.EARTH,"tileGrey_41.png",-4983364,"Earth");
-entities_GemType.BLUE = new entities_GemType(entities_ManaType.WATER,"tileGrey_42.png",-2689281,"Water");
-entities_GemType.YELLOW = new entities_GemType(entities_ManaType.LIGHT,"tileGrey_33.png",-393291,"Light");
-entities_GemType.PURPLE = new entities_GemType(entities_ManaType.DARK,"tileGrey_32.png",-3031553,"Dark");
-entities_GemType.ORANGE = new entities_GemType(entities_ManaType.AIR,"tileGrey_31.png",-5592406,"Air");
-entities_GemType.ALL = [entities_GemType.RED,entities_GemType.GREEN,entities_GemType.BLUE,entities_GemType.YELLOW,entities_GemType.PURPLE,entities_GemType.ORANGE];
+entities_ManaType.ALL = [entities_ManaType.FIRE,entities_ManaType.EARTH,entities_ManaType.WATER,entities_ManaType.LIGHT,entities_ManaType.DARK];
+entities_GemType.FIRE = new entities_GemType("tileGrey_40.png",-355959,"Fire",entities_ManaType.FIRE);
+entities_GemType.EARTH = new entities_GemType("tileGrey_41.png",-4983364,"Earth",entities_ManaType.EARTH);
+entities_GemType.WATER = new entities_GemType("tileGrey_42.png",-2689281,"Water",entities_ManaType.WATER);
+entities_GemType.LIGHT = new entities_GemType("tileGrey_33.png",-393291,"Light",entities_ManaType.LIGHT);
+entities_GemType.DARK = new entities_GemType("tileGrey_32.png",-3031553,"Dark",entities_ManaType.DARK);
+entities_GemType.DAMAGE = new entities_GemType("tileGrey_31.png",-5592406,"Damage");
+entities_GemType.ALL = [entities_GemType.FIRE,entities_GemType.EARTH,entities_GemType.WATER,entities_GemType.LIGHT,entities_GemType.DARK,entities_GemType.DAMAGE];
 flixel_math_FlxBasePoint.pool = (function($this) {
 	var $r;
 	var x = 0;

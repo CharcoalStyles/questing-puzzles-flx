@@ -9,7 +9,6 @@
 // - Fire: int
 // - Water: int
 // - Earth: int
-// - Air: int
 // - Light: int
 // - Dark: int
 
@@ -191,27 +190,23 @@ function doManaParticleEffect(manaType, amount, colour)
 
 var maxMana = 0;
 if (args.Fire != null){
-  doManaParticleEffect("Fire", args.Fire, GemType.RED.colour);
+  doManaParticleEffect("Fire", args.Fire, GemType.FIRE.colour);
   maxMana = Math.max(maxMana, args.Fire);
 }
 if (args.Water != null){
-  doManaParticleEffect("Water", args.Water, GemType.BLUE.colour);
+  doManaParticleEffect("Water", args.Water, GemType.WATER.colour);
   maxMana = Math.max(maxMana, args.Water);
 }
 if (args.Earth != null){
-  doManaParticleEffect("Earth", args.Earth, GemType.GREEN.colour);
+  doManaParticleEffect("Earth", args.Earth, GemType.EARTH.colour);
   maxMana = Math.max(maxMana, args.Earth);
 }
-if (args.Air != null){
-  doManaParticleEffect("Air", args.Air, GemType.ORANGE.colour);
-  maxMana = Math.max(maxMana, args.Air);
-}
 if (args.Light != null){
-  doManaParticleEffect("Light", args.Light, GemType.YELLOW.colour);
+  doManaParticleEffect("Light", args.Light, GemType.LIGHT.colour);
   maxMana = Math.max(maxMana, args.Light);
 }
 if (args.Dark != null){
-  doManaParticleEffect("Dark", args.Dark, GemType.PURPLE.colour);
+  doManaParticleEffect("Dark", args.Dark, GemType.DARK.colour);
   maxMana = Math.max(maxMana, args.Dark);
 }
 

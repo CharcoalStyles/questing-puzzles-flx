@@ -1,0 +1,13 @@
+{
+  "name": "Test Rat",
+  "level": 1,
+  "health": 12,
+  "mana": {
+    "Fire": 10,
+    "Water": 15,
+    "Earth": 10,
+    "Light": 15,
+    "Dark": 20
+  },
+  "spells": [ "RatBite", "EatCheese" ]
+}
