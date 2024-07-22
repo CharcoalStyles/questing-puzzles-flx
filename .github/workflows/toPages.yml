@@ -24,6 +24,7 @@ jobs:
           haxelib install flixel
           haxelib install flixel-addons
           haxelib install hscript
+          haxelib git csHxUtils git@github.com:CharcoalStyles/csHxUtils.git
 
       # Runs a set of commands using the runners shell
       - name: Build the HTML5 version
