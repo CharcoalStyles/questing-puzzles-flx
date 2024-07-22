@@ -48,6 +48,8 @@
   
 	<haxelib name="hscript" />
 
+    <haxelib name="csHxUtils" />
+
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
 	<!--Enable the Flixel core recording system-->

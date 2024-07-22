@@ -1,10 +1,12 @@
 package states;
 
+import csHxUtils.CsMath;
+import csHxUtils.entities.CsEmitter;
+import csHxUtils.entities.SplitText;
 import entities.Character;
 import entities.Gem.GemType;
 import entities.PlayBoard;
 import entities.Sidebar;
-import entities.effects.CsEmitter;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
@@ -13,10 +15,8 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import haxe.Timer;
 import states.subStates.PauseState;
-import utils.CsMath;
 import utils.GlobalState;
 import utils.Loader;
-import utils.SplitText;
 
 enum Play_State
 {
@@ -174,7 +174,7 @@ class PlayState extends FlxState
 
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
-			this.subState = new PauseState();
+			this.subState = new PauseState(globalState.controllerId);
 			this.subState.create();
 			this.subState.closeCallback = () ->
 			{

@@ -4,7 +4,6 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
-import flixel.util.FlxColor;
 
 typedef UpdPix =
 {

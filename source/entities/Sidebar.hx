@@ -1,8 +1,12 @@
 package entities;
 
+import csHxUtils.ExtendedLerp;
+import csHxUtils.Observer;
+import csHxUtils.entities.CsEmitter;
+import csHxUtils.entities.SplitText;
+import csHxUtils.entities.UiFlxGroup;
 import entities.Character;
 import entities.Gem;
-import entities.effects.CsEmitter;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
@@ -17,11 +21,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxPool;
 import haxe.Timer;
 import js.html.Console;
-import utils.ExtendedLerp;
 import utils.GlobalState;
-import utils.Observer;
-import utils.SplitText;
-import utils.UiFlxGroup;
 
 class Sidebar extends UiFlxGroup
 {

@@ -1,11 +1,14 @@
 package utils;
 
+import csHxUtils.CsMath.centreRect;
+import csHxUtils.Observer.FloatObservable;
+import csHxUtils.Observer.IntObservable;
+import csHxUtils.entities.CsEmitter;
 import entities.Character.Spell;
 import entities.Character.SpellEffect;
 import entities.Character;
 import entities.Gem.GemType;
 import entities.Gem.ManaType;
-import entities.effects.CsEmitter;
 import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRandom;
@@ -14,9 +17,6 @@ import haxe.DynamicAccess;
 import haxe.Timer;
 import openfl.Assets;
 import states.PlayState.Play_State;
-import utils.CsMath.centreRect;
-import utils.Observer.FloatObservable;
-import utils.Observer.IntObservable;
 
 typedef CharacterStruct =
 {

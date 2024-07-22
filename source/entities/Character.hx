@@ -1,11 +1,11 @@
 package entities;
 
+import csHxUtils.Observer.FloatObservable;
+import csHxUtils.Observer.IntObservable;
 import entities.Gem.ManaType;
 import states.PlayState.Play_State;
 import utils.Loader.CharacterStruct;
 import utils.Loader;
-import utils.Observer.FloatObservable;
-import utils.Observer.IntObservable;
 
 class Character
 {

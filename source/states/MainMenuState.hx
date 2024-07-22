@@ -1,16 +1,13 @@
 package states;
 
-import entities.effects.CsEmitter;
+import csHxUtils.entities.CsMenu;
+import csHxUtils.entities.SplitText;
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import haxe.Timer;
-import utils.CsMenu;
 import utils.GlobalState;
 import utils.Loader;
-import utils.SplitText;
 
 class MainMenuState extends FlxState
 {
@@ -30,7 +27,12 @@ class MainMenuState extends FlxState
 		text.x = (FlxG.width - text.width) / 2;
 		text.y = 96;
 
-		var menu = new CsMenu(FlxG.width / 2, FlxG.height / 2, FlxTextAlign.CENTER);
+		var menu = new CsMenu(FlxG.width / 2, FlxG.height / 2, FlxTextAlign.CENTER, {
+			keyboard: true,
+			mouse: true,
+			gamepad: true,
+			gamepadId: 0
+		});
 		var mainPage = menu.createPage("Main");
 		var newGamePage = menu.createPage("New Game");
 

@@ -1,12 +1,12 @@
 package utils;
 
+import csHxUtils.Observer.FloatObservable;
+import csHxUtils.Observer.IntObservable;
+import csHxUtils.entities.CsEmitter;
 import entities.Character;
 import entities.Gem.ManaType;
-import entities.effects.CsEmitter;
 import flixel.FlxBasic;
 import states.PlayState.Play_State;
-import utils.Observer.FloatObservable;
-import utils.Observer.IntObservable;
 
 var nextState = [Play_State.Idle, Play_State.BoardMatching];
 

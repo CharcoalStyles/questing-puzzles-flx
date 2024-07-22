@@ -1,5 +1,7 @@
 package entities;
 
+import csHxUtils.KennyAtlasLoader;
+import csHxUtils.entities.UiFlxGroup;
 import entities.Gem.GemType;
 import entities.Gem.ManaType;
 import flixel.FlxG;
@@ -11,8 +13,6 @@ import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxPool;
 import states.MainMenuState;
-import utils.KennyAtlasLoader;
-import utils.UiFlxGroup;
 
 typedef CellIndex =
 {
