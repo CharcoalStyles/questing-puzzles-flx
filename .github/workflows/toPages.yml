@@ -24,7 +24,7 @@ jobs:
           haxelib install flixel
           haxelib install flixel-addons
           haxelib install hscript
-          haxelib git csHxUtils git@github.com:CharcoalStyles/csHxUtils.git
+          haxelib git csHxUtils https://github.com/CharcoalStyles/questing-puzzles-flx.git
 
       # Runs a set of commands using the runners shell
       - name: Build the HTML5 version
