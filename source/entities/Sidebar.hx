@@ -33,6 +33,7 @@ class Sidebar extends UiFlxGroup
 	public var spellUis:Array<SpellUi>;
 
 	var title:SplitText;
+	var portrait:FlxSprite;
 
 	public var healthText:FlxText;
 
@@ -112,6 +113,13 @@ class Sidebar extends UiFlxGroup
 		var workingY = 0;
 
 		workingY += 10;
+
+		portrait = new FlxSprite(0, 0, 'assets/images/player1.png');
+		portrait.antialiasing = false;
+		portrait.setGraphicSize(Std.int(portrait.width * 2), Std.int(portrait.height * 2));
+		portrait.x = isLeft ? portrait.width / 2 : FlxG.width - (portrait.width * 1.5);
+		portrait.y = portrait.height / 2;
+		add(portrait);
 
 		title = new SplitText(paddedWorkingWidth.left, workingY, char.name);
 		title.borderColor = 0xff111111;
@@ -243,12 +251,10 @@ class Sidebar extends UiFlxGroup
 					lifespan: () -> FlxG.random.float(0.5, 1.0),
 					alphaExtended: () -> [{t: 0, value: 1}],
 					colourExtended: () -> [{t: 0, value: colour}],
-					scaleExtended: () -> [
-						{
-							t: 0,
-							value: partScale
-						},
-					]
+					scaleExtended: () -> [{
+						t: 0,
+						value: partScale
+					},]
 				}),
 				{
 					lifespan: () -> FlxG.random.float(0.75, 0.5),
@@ -257,11 +263,7 @@ class Sidebar extends UiFlxGroup
 						target: FlxPoint.get(bar.x, bar.y),
 						easeName: "cubeIn"
 					},
-					scaleExtended: () -> [
-						{t: 0, value: partScale},
-						{t: 0.7, value: partScale.scaleNew(0.75)},
-						{t: 1, value: partScale.scaleNew(0.5)},
-					],
+					scaleExtended: () -> [{t: 0, value: partScale}, {t: 0.7, value: partScale.scaleNew(0.75)}, {t: 1, value: partScale.scaleNew(0.5)},],
 					onComplete: (particle) ->
 					{
 						character.mana[mt].addA(amount / subParts);
