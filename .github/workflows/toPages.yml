@@ -19,7 +19,7 @@ jobs:
 
       - name: list files
         run: |
-          pwa
+          pwd
           ls -la
 
       - name: Install the csHxUtils library
