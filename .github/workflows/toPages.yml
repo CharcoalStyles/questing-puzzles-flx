@@ -26,8 +26,9 @@ jobs:
         run: |
           git clone https://github.com/CharcoalStyles/csHxUtils.git /home/runner/work/questing-puzzles-flx/csHxUtils
           ls /home/runner/work/questing-puzzles-flx/csHxUtils/
-          mkdir /home/runner/work/questing-puzzles-flx/questing-puzzles-flx/source/csHxUtils
-          cp -r /home/runner/work/questing-puzzles-flx/csHxUtils/csHxUtils/* /home/runner/work/questing-puzzles-flx/questing-puzzles-flx/source/csHxUtils
+          cd /home/runner/work/questing-puzzles-flx/questing-puzzles-flx/source/
+          mkdir csHxUtils
+          cp -r /home/runner/work/questing-puzzles-flx/csHxUtils/csHxUtils/* ./csHxUtils
 
       - name: Install Haxelib libraries
         run: |
@@ -44,6 +45,7 @@ jobs:
       
       - name: Build the HTML5 version
         run: |
+          cd /home/runner/work/questing-puzzles-flx/questing-puzzles-flx
           haxelib run lime build html5 
       
       - name: Deploy to GitHub Pages
