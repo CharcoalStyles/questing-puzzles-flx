@@ -29,6 +29,7 @@ jobs:
           cd /home/runner/work/questing-puzzles-flx/questing-puzzles-flx/source/
           mkdir csHxUtils
           cp -r /home/runner/work/questing-puzzles-flx/csHxUtils/csHxUtils/* ./csHxUtils
+          haxelib git csHxUtils https://github.com/CharcoalStyles/csHxUtils.git
 
       - name: Install Haxelib libraries
         run: |
