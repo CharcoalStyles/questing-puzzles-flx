@@ -17,10 +17,16 @@ jobs:
         with:
           haxe-version: 4.3.3
 
+      - name: list files
+        run: |
+          pwa
+          ls -la
+
       - name: Install the csHxUtils library
         run: |
-          haxelib git csHxUtils https://github.com/CharcoalStyles/questing-puzzles-flx.git
-        
+          git clone https://github.com/CharcoalStyles/questing-puzzles-flx.git /home/runner/work/csHxUtils
+          haxelib dev csHxUtils /home/runner/work/csHxUtils
+
       - name: Install Haxelib libraries
         run: |
           haxelib install lime 
