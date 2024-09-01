@@ -1,3 +1,23 @@
+# 2024-09-01 21:32:09
+
+Ok, that was a bit of a break.
+
+It's been at the back of my mind how I should approach this project. Should I stick as much as possible to the original inspiration or should I add a bit of a spin on it?
+
+Still not 100% sure, so I think I'll have a bit of a crack in a slightly different direction.
+
+Instead of having a single character you play as, you control a team of characters. Each character has a set of skills and spells that they can use. This is heavily inspired by the v3 update of [Slice and Dice](https://tann.itch.io/slice-dice), with a bit of inspiration from Puzzle Kingdoms.
+
+Lots of things to unpack or this change:
+
+- There has to bea a *bunch* of characters; it doesn't mean much more work than the original, as the characters can (and will) be used in enemy groups,too.
+- There will be a big re-think of how characters target each other, how spells and abilities are activated, how mana is handled, and how the 'damage' tile is used. So basically all the minute-to-minute mechanics will need a solid overhaul.
+- A big UI rethink, too. Not that the current one was that good.
+
+I'm not going to timebox this, considering I have such minimal and erratic time to spend on it. But I'll get it to a level of quality a bit better than the current version.
+
+Also, the only recent fixes in code are getting the Github pages working since I moved a bunch of code out into a new library.
+
 # 2024-05-30 20:45:29
 
 The grey gems now do damage!, 1 damage per gem and a simple effect. Nothing too much more than that.
