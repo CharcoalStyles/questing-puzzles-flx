@@ -27,11 +27,11 @@ jobs:
 
       - name: Clone the csHxUtils library
         run: |
-          haxelib dev csHxUtils /home/runner/hxLibs/questing-puzzles-flx
+          git clone https://github.com/CharcoalStyles/questing-puzzles-flx.git /home/runner/hxLibs/questing-puzzles-flx
       
       - name: Install the csHxUtils library
         run: |
-          haxelib install csHxUtils
+          haxelib dev csHxUtils /home/runner/hxLibs/questing-puzzles-flx
 
       # Runs a set of commands using the runners shell
       - name: List Haxelib libraries
