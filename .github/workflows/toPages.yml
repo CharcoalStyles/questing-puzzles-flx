@@ -25,13 +25,9 @@ jobs:
           haxelib install flixel-addons
           haxelib install hscript
 
-      - name: Clone the csHxUtils library
-        run: |
-          git clone https://github.com/CharcoalStyles/questing-puzzles-flx.git /home/runner/hxLibs/questing-puzzles-flx
-      
       - name: Install the csHxUtils library
         run: |
-          haxelib dev csHxUtils /home/runner/hxLibs/questing-puzzles-flx
+          haxelib gut csHxUtils https://github.com/CharcoalStyles/questing-puzzles-flx.git
 
       # Runs a set of commands using the runners shell
       - name: List Haxelib libraries
