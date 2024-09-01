@@ -16,6 +16,10 @@ jobs:
       - uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.3.3
+
+      - name: Install the csHxUtils library
+        run: |
+          haxelib git csHxUtils https://github.com/CharcoalStyles/questing-puzzles-flx.git
         
       - name: Install Haxelib libraries
         run: |
@@ -24,10 +28,6 @@ jobs:
           haxelib install flixel
           haxelib install flixel-addons
           haxelib install hscript
-
-      - name: Install the csHxUtils library
-        run: |
-          haxelib git csHxUtils https://github.com/CharcoalStyles/questing-puzzles-flx.git
 
       # Runs a set of commands using the runners shell
       - name: List Haxelib libraries
