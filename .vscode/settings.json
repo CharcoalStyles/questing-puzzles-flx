@@ -12,5 +12,9 @@
   "haxe.enableExtendedIndentation": true,
   "lime.browser": "edge",
   "editor.defaultFormatter": "nadako.vshaxe",
-  "prettier.enable": false
+  "prettier.enable": false,
+  "deno.enable": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  }
 }
