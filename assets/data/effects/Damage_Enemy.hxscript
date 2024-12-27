@@ -1,4 +1,4 @@
-// DamageEnemy.hxscript
+// Damage_Enemy.hxscript
 
 // Damages the enemy's health by the `damage` argument.
 

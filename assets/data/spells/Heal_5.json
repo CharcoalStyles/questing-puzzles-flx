@@ -4,7 +4,7 @@
   "mana": {
     "Water": 5
   },
-  "effect": "HealCaster",
+  "effect": "Heal_Caster",
   "args": {
     "heal": 5
   }

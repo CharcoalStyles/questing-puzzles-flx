@@ -1,4 +1,4 @@
-// HealCaster.hxscript
+// Heal_Caster.hxscript
 
 // Heals the caster by the `heal` argument.
 

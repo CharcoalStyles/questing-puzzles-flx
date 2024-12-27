@@ -1,4 +1,4 @@
-// AdjustEnemyMana.hxscript
+// Adjust_Enemy_Mana.hxscript
 
 // This effect is used to adjust the mana of an enemy.
 // It can be used to increase or decrease the mana of an enemy.

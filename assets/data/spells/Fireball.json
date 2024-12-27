@@ -4,7 +4,7 @@
   "mana": {
     "Fire": 5
   },
-  "effect": "DamageEnemy",
+  "effect": "Damage_Enemy",
   "args": {
     "damage": 5,
     "trailType": 1,
