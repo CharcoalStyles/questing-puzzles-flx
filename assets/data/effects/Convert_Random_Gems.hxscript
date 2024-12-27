@@ -1,4 +1,4 @@
-// ConvertRandomGems.hxscript
+// Convert_Random_Gems.hxscript
 
 // Given a object. with keys of Mana Names and values of the number of gems to convert,
 // it converts random gems on board to the corresponding mana type

@@ -64,7 +64,7 @@ Here is an example of a spell:
     "Fire": 2,
     "Dark": 2,
   },
-  "effect": "DamageEnemy", // The name of the effect script to call
+  "effect": "Damage_Enemy", // The name of the effect script to call
   "args": { 
     "damage": 2, // The arguments to pass to the effect script
     "colour": "0x909090" // The colour of the particles
@@ -111,7 +111,7 @@ var ret = {
 ret;
 ```
 
-This is a very cutdown version of the [DamageEnemy](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/assets/data/effects/DamageEnemy.hxscript) effect script, just to give a simple entry point to learn about the effect script.
+This is a very cutdown version of the [Damage_Enemy](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/assets/data/effects/Damage_Enemy.hxscript) effect script, just to give a simple entry point to learn about the effect script.
 
 ### What's available to the effect script?
 
@@ -119,7 +119,7 @@ This is a very cutdown version of the [DamageEnemy](https://github.com/CharcoalS
 
 The `args` property is a collection of the arguments prodided to the effect script from the spell object. This is different for every effect, allowing swpells to use the same effect script but with different arguments.
 
-Currently, the only effect available is the [DamageEnemy](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/assets/data/effects/DamageEnemy.hxscript) effect script, which takes the required argument `damage` and the optional argument `colour`. The `damage` argument is an integer that is the amount of damage to be dealt to the enemy. The `colour` argument is a string (CSS style colour code or hexadecimal colour code) that sets the colour of the particle effects.
+Currently, the only effect available is the [Damage_Enemy](https://github.com/CharcoalStyles/questing-puzzles-flx/blob/main/assets/data/effects/Damage_Enemy.hxscript) effect script, which takes the required argument `damage` and the optional argument `colour`. The `damage` argument is an integer that is the amount of damage to be dealt to the enemy. The `colour` argument is a string (CSS style colour code or hexadecimal colour code) that sets the colour of the particle effects.
 
 #### Math
 

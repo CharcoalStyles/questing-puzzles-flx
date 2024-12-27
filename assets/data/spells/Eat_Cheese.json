@@ -5,7 +5,7 @@
     "Earth": 1,
     "Light": 1
   },
-  "effect": "HealCaster",
+  "effect": "Heal_Caster",
   "args": {
     "heal": 2,
     "colours": {

@@ -53,7 +53,7 @@ class GlobalState extends FlxBasic
 
 		player.spells = new Array();
 		player.spells.push(Loader.loadSpell("Fireball"));
-		player.spells.push(Loader.loadSpell("Heal5"));
-		player.spells.push(Loader.loadSpell("LightEmUp"));
+		player.spells.push(Loader.loadSpell("Heal_5"));
+		player.spells.push(Loader.loadSpell("Light_Em_Up"));
 	}
 }

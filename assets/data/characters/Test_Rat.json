@@ -9,5 +9,5 @@
     "Light": 15,
     "Dark": 20
   },
-  "spells": [ "RatBite", "EatCheese" ]
+  "spells": [ "Rat_Bite", "Eat_Cheese" ]
 }

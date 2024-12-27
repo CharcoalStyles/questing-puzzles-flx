@@ -1,3 +1,17 @@
+# 2024-12-27 21:45:44
+
+And another long break. There has been a few little updates before this, but it's about time to write about stuff.
+
+I'm ignoring everything in the last post as far as how the game works. This was born out of a want to see a new "classic" match-3 RPG game and I'm going to stick with that.
+
+So, I've been working on a tool that will help me make the content for the game. I'm using my day job skills to make a NextJS + Deno based app to create and edit the data. Currently it's just some APIs to create, read and update the data for spells, characters and effects. Next steps will be adding the delete and possibly the individual read routes (currently you can only read everything, which will be **too** much for the final editor.)
+
+After that will be writing up the UI and then pumping out the new content. Another thing I want ot add is an embedded version of the game that can be pushed into the editor to simulate battles based on the current state of the data that is being edited. :D
+
+One thing to note with this is that through the use of Deno, I should be able to build the editor for Windows, Mac and Linux. Modding was (obviously) a big part of what I wanted to make, so releasing the editor on all three platforms should be a nice bonus!
+
+Also, I've done a manual conversion of the file names and references to what the editor should be pushing out. But I haven't tested it, so YOLO.
+
 # 2024-09-01 21:32:09
 
 Ok, that was a bit of a break.
@@ -58,7 +72,7 @@ Eventually there will be more options; I'm thinking different anims, joystick su
 
 # 2024-05-20 05:47:37
 
-Added ability to set the speed of the main particle effect in the `DamageEnemy` effect script.
+Added ability to set the speed of the main particle effect in the `Damage_Enemy` effect script.
 
 # 2024-05-18 22:44:15
 
@@ -102,7 +116,7 @@ Also added some more info to the `Modding.md` file, because of things I've added
 
 ## 2024-05-12 22:23:28
 
-Made the `Warcry `spell and it's associated `AdjustEnemyMana` effect work!
+Made the `Warcry `spell and it's associated `Adjust_Enemy_Mana` effect work!
 
 As part of this, I changed up the ManaType enum to be a class. This is because my original idea of Enums was informed by how they are used in C# and the Haxe implantation of them are quite different. I'm not sure if I'll ever make use of the Haxe Enums again, but they seem to be fairly powerful, just not in a way I know how to use.
 
@@ -112,7 +126,7 @@ Also, I added the `Warcry` spell to the Player's spells array, mainly for testin
 
 Added ability to add an ease function to the target effect states from within a script. This was to make the fireball spell work as it did before the transition to the new scripting system.
 
-I also added new optional args to the `DamageEnemy` effect script for the `explosion` and `trailType` arguments. Originally since this effect was only used for the fireball spell, the trail and explosion were hard coded.
+I also added new optional args to the `Damage_Enemy` effect script for the `explosion` and `trailType` arguments. Originally since this effect was only used for the fireball spell, the trail and explosion were hard coded.
 
 Finally, I adjusted the particle effect for the heal spell to spawn a bit closer to the size of the text.
 

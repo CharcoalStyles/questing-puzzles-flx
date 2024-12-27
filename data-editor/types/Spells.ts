@@ -1,7 +1,7 @@
 import { z } from "zod";
 import {mana} from "./General.ts";
 
-export const Spell = z.object({
+export const spell = z.object({
   name: z.string(),
   description: z.string(),
   mana: z.record(mana, z.number()),
@@ -21,3 +21,5 @@ export const Spell = z.object({
     ]),
   ),
 });
+
+export type Spell = z.infer<typeof spell>;

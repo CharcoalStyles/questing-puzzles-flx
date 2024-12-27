@@ -6,7 +6,7 @@
     "Light": 2,
     "Water": 2
   },
-  "effect": "AdjustEnemyMana",
+  "effect": "Adjust_Enemy_Mana",
   "args": {
     "Fire" : -1,
     "Water" : -1,

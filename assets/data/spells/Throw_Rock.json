@@ -5,7 +5,7 @@
     "Fire": 2,
     "Dark": 2
   },
-  "effect": "DamageEnemy",
+  "effect": "Damage_Enemy",
   "args": {
     "lifespan": {
       "min": 0.75,

@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+export const fileType = z.union([
+  z.literal('character'),
+  z.literal('effect'),
+  z.literal('spell'),
+]);
+
+export type FileType = z.infer<typeof fileType>;
+
 export const mana = z.union([
   z.literal('Fire'),
   z.literal('Dark'),
@@ -9,7 +17,3 @@ export const mana = z.union([
 ]);
 
 export type Mana = z.infer<typeof mana>;
-
-export const script = z.record(z.string(), z.string());
-
-export type Script = z.infer<typeof script>;

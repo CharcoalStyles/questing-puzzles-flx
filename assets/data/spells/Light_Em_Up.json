@@ -5,7 +5,7 @@
     "Light": 4,
     "Dark": 4
   },
-  "effect": "ConvertRandomGems",
+  "effect": "Convert_Random_Gems",
   "args": {
     "Fire": 5
   }
