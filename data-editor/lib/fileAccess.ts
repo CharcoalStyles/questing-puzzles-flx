@@ -1,3 +1,5 @@
+/// <reference lib="deno.ns" />
+
 import join from "path.join";
 import { Character } from "../types/Character.ts";
 import { Spell } from "../types/Spells.ts";
@@ -27,7 +29,7 @@ export async function getAll<T extends DataTypes>(ft: FileType) {
   const { path, fileType } = fileTypes[ft];
   console.log(path)
   console.log(fileType);
-
+  
   const items: Array<T> = [];
   // list all the files in the spells directory
   for await (

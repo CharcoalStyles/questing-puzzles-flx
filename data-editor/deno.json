@@ -1,6 +1,19 @@
 {
-  "unstable": ["unsafe-proto"],
+  "unstable": [
+    "unsafe-proto",
+    "sloppy-imports"
+  ],
   "imports": {
     "@std/path": "jsr:@std/path@^1.0.8"
+  },
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": false,
+    "strict": true,
+    "jsx": "react-jsx"
   }
 }

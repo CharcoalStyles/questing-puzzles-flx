@@ -1,10 +1,7 @@
 
-import { fetchFetcher } from "@/lib/useFetcher";
-import useSWR from "swr";
-
 export default function Home() {
 
-  const { data, error, isValidating } = useSWR('/api/spells', fetchFetcher);
+
 
   return (
     <div >

@@ -14,7 +14,10 @@
   "editor.defaultFormatter": "nadako.vshaxe",
   "prettier.enable": false,
   "deno.enable": true,
+  "deno.lint": true,
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
-  }
+  },
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }

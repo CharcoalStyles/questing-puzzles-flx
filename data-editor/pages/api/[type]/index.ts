@@ -4,7 +4,7 @@ import { Character, character } from "../../../types/Character.ts";
 import { getAll, pushFile } from "../../../lib/fileAccess.ts";
 import { fileType } from "../../../types/General.ts";
 import { spell, Spell } from "../../../types/Spells.ts";
-import { Effect, effect } from "../../../types/Effects.ts";
+import { effect } from "../../../types/Effects.ts";
 
 type Data = Array<Character> | Array<string> | Array<Spell>;
 
